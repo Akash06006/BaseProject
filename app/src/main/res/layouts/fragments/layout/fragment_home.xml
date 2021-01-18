@@ -6,83 +6,193 @@
 
     <data>
 
-        <import type="com.example.driver.common.BindingUtils" />
+        <import type="com.android.sidewalk.common.BindingUtils" />
 
         <variable
                 name="homeViewModel"
-                type="com.example.driver.viewmodels.home.HomeViewModel" />
+                type="com.android.sidewalk.viewmodels.home.HomeViewModel" />
 
     </data>
 
-    <LinearLayout
+    <ScrollView
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@color/colorPrimary"
-            android:orientation="vertical">
-
-        <include
-                android:id="@+id/toolbarCommon"
-                layout="@layout/common_toolbar_back"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/dp_50"
-                android:layout_marginTop="10dp"
-                android:visibility="visible" />
-
-        <TextView
-                android:id="@+id/txtWelcome"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_marginTop="10dp"
-                android:text="Welcome, Akash Gharu"
-                android:textColor="@color/colorWhite"
-                android:textSize="@dimen/sp_18"
-                android:textStyle="bold"
-                app:font="@{`semibold`}" />
+            android:layout_height="match_parent">
 
         <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_marginTop="20dp"
-                android:background="@drawable/ic_top_circle"
+                android:background="@color/colorWhite"
                 android:orientation="vertical">
 
-            <TextView
-                    android:layout_width="180dp"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_marginLeft="40dp"
-                    android:layout_marginTop="40dp"
-                    android:layout_marginRight="40dp"
-                    android:gravity="center"
-                    android:text="@string/delivery_few_minutes"
-                    android:textColor="@color/colorPrimary"
-                    android:textSize="22sp"
-                    android:textStyle="bold"
-                    app:font="@{`semibold`}" />
+            <include
+                    android:id="@+id/toolbarCommon"
+                    layout="@layout/common_toolbar_back"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/dp_50"
+                    android:visibility="gone" />
 
-            <ImageView
-                    android:layout_width="wrap_content"
+            <RelativeLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_marginTop="25dp"
-                    android:src="@drawable/ic_home_logo" />
+                    android:layout_marginTop="-5dp">
 
-            <TextView
-                    android:id="@+id/txtCreateOrder"
-                    android:layout_width="wrap_content"
+                <ImageView
+                        android:id="@+id/imgBanner"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:minHeight="270dp"
+                        android:scaleType="centerCrop"
+                        android:src="@drawable/ic_home_banner" />
+
+                <View
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="#50000000"
+                        android:minHeight="270dp" />
+
+                <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="5dp"
+                        android:orientation="vertical">
+                    <!--ic_home_banner-->
+                    <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="5dp"
+                            android:orientation="vertical">
+
+                        <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="10dp"
+                                android:text="@string/welcome"
+                                android:textColor="@color/colorWhite"
+                                android:textSize="@dimen/sp_16"
+                                app:font="@{`regular`}" />
+
+                        <LinearLayout
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:gravity="center"
+                                android:orientation="horizontal">
+
+                            <TextView
+                                    android:id="@+id/txtWelcome"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:maxLength="32"
+                                    android:singleLine="true"
+                                    android:text="Welcome"
+                                    android:textColor="@color/colorWhite"
+                                    android:textSize="20dp"
+                                    android:textStyle="bold"
+                                    app:font="@{`bold`}" />
+
+                            <ImageView
+                                    android:id="@+id/imgEdit"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginLeft="5dp"
+                                    android:onClick="@{(v) -> homeViewModel.clickListener(v)}"
+                                    android:src="@drawable/ic_edit_image" />
+                        </LinearLayout>
+                    </LinearLayout>
+
+                    <de.hdodenhof.circleimageview.CircleImageView
+                            android:id="@+id/img_right"
+                            android:layout_width="40dp"
+                            android:layout_height="@dimen/dp_40"
+                            android:layout_alignParentRight="true"
+                            android:layout_centerHorizontal="true"
+                            android:layout_centerVertical="true"
+                            android:layout_marginEnd="@dimen/dp_15"
+                            android:layout_marginRight="@dimen/dp_15"
+                            android:contentDescription="@string/todo"
+                            android:onClick="@{(v) -> homeViewModel.clickListener(v)}"
+                            android:src="@drawable/ic_user"
+                            android:visibility="visible"
+                            app:civ_border_color="@color/colorWhite"
+                            app:civ_border_width="3dp" />
+                </RelativeLayout>
+            </RelativeLayout>
+
+            <RelativeLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_marginTop="25dp"
-                    android:background="@drawable/shape_button_round_back"
+                    android:layout_margin="5dp"
+                    android:gravity="center_vertical"
+                    android:orientation="vertical">
+
+                <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginLeft="5dp"
+                        android:text="@string/your_popular_mobile_cart"
+                        android:textColor="@color/colorBlack"
+                        android:textStyle="bold"
+                        app:font="@{`bold`}" />
+
+                <TextView
+                        android:id="@+id/txtTruckAll"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginRight="5dp"
+                        android:text="@string/see_all"
+                        android:textColor="@color/view_see"
+                        android:textSize="12sp"
+                        app:font="@{`regular`}" />
+            </RelativeLayout>
+
+            <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rvTrucks"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/dp_5"
                     android:gravity="center"
-                    android:onClick="@{(v) -> homeViewModel.clickListener(v)}"
-                    android:text="@string/new_order"
-                    android:textAllCaps="false"
-                    android:textColor="@color/colorWhite"
-                    android:textSize="18sp" />
+                    android:padding="@dimen/dp_5"
+                    android:visibility="visible" />
+
+            <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
+                    android:orientation="vertical">
+
+                <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginLeft="5dp"
+                        android:text="@string/upcoming_events"
+                        android:textColor="@color/colorBlack"
+                        android:textStyle="bold"
+                        app:font="@{`bold`}" />
+
+                <TextView
+                        android:id="@+id/txtEventsAll"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginRight="5dp"
+                        android:text="@string/see_all"
+                        android:textColor="@color/view_see"
+                        android:textSize="12sp"
+                        app:font="@{`regular`}" />
+            </RelativeLayout>
+
+            <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rvEvents"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/dp_5"
+                    android:gravity="center"
+                    android:padding="@dimen/dp_5"
+                    android:visibility="visible" />
         </LinearLayout>
-
-    </LinearLayout>
-
+    </ScrollView>
 </layout>

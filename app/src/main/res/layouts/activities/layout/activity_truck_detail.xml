@@ -1,0 +1,339 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <import type="com.android.sidewalk.common.BindingUtils" />
+
+        <variable
+                name="truckViewModel"
+                type="com.android.sidewalk.viewmodels.trucks.TrucksViewModel" />
+
+        <variable
+                name="detailResponse"
+                type="com.android.sidewalk.model.truck.TruckDetailResponse.Data" />
+
+    </data>
+
+    <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+        <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+            <include
+                    android:id="@+id/toolbarCommon"
+                    layout="@layout/common_toolbar_back"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/dp_50" />
+
+            <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"
+                    android:padding="20dp">
+                <!-- viewpager to show images -->
+                <!-- <androidx.viewpager.widget.ViewPager
+                         android:id="@+id/viewPager"
+                         android:layout_width="match_parent"
+                         android:layout_height="wrap_content" />-->
+
+                <androidx.viewpager.widget.ViewPager
+                        android:id="@+id/vpBanner"
+                        android:layout_width="match_parent"
+                        android:layout_height="170dp"
+                        android:visibility="visible" />
+                <!--                        android:background="@drawable/home_viewpager_background"
+                -->
+                <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_marginTop="-20dp"
+                        android:background="@drawable/ic_secondary_round_back"
+                        android:orientation="vertical"
+                        android:padding="10dp">
+
+                    <TextView
+                            android:id="@+id/txtname"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="10dp"
+                            android:layout_marginTop="5dp"
+                            android:gravity="center"
+                            android:hint="Mobile Cart name"
+                            android:onClick="@{(v) -> truckViewModel.clickListener(v)}"
+                            android:text="@{detailResponse.name}"
+                            android:textColor="@color/colorWhite"
+                            android:textSize="20sp"
+                            android:textStyle="bold"
+                            app:font="@{`bold`}" />
+                    <!--android:text="@{model.firstName}"-->
+
+                    <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="10dp"
+                            android:orientation="horizontal">
+
+                        <RatingBar
+                                android:id="@+id/rBar"
+                                style="@android:style/Widget.Material.RatingBar.Small"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:numStars="5"
+                                android:rating="4"
+                                android:stepSize="0.5"
+                                android:theme="@style/RatingBarDetail" />
+
+                        <TextView
+                                android:id="@+id/txtCount"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="@dimen/dp_5"
+                                android:singleLine="true"
+                                android:text="(10)"
+                                android:textColor="@color/colorWhite"
+                                app:font="@{`regular`}" />
+                    </LinearLayout>
+
+                </LinearLayout>
+
+                <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="-40dp"
+                        android:background="@drawable/ic_round_back"
+                        android:elevation="5dp"
+                        android:orientation="vertical"
+                        android:padding="15dp">
+
+                    <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="10dp"
+                            android:orientation="horizontal"
+                            android:weightSum="3">
+
+                        <TextView
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="@dimen/dp_5"
+                                android:layout_weight="1"
+                                android:singleLine="true"
+                                android:text="@string/location"
+                                app:font="@{`regular`}" />
+
+                        <TextView
+                                android:id="@+id/txtloc"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="@dimen/dp_5"
+                                android:layout_weight="2"
+                                android:singleLine="true"
+                                android:text="@{detailResponse.location}"
+                                android:textColor="@color/colorBlack"
+                                android:textSize="16sp"
+                                app:font="@{`regular`}" />
+                        <!--android:text="@{model.firstName}"-->
+                    </LinearLayout>
+
+                    <View
+                            android:layout_width="match_parent"
+                            android:layout_height="1dp"
+                            android:layout_margin="10dp"
+                            android:alpha="0.5"
+                            android:background="@color/colorGrey" />
+
+                    <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="10dp"
+                            android:orientation="horizontal"
+                            android:weightSum="3">
+
+                        <TextView
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="@dimen/dp_5"
+                                android:layout_weight="1"
+                                android:singleLine="true"
+                                android:text="@string/regno"
+                                app:font="@{`regular`}" />
+
+                        <TextView
+                                android:id="@+id/txtReg"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="@dimen/dp_5"
+                                android:layout_weight="2"
+                                android:singleLine="true"
+                                android:text="@{detailResponse.registrationNo}"
+                                android:textColor="@color/colorBlack"
+                                android:textSize="16sp"
+                                app:font="@{`regular`}" />
+                        <!--android:text="@{model.firstName}"-->
+                    </LinearLayout>
+
+                    <View
+                            android:layout_width="match_parent"
+                            android:layout_height="1dp"
+                            android:layout_margin="10dp"
+                            android:alpha="0.5"
+                            android:background="@color/colorGrey" />
+
+                    <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="10dp"
+                            android:orientation="horizontal"
+                            android:weightSum="3">
+
+                        <TextView
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="@dimen/dp_5"
+                                android:layout_weight="1"
+                                android:singleLine="true"
+                                android:text="@string/timing"
+                                app:font="@{`regular`}" />
+
+                        <TextView
+                                android:id="@+id/txtTime"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="@dimen/dp_5"
+                                android:layout_weight="2"
+                                android:singleLine="true"
+                                android:text="202 Food Street nexus"
+                                android:textColor="@color/colorBlack"
+                                android:textSize="16sp"
+                                app:font="@{`regular`}" />
+                        <!--android:text="@{model.firstName}"-->
+                    </LinearLayout>
+
+                </LinearLayout>
+
+                <TextView
+                        android:id="@+id/txtGallery"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/dp_5"
+                        android:layout_marginTop="@dimen/dp_5"
+                        android:singleLine="true"
+                        android:text="@string/view_gallery"
+                        android:textColor="@color/colorBlack"
+                        android:textSize="16sp"
+                        android:textStyle="bold"
+                        app:font="@{`bold`}" />
+
+                <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/rvGallery"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/dp_5"
+                        android:background="@drawable/ic_round_back"
+                        android:gravity="center"
+                        android:padding="@dimen/dp_5"
+                        android:visibility="visible" />
+
+                <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/dp_5"
+                        android:layout_marginTop="@dimen/dp_5"
+                        android:singleLine="true"
+                        android:text="@string/truck_partner"
+                        android:textColor="@color/colorBlack"
+                        android:textSize="16sp"
+                        android:textStyle="bold"
+                        app:font="@{`bold`}" />
+
+                <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/dp_5"
+                        android:background="@drawable/ic_round_back"
+                        android:elevation="5dp"
+                        android:orientation="vertical"
+                        android:padding="15dp">
+                    <!--android:text="@{model.firstName}"-->
+
+                    <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="10dp"
+                            android:orientation="horizontal"
+                            android:weightSum="3">
+
+                        <TextView
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="@dimen/dp_5"
+                                android:layout_weight="1"
+                                android:singleLine="true"
+                                android:text="@string/name"
+                                app:font="@{`regular`}" />
+
+                        <TextView
+                                android:id="@+id/txtPartnerName"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="@dimen/dp_5"
+                                android:layout_weight="2"
+                                android:singleLine="true"
+                                android:text="@{detailResponse.partnerName}"
+                                android:textColor="@color/colorBlack"
+                                android:textSize="16sp"
+                                app:font="@{`regular`}" />
+                        <!--android:text="@{model.firstName}"-->
+                    </LinearLayout>
+
+                    <View
+                            android:layout_width="match_parent"
+                            android:layout_height="1dp"
+                            android:layout_margin="10dp"
+                            android:alpha="0.5"
+                            android:background="@color/colorGrey" />
+
+                    <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="10dp"
+                            android:orientation="horizontal"
+                            android:weightSum="3">
+
+                        <TextView
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="@dimen/dp_5"
+                                android:layout_weight="1"
+                                android:singleLine="true"
+                                android:text="@string/phone_no"
+                                app:font="@{`regular`}" />
+
+                        <TextView
+                                android:id="@+id/txtPartnerNumber"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="@dimen/dp_5"
+                                android:layout_weight="2"
+                                android:singleLine="true"
+                                android:text="@{detailResponse.partnerNumber}"
+                                android:textColor="@color/colorBlack"
+                                android:textSize="16sp"
+                                app:font="@{`regular`}" />
+                    </LinearLayout>
+
+                </LinearLayout>
+            </LinearLayout>
+
+        </LinearLayout>
+    </ScrollView>
+
+</layout>

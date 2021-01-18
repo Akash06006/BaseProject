@@ -5,7 +5,7 @@ apply plugin: 'kotlin-kapt'
 android {
     compileSdkVersion 28
     defaultConfig {
-        applicationId "com.example.courier"
+        applicationId "com.android.sidewalk"
         minSdkVersion 21
         targetSdkVersion 28
         versionCode 1
@@ -98,5 +98,7 @@ dependencies {
     //implementation 'com.jaredrummler:material-spinner:1.3.1'
 
     implementation "androidx.viewpager2:viewpager2:1.0.0"
+
+    implementation 'com.makeramen:roundedimageview:2.3.0'
 }
 apply plugin: 'com.google.gms.google-services'

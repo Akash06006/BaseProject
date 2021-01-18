@@ -7,14 +7,14 @@
 
         <variable
                 name="verifViewModel"
-                type="com.example.driver.viewmodels.OTPVerificationModel" />
+                type="com.android.sidewalk.viewmodels.OTPVerificationModel" />
 
     </data>
 
     <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            tools:context=".views.home.LandingActivty">
+            tools:context="com.android.sidewalk.views.home.LandingActivty">
 
         <FrameLayout
                 android:id="@+id/frame_layout"
@@ -28,38 +28,38 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_alignParentBottom="true"
+                android:background="@color/colorSecondary"
                 android:visibility="visible"
-                app:tabBackground="@color/colorWhite"
                 app:tabIndicatorColor="@color/colorWhite"
 
-                app:tabSelectedTextColor="@color/colorPrimary"
+                app:tabSelectedTextColor="@color/colorWhite"
                 app:tabTextAppearance="@style/customizeTabText"
                 app:tabTextColor="@color/tabColor">
 
             <com.google.android.material.tabs.TabItem
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:icon="@drawable/ic_tab_order"
-                    android:text="Orders" />
+                    android:icon="@drawable/ic_home_tab_selected"
+                    android:text="@string/home" />
             <!---->
 
             <com.google.android.material.tabs.TabItem
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:icon="@drawable/ic_tab_create"
-                    android:text="Create Order" />
+                    android:icon="@drawable/ic_truck_tab"
+                    android:text="@string/truck" />
             <!-- android:icon="@drawable/ic_booking_tab"-->
             <com.google.android.material.tabs.TabItem
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:icon="@drawable/ic_tab_notification"
-                    android:text="Notification" />
+                    android:icon="@drawable/ic_event_tab"
+                    android:text="@string/events" />
             <!-- android:icon="@drawable/ic_wallet_tab"-->
             <com.google.android.material.tabs.TabItem
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:icon="@drawable/ic_tab_user"
-                    android:text="Profile" />
+                    android:icon="@drawable/ic_setting_tab"
+                    android:text="@string/settings" />
             <!-- android:icon="@drawable/ic_profile_tab"-->
         </com.google.android.material.tabs.TabLayout>
 

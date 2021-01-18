@@ -13,7 +13,7 @@
     <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="@dimen/dp_toobar"
-            android:background="@color/colorPrimary"
+            android:background="@drawable/ic_toolbar_back"
             app:layout_constraintBottom_toTopOf="@+id/img_cost"
             app:layout_constraintTop_toTopOf="@+id/img_cost">
 
@@ -65,7 +65,7 @@
                 android:contentDescription="@string/todo"
                 android:onClick="@{onClick}"
                 android:src="@drawable/ic_user"
-                android:visibility="visible"
+                android:visibility="gone"
                 app:civ_border_color="@color/colorWhite"
                 app:civ_border_width="2dp" />
 

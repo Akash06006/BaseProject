@@ -5,15 +5,15 @@
 
     <data>
 
-        <import type="com.example.driver.common.BindingUtils" />
+        <import type="com.android.sidewalk.common.BindingUtils" />
 
         <variable
                 name="profileViewModel"
-                type="com.example.driver.viewmodels.profile.ProfileViewModel" />
+                type="com.android.sidewalk.viewmodels.profile.ProfileViewModel" />
 
         <variable
                 name="model"
-                type="com.example.driver.model.LoginResponse.Data" />
+                type="com.android.sidewalk.model.LoginResponse" />
 
     </data>
 
@@ -75,7 +75,6 @@
                                 android:layout_height="@dimen/dp_100"
                                 android:layout_centerInParent="true"
                                 android:contentDescription="@string/todo"
-                                android:src="@{model.image!=null ?  model.image.toString():@string/todo,default=@drawable/ic_person}"
                                 app:civ_border_color="@color/colorWhite"
                                 app:civ_border_width="3dp" />
 
@@ -170,12 +169,12 @@
                                 android:inputType="text"
                                 android:maxLength="30"
                                 android:singleLine="true"
-                                android:text="@{model.firstName}"
+
                                 android:textColor="@color/colorblack"
                                 android:textSize="14sp"
                                 app:font="@{`regular`}"
                                 tools:ignore="MissingConstraints" />
-
+                        <!--android:text="@{model.firstName}"-->
                     </com.google.android.material.textfield.TextInputLayout>
                     <!--                            android:background="@drawable/ic_editttext_bg"
                     -->
@@ -196,13 +195,13 @@
                                 android:inputType="text"
                                 android:maxLength="30"
                                 android:singleLine="true"
-                                android:text="@{model.lastName}"
+
                                 android:textColor="@color/colorblack"
                                 android:textColorHint="@color/colorGrey"
                                 android:textSize="14sp"
                                 app:font="@{`regular`}"
                                 tools:ignore="MissingConstraints" />
-
+                        <!--android:text="@{model.lastName}"-->
                     </com.google.android.material.textfield.TextInputLayout>
 
                     <com.google.android.material.textfield.TextInputLayout
@@ -221,13 +220,13 @@
                                 android:inputType="phone"
                                 android:maxLength="12"
                                 android:singleLine="true"
-                                android:text="@{model.phoneNo}"
+
                                 android:textColor="@color/colorblack"
                                 android:textColorHint="@color/colorGrey"
                                 android:textSize="14sp"
                                 app:font="@{`regular`}"
                                 tools:ignore="MissingConstraints,TextFields" />
-
+                        <!--  android:text="@{model.phoneNo}"-->
                     </com.google.android.material.textfield.TextInputLayout>
 
                     <EditText
@@ -241,13 +240,13 @@
                             android:paddingLeft="@dimen/dp_15"
                             android:paddingRight="@dimen/dp_15"
                             android:singleLine="true"
-                            android:text="@{model.phoneNo}"
+
                             android:textColor="@color/colorblack"
                             android:textColorHint="@color/colorGrey"
                             android:visibility="gone"
                             app:font="@{`regular`}"
                             tools:ignore="MissingConstraints,TextFields" />
-
+                    <!-- android:text="@{model.phoneNo}"-->
                     <com.google.android.material.textfield.TextInputLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
@@ -264,13 +263,13 @@
                                 android:layout_height="wrap_content"
                                 android:maxLength="100"
                                 android:singleLine="true"
-                                android:text="@{model.email}"
+
                                 android:textColor="@color/colorblack"
                                 android:textColorHint="@color/colorGrey"
                                 android:textSize="14sp"
                                 app:font="@{`regular`}"
                                 tools:ignore="MissingConstraints" />
-
+                        <!--         android:text="@{model.email}"-->
                     </com.google.android.material.textfield.TextInputLayout>
 
                     <!-- <Button

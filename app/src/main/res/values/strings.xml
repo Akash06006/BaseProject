@@ -1,4 +1,4 @@
-<!DOCTYPE resources [<!ENTITY app_name "LOCOMO">]>
+<!DOCTYPE resources [<!ENTITY app_name "SideWalk">]>
 <resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="MissingTranslation">
     <string name="app_name">&app_name;</string>
     <string name="facebook_app_id">630169387861716</string>
@@ -54,7 +54,6 @@
     <string name="memebership">Memebership</string>
     <string name="type">Type</string>
     <string name="accounts">Accounts</string>
-    <string name="settings">Settings</string>
     <string name="payment_method">Payment Method</string>
     <string name="linked_Card">Linked Card</string>
     <string name="logout">Logout</string>
@@ -126,7 +125,6 @@
     <string name="cancel_booking">Cancel Booking</string>
     <string name="cancelled">Cancelled</string>
 
-    <string name="back">Back</string>
     <string name="continues">Continue</string>
     <string name="cancellationstext">Cancellation of this service will cost you $25 from your account. In order to
         proceed, press Continue :
@@ -144,7 +142,7 @@
     <string name="booking_details">Booking Details</string>
     <string name="service1">Service:</string>
     <string name="attendies">Attendees</string>
-    <string name="time">Time</string>
+    <string name="time">Time: </string>
     <string name="date">Date</string>
     <string name="dummy_count">(34/45)</string>
     <string name="provided_by" tools:keep="@string/provided_by">Provided By</string>
@@ -203,7 +201,6 @@
     <string name="message">Message</string>
     <string name="send_message">Send Message</string>
     <string name="edit_payment_method">Edit payment method</string>
-    <string name="location">Location</string>
     <string name="privacy_policy">Privacy policy</string>
     <string name="invite_a_friend">Invite a friend</string>
     <string name="notifications">Notifications</string>
@@ -216,7 +213,7 @@
     <string name="date_time">Date and Time</string>
     <string name="signup_with">Or Sign up with</string>
     <string name="dont_have_account">Don\'t have an account?</string>
-    <string name="signup">Sign up</string>
+    <string name="signup">Sign Up</string>
     <string name="delivery_few_minutes">Delivery within few minutes</string>
     <string name="new_order">New Order</string>
     <string name="vehicle_type">Vehicle Type</string>
@@ -225,7 +222,6 @@
     <string name="mob_no">Mobile No</string>
     <string name="delivery_location">Delivery Location</string>
     <string name="add_address">Add Address</string>
-    <string name="item_name">Item Name</string>
     <string name="weight">Weight</string>
     <string name="parcel_value">Parcel Value (Rs)</string>
     <string name="promo_code">Promo Code</string>
@@ -253,6 +249,61 @@
 
     <string name="key_country_code">country_code</string>
 
+    <string name="restaurant">Restaurant</string>
+    <string name="new_user">New User?</string>
+    <string name="login_with">Or Login with</string>
+    <string name="vendor_license">Vendor License (Optional)</string>
+    <string name="front">Front</string>
+    <string name="back">Back</string>
+    <string name="agree_terms">By continuing you agree to our Terms and Conditions</string>
+    <string name="agree_terms_msg">Please agree to Terms and Conditions</string>
+    <string name="profile_img_error">Please select profile image</string>
+    <string name="license_front_img_error">Please select license front image</string>
+    <string name="license_back_img_error">Please select license back image</string>
+    <string name="truck">Truck</string>
+    <string name="events">Events</string>
+    <string name="settings">Settings</string>
+    <string name="your_popular_mobile_cart">Your Popular Mobile Carts</string>
+    <string name="see_all">See All</string>
+    <string name="upcoming_events">Upcoming Events</string>
+
+    <string name="upload_img">Upload image</string>
+    <string name="mobile_cart_name">Mobile cart name</string>
+    <string name="location">Location</string>
+    <string name="reg_no">Registration No.</string>
+    <string name="start_time">Start time</string>
+    <string name="end_time">End time</string>
+    <string name="gallery">Gallery</string>
+    <string name="add">Add</string>
+    <string name="mobile_cart_partner">Mobile cart  information</string>
+    <string name="save">Save</string>
+    <string name="add_mobile_cart">Add Mobile Cart</string>
+    <string name="my_mobile_carts">My Mobile Carts</string>
+    <string name="upload_img_error">Please upload image</string>
+    <string name="select_start_time">Please select start time</string>
+    <string name="select_end_time">Please select end time</string>
+
+    <string name="regno">Reg. No.</string>
+    <string name="timing">Timing</string>
+
+    <string name="view_gallery">View Gallery</string>
+    <string name="truck_partner">Truck Partner</string>
+    <string name="phone_no">Phone No</string>
+    <string name="details">Details</string>
+    <string name="view_all">View All</string>
+    <string name="view_image">View Image</string>
+    <string name="add_category">+ Add Category</string>
+    <string name="add_item">+ Add Item</string>
+    <string name="add_menu">Add Menu</string>
+    <string name="item_name">Item Name</string>
+    <string name="add_item_title">Add Item</string>
+    <string name="price">Price</string>
+    <string name="no_record_found">No Record Found</string>
+    <string name="upload_image">Upload Image</string>
+    <string name="category_name">Category Name</string>
+    <string name="description">Description</string>
+    <string name="veg">Veg</string>
+    <string name="non_veg">Non Veg</string>
 
     <string-array name="Languages">
         <item>Java</item>

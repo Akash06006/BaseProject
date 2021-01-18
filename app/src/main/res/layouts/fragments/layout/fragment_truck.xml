@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <import type="com.android.sidewalk.common.BindingUtils" />
+
+        <variable
+                name="truckViewModel"
+                type="com.android.sidewalk.viewmodels.trucks.TrucksViewModel" />
+
+    </data>
+
+    <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+        <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/colorWhite"
+                android:orientation="vertical">
+
+            <include
+                    android:id="@+id/toolbarCommon"
+                    layout="@layout/common_toolbar_back"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/dp_50" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rvTrucks"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/dp_5"
+                    android:gravity="center"
+                    android:padding="@dimen/dp_5"
+                    android:visibility="visible" />
+        </LinearLayout>
+    </ScrollView>
+</layout>

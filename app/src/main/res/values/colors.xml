@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- <color name="colorPrimary">#0F3C75</color>-->
-    <color name="colorPrimary">#6D60F8</color>
-    <color name="colorPrimaryDark">#6D60F8</color>
+    <color name="colorPrimary">#26BADC</color>
+    <color name="colorPrimaryDark">#24ABCA</color>
     <color name="colorAccent">#000000</color>
     <color name="colorWhite">#ffffff</color>
     <color name="colorWhite2">#F9F4F3</color>
@@ -23,9 +23,10 @@
     <color name="colorBlack">#000000</color>
     <color name="colorYellow">#dab45f</color>
     <color name="colorTransparentBlack">#99000000</color>
-    <color name="colorButtonBack">#FFCA3C</color>
+    <color name="colorButtonBack">#26BADC</color>
     <color name="colorForgotPassword">#4D37B3</color>
-
-    <color name="tabColor">#989393</color>
-
+    <color name="colorSecondary">#FF6633</color>
+    <color name="tabColor">#80ffffff</color>
+    <color name="terms_color">#989393</color>
+    <color name="view_see">#9FDAE8</color>
 </resources>

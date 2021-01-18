@@ -21,11 +21,25 @@
         <item name="windowNoTitle">true</item>
     </style>
 
+    <style name="RatingBar" parent="Theme.AppCompat">
+        <item name="colorControlNormal">@color/colorGrey</item>
+        <item name="colorControlActivated">@color/colorOrange</item>
+    </style>
+
+    <style name="RatingBarDetail" parent="Theme.AppCompat">
+        <item name="colorControlNormal">@color/colorGrey</item>
+        <item name="colorControlActivated">@color/colorWhite</item>
+    </style>
+
     <style name="customizeTabText" parent="TextAppearance.Design.Tab">
         <item name="android:textSize">12sp</item>
         <item name="textAllCaps">false</item>
         <item name="android:textColor">@color/tabColor</item>
         <item name="android:textStyle">normal</item>
+    </style>
+
+    <style name="MyTimePickerTheme" parent="android:Widget.Material.Light.TimePicker">
+        <item name="android:timePickerMode">spinner</item>
     </style>
 
     <style name="TabLayout" parent="Widget.Design.TabLayout">

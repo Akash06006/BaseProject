@@ -1,0 +1,181 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <import type="com.android.sidewalk.common.BindingUtils" />
+
+        <variable
+                name="menuViewModel"
+                type="com.android.sidewalk.viewmodels.menu.MenuViewModel" />
+
+    </data>
+
+    <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+        <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:orientation="vertical">
+
+            <include
+                    android:id="@+id/toolbarCommon"
+                    layout="@layout/common_toolbar_back"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/dp_50" />
+
+            <RelativeLayout
+                    android:id="@+id/rlUpload"
+                    android:layout_width="match_parent"
+                    android:layout_height="150dp"
+                    android:layout_below="@+id/view"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginTop="20dp"
+                    android:layout_marginRight="10dp"
+                    android:background="@drawable/ic_cat_back"
+                    android:onClick="@{(v) -> menuViewModel.clickListener(v)}">
+
+                <ImageView
+                        android:id="@+id/imgUpload"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerInParent="true"
+                        android:src="@drawable/ic_upload" />
+
+                <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/imgUpload"
+                        android:layout_centerHorizontal="true"
+                        android:hint="@string/upload_image" />
+
+                <com.makeramen.roundedimageview.RoundedImageView
+                        android:id="@+id/imgView"
+                        android:layout_width="match_parent"
+                        android:layout_height="150dp"
+                        android:scaleType="centerCrop"
+                        app:riv_corner_radius="12dp"
+
+                        app:riv_mutate_background="true" />
+
+            </RelativeLayout>
+
+            <EditText
+                    android:id="@+id/edtItemName"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/rlUpload"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginTop="20dp"
+                    android:layout_marginRight="10dp"
+                    android:background="@drawable/ic_edt_back"
+                    android:hint="@string/item_name"
+                    android:imeOptions="actionDone"
+                    android:inputType="textCapSentences"
+                    android:maxLength="16"
+                    android:paddingLeft="15dp"
+                    android:singleLine="true"
+                    android:textSize="14sp"
+                    app:font="@{`regular`}" />
+
+            <EditText
+                    android:id="@+id/edtPrice"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/rlUpload"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginTop="20dp"
+                    android:layout_marginRight="10dp"
+                    android:background="@drawable/ic_edt_back"
+                    android:hint="@string/price"
+                    android:imeOptions="actionDone"
+                    android:inputType="phone"
+                    android:maxLength="16"
+                    android:paddingLeft="15dp"
+                    android:singleLine="true"
+                    android:textSize="14sp"
+                    app:font="@{`regular`}" />
+
+            <EditText
+                    android:id="@+id/edtDescription"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/rlUpload"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginTop="20dp"
+                    android:layout_marginRight="10dp"
+                    android:background="@drawable/ic_edt_back"
+                    android:hint="@string/description"
+                    android:inputType="textCapSentences|textMultiLine"
+                    android:maxLines="3"
+                    android:minLines="2"
+                    android:paddingLeft="15dp"
+                    android:scrollbars="vertical"
+                    android:textSize="14sp"
+                    app:font="@{`regular`}" />
+
+            <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginTop="20dp"
+                    android:layout_marginRight="10dp"
+                    android:gravity="center"
+                    android:orientation="horizontal">
+
+                <TextView
+                        android:id="@+id/txtVeg"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/ic_veg_selected"
+                        android:gravity="center"
+                        android:onClick="@{(v) -> menuViewModel.clickListener(v)}"
+                        android:text="@string/veg"
+                        android:textAllCaps="false"
+                        android:textColor="@color/colorWhite"
+                        app:font="@{`regular`}"
+                        tools:ignore="AllCaps" />
+
+                <TextView
+                        android:id="@+id/txtNonVeg"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="10dp"
+                        android:background="@drawable/ic_veg_unselected"
+                        android:gravity="center"
+                        android:onClick="@{(v) -> menuViewModel.clickListener(v)}"
+                        android:text="@string/non_veg"
+                        android:textAllCaps="false"
+                        android:textColor="@color/colorGrey"
+                        app:font="@{`regular`}"
+                        tools:ignore="AllCaps" />
+            </LinearLayout>
+
+            <Button
+                    android:id="@+id/btnAddItem"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/edtCatName"
+                    android:layout_centerHorizontal="true"
+                    android:layout_gravity="center"
+                    android:layout_margin="20dp"
+                    android:background="@drawable/shape_button_back"
+                    android:minWidth="150dp"
+                    android:onClick="@{(v) -> menuViewModel.clickListener(v)}"
+                    android:paddingLeft="40dp"
+                    android:paddingTop="10dp"
+                    android:paddingRight="40dp"
+                    android:paddingBottom="10dp"
+                    android:text="@string/save"
+                    android:textAllCaps="false"
+                    android:textColor="@color/colorWhite" />
+
+        </LinearLayout>
+    </ScrollView>
+</layout>

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:tools="http://schemas.android.com/tools"
-        package="com.example.driver">
+        package="com.android.sidewalk">
 
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.VIBRATE" />
@@ -29,7 +29,7 @@
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
 
     <application
-            android:name="com.example.driver.application.MyApplication"
+            android:name=".application.MyApplication"
             android:fullBackupContent="@xml/backup_descriptor"
             android:icon="@drawable/ic_app"
             android:label="@string/app_name"
@@ -39,10 +39,40 @@
             android:theme="@style/AppTheme.NoActionBar"
             tools:ignore="GoogleAppIndexingWarning"
             tools:targetApi="n">
-        <activity android:name="com.example.driver.views.tutorials.TutorialActivity"></activity>
-        <activity android:name="com.example.driver.views.home.LandingActivty" />
         <activity
-                android:name="com.example.driver.views.SplashActivity"
+                android:name=".views.trucks.AddTruckActivity"
+                android:screenOrientation="portrait"
+                android:windowSoftInputMode="stateHidden"></activity>
+        <activity
+                android:name=".views.trucks.TruckDetailActivity"
+                android:screenOrientation="portrait"
+                android:windowSoftInputMode="stateHidden"></activity>
+        <activity
+                android:name=".views.trucks.GalleryActivity"
+                android:screenOrientation="portrait"
+                android:windowSoftInputMode="stateHidden"></activity>
+
+        <activity
+                android:name=".views.menu.CategoryListActivity"
+                android:screenOrientation="portrait"
+                android:windowSoftInputMode="stateHidden"></activity>
+
+        <activity
+                android:name=".views.menu.ProductListActivity"
+                android:screenOrientation="portrait"
+                android:windowSoftInputMode="stateHidden"></activity>
+
+        <activity
+                android:name=".views.menu.AddItemActivity"
+                android:screenOrientation="portrait"
+                android:windowSoftInputMode="stateHidden"></activity>
+
+
+
+        <activity android:name=".views.tutorials.TutorialActivity" />
+        <activity android:name=".views.home.LandingActivty" />
+        <activity
+                android:name=".views.SplashActivity"
                 android:screenOrientation="portrait"
                 android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
@@ -52,73 +82,41 @@
             </intent-filter>
         </activity>
         <activity
-                android:name="com.example.driver.views.authentication.LoginActivity"
+                android:name=".views.authentication.LoginActivity"
                 android:screenOrientation="portrait"
                 android:windowSoftInputMode="stateHidden" />
         <activity
-                android:name="com.example.driver.views.orders.CreateOrderActivty"
+                android:name=".views.orders.CreateOrderActivty"
                 android:screenOrientation="portrait"
                 android:windowSoftInputMode="stateHidden" />
         <activity
-                android:name="com.example.driver.views.authentication.SignupActivity"
+                android:name=".views.authentication.SignupActivity"
                 android:screenOrientation="portrait"
                 android:windowSoftInputMode="stateHidden" />
         <activity
-                android:name="com.example.driver.views.authentication.ForgotPasswrodActivity"
+                android:name=".views.authentication.ForgotPasswrodActivity"
                 android:screenOrientation="portrait" />
         <activity
-                android:name="com.example.driver.views.authentication.OTPVerificationActivity"
+                android:name=".views.authentication.OTPVerificationActivity"
                 android:screenOrientation="portrait"
                 android:windowSoftInputMode="stateHidden" />
         <activity
-                android:name="com.example.driver.views.authentication.ResetPasswrodActivity"
+                android:name=".views.authentication.ResetPasswrodActivity"
                 android:screenOrientation="portrait" />
         <activity
-                android:name="com.example.driver.views.authentication.ChangePasswrodActivity"
+                android:name=".views.authentication.ChangePasswrodActivity"
+                android:screenOrientation="portrait" />
+
+        <activity
+                android:name=".views.contactus.ContactUsActivity"
                 android:screenOrientation="portrait" />
         <activity
-                android:name=".views.home.MyBookingsActivity"
-                android:screenOrientation="portrait" />
-        <activity
-                android:name=".views.activity.DashboardActivity"
-                android:screenOrientation="portrait" />
-        <activity
-                android:name=".views.services.CreateBookingActivity"
-                android:screenOrientation="portrait" />
-        <activity
-                android:name=".views.services.ServiceDetail"
-                android:screenOrientation="portrait" />
-        <activity
-                android:name=".views.history.HistoryBookingActivity"
-                android:screenOrientation="portrait" />
-        <activity
-                android:name=".views.chat.ChatInnerListActivity"
-                android:screenOrientation="portrait" />
-        <activity
-                android:name=".views.booking.BookedServiceDetail"
-                android:screenOrientation="portrait" />
-        <activity
-                android:name=".views.booking.BookingRulesDetail"
-                android:screenOrientation="portrait" />
-        <activity
-                android:name=".views.booking.EmployeeProfileDetail"
-                android:screenOrientation="portrait" />
-        <activity
-                android:name=".views.authentication.UserOptionActivity"
-                android:screenOrientation="portrait" />
-        <activity
-                android:name=".views.booking.ServiceDescriptionActivity"
-                android:screenOrientation="portrait" />
-        <activity
-                android:name="com.example.driver.views.contactus.ContactUsActivity"
-                android:screenOrientation="portrait" />
-        <activity
-                android:name="com.example.driver.views.authentication.MyAccountsActivity"
+                android:name=".views.authentication.MyAccountsActivity"
                 android:screenOrientation="portrait" />
 
         <provider
                 android:name="androidx.core.content.FileProvider"
-                android:authorities="com.example.driver.fileprovider"
+                android:authorities="com.android.sidewalk.fileprovider"
                 android:exported="false"
                 android:grantUriPermissions="true">
             <meta-data

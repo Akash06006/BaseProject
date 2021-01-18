@@ -1,0 +1,105 @@
+package com.android.sidewalk.viewmodels
+
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import android.view.View
+import com.android.sidewalk.common.UtilsFunctions
+import com.android.sidewalk.model.CommonModel
+import com.android.sidewalk.model.LoginResponse
+import com.android.sidewalk.repositories.LoginRepository
+import com.android.sidewalk.sharedpreference.SharedPrefClass
+import com.google.gson.JsonObject
+import okhttp3.MultipartBody
+import okhttp3.RequestBody
+import java.util.HashMap
+
+class LoginViewModel : BaseViewModel() {
+    private val isClick = MutableLiveData<String>()
+    private var loginResponse : MutableLiveData<LoginResponse>? = null
+    private var signupResponse : MutableLiveData<LoginResponse>? = null
+    private var verifyUserResponse : MutableLiveData<CommonModel>? = null
+    private var loginRepository =
+        LoginRepository()
+    private var sharedPrefClass =
+        SharedPrefClass()
+    private val mIsUpdating = MutableLiveData<Boolean>()
+    private val postEmailError = MutableLiveData<String>()
+    private val postPassError = MutableLiveData<String>()
+
+    init {
+        loginResponse = loginRepository.getLoginData(null)
+        signupResponse = loginRepository.callSignupApi(null, null, null, null)
+        verifyUserResponse = loginRepository.callVerifyUserApi(null)
+    }
+
+    fun getLoginRes() : LiveData<LoginResponse> {
+        return loginResponse!!
+    }
+
+    fun getVerifyUserRes() : LiveData<CommonModel> {
+        return verifyUserResponse!!
+    }
+
+    fun getSignupRes() : LiveData<LoginResponse> {
+        return signupResponse!!
+    }
+
+    fun getEmailError() : LiveData<String> {
+        return postEmailError
+    }
+
+    fun getPasswordError() : LiveData<String> {
+        return postPassError
+    }
+
+    override fun isLoading() : LiveData<Boolean> {
+        return mIsUpdating
+    }
+
+    /* override fun isClick() : LiveData<String> {
+         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+     }
+    override fun clickListener(v : View) {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }*/
+    override fun isClick() : LiveData<String> {
+        return isClick
+    }
+
+    override fun clickListener(v : View) {
+        isClick.value = v.resources.getResourceName(v.id).split("/")[1]
+    }
+
+    fun callLoginApi(mJsonObject : JsonObject) {
+        if (UtilsFunctions.isNetworkConnected()) {
+            //emialExistenceResponse = loginRepository.checkPhoneExistence(mJsonObject)
+            loginResponse = loginRepository.getLoginData(mJsonObject)
+            mIsUpdating.postValue(true)
+        }
+
+    }
+
+    fun callSignupApi(
+        mJsonObject : HashMap<String, RequestBody>,
+        userImage : MultipartBody.Part?,
+        licenseFront : MultipartBody.Part?,
+        licenseBack : MultipartBody.Part?
+    ) {
+        if (UtilsFunctions.isNetworkConnected()) {
+            //emialExistenceResponse = loginRepository.checkPhoneExistence(mJsonObject)
+            signupResponse =
+                loginRepository.callSignupApi(mJsonObject, userImage, licenseFront, licenseBack)
+            mIsUpdating.postValue(true)
+        }
+
+    }
+
+    fun callVerifyUserApi(mJsonObject : JsonObject) {
+        if (UtilsFunctions.isNetworkConnected()) {
+            //emialExistenceResponse = loginRepository.checkPhoneExistence(mJsonObject)
+            verifyUserResponse = loginRepository.callVerifyUserApi(mJsonObject)
+            mIsUpdating.postValue(true)
+        }
+
+    }
+}

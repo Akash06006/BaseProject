@@ -1,0 +1,283 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <import type="com.android.sidewalk.common.BindingUtils" />
+
+        <variable
+                name="truckViewModel"
+                type="com.android.sidewalk.viewmodels.trucks.TrucksViewModel" />
+
+    </data>
+
+    <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/colorWhite">
+
+        <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/colorWhite"
+                android:orientation="vertical">
+
+            <include
+                    android:id="@+id/toolbarCommon"
+                    layout="@layout/common_toolbar_back"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/dp_50" />
+
+            <TextView
+                    android:id="@+id/txtUploadImage"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="5dp"
+                    android:background="@drawable/ic_time_back"
+                    android:gravity="center"
+
+                    android:onClick="@{(v) -> truckViewModel.clickListener(v)}"
+                    android:text="@string/upload_img" />
+
+            <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_margin="5dp"
+                    android:background="@color/colorWhite"
+                    android:orientation="horizontal">
+
+                <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/rv_images"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
+
+                <com.makeramen.roundedimageview.RoundedImageView
+                        android:id="@+id/imgAddImage"
+                        android:layout_width="80dp"
+                        android:layout_height="80dp"
+                        android:layout_marginLeft="5dp"
+                        android:layout_marginTop="10dp"
+                        android:background="@drawable/ic_add_img"
+                        android:onClick="@{(v) -> truckViewModel.clickListener(v)}"
+                        android:scaleType="centerCrop"
+                        android:visibility="gone"
+                        app:riv_corner_radius="12dp"
+                        app:riv_mutate_background="true" />
+            </LinearLayout>
+
+            <EditText
+                    android:id="@+id/edtTruckName"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginRight="10dp"
+                    android:background="@drawable/ic_edt_back"
+                    android:hint="@string/mobile_cart_name"
+                    android:imeOptions="actionNext"
+                    android:maxLength="16"
+                    android:paddingLeft="15dp"
+                    android:singleLine="true"
+                    android:textSize="14sp"
+                    app:font="@{`regular`}" />
+
+            <EditText
+                    android:id="@+id/edtLocation"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginRight="10dp"
+                    android:background="@drawable/ic_edt_back"
+                    android:hint="@string/location"
+                    android:imeOptions="actionNext"
+                    android:maxLength="16"
+                    android:paddingLeft="15dp"
+                    android:singleLine="true"
+                    android:textSize="14sp"
+                    app:font="@{`regular`}" />
+
+            <EditText
+                    android:id="@+id/edtRegNo"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginRight="10dp"
+                    android:background="@drawable/ic_edt_back"
+                    android:hint="@string/reg_no"
+                    android:imeOptions="actionNext"
+                    android:maxLength="16"
+                    android:paddingLeft="15dp"
+                    android:singleLine="true"
+                    android:textSize="14sp"
+                    app:font="@{`regular`}" />
+
+            <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:weightSum="2">
+
+                <TextView
+                        android:id="@+id/edtStartTime"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginRight="10dp"
+                        android:layout_weight="1"
+                        android:background="@drawable/ic_time_back"
+                        android:clickable="true"
+                        android:drawableRight="@drawable/ic_clock"
+                        android:drawablePadding="5dp"
+                        android:editable="false"
+                        android:focusable="false"
+                        android:focusableInTouchMode="false"
+                        android:gravity="center_vertical"
+                        android:hint="@string/start_time"
+                        android:imeOptions="actionNext"
+                        android:maxLength="16"
+                        android:onClick="@{(v) -> truckViewModel.clickListener(v)}"
+                        android:paddingLeft="15dp"
+                        android:paddingRight="10dp"
+                        android:singleLine="true"
+                        android:textSize="14sp"
+                        app:font="@{`regular`}" />
+
+                <TextView
+                        android:id="@+id/edtEndTime"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginRight="10dp"
+                        android:layout_weight="1"
+                        android:background="@drawable/ic_time_back"
+                        android:clickable="true"
+                        android:drawableRight="@drawable/ic_clock"
+                        android:drawablePadding="5dp"
+                        android:editable="false"
+                        android:focusable="false"
+                        android:gravity="center_vertical"
+                        android:hint="@string/end_time"
+                        android:imeOptions="actionNext"
+                        android:maxLength="16"
+                        android:onClick="@{(v) -> truckViewModel.clickListener(v)}"
+                        android:paddingLeft="15dp"
+                        android:paddingRight="10dp"
+                        android:singleLine="true"
+                        android:textSize="14sp"
+                        app:font="@{`regular`}" />
+            </LinearLayout>
+
+            <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp">
+
+                <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="left"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginTop="10dp"
+                        android:text="@string/gallery"
+                        android:textAllCaps="false"
+                        android:textColor="@color/colorBlack"
+                        android:textSize="16dp"
+                        app:font="@{`semibold`}"
+                        tools:ignore="AllCaps" />
+
+                <TextView
+                        android:id="@+id/txtAddGallery"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginRight="10dp"
+                        android:drawableRight="@drawable/ic_img_plus"
+                        android:drawablePadding="5dp"
+                        android:gravity="center"
+                        android:onClick="@{(v) -> truckViewModel.clickListener(v)}"
+                        android:text="@string/add"
+                        android:textAllCaps="false"
+                        android:textColor="@color/view_see"
+                        app:font="@{`semibold`}"
+                        tools:ignore="AllCaps" />
+            </RelativeLayout>
+
+            <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rvGallery"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp" />
+
+            <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="left"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginTop="10dp"
+                    android:text="@string/truck_partner"
+                    android:textAllCaps="false"
+                    android:textColor="@color/colorBlack"
+                    android:textSize="16dp"
+                    app:font="@{`semibold`}"
+                    tools:ignore="AllCaps" />
+
+            <EditText
+                    android:id="@+id/edtName"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginRight="10dp"
+                    android:background="@drawable/ic_edt_back"
+                    android:hint="@string/name"
+                    android:imeOptions="actionNext"
+                    android:maxLength="16"
+                    android:paddingLeft="15dp"
+                    android:singleLine="true"
+                    android:textSize="14sp"
+                    app:font="@{`regular`}" />
+
+            <EditText
+                    android:id="@+id/edtPhone"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginRight="10dp"
+                    android:background="@drawable/ic_edt_back"
+                    android:hint="@string/phone_number"
+                    android:imeOptions="actionNext"
+                    android:maxLength="16"
+                    android:paddingLeft="15dp"
+                    android:singleLine="true"
+                    android:textSize="14sp"
+                    app:font="@{`regular`}" />
+
+            <Button
+                    android:id="@+id/btnSave"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginTop="25dp"
+                    android:layout_marginRight="20dp"
+                    android:layout_marginBottom="20dp"
+                    android:background="@drawable/shape_button_back"
+                    android:onClick="@{(v) -> truckViewModel.clickListener(v)}"
+                    android:text="@string/save"
+                    android:textAllCaps="false"
+                    android:textColor="@color/colorWhite"
+                    android:textSize="@dimen/button_text_size" />
+        </LinearLayout>
+    </ScrollView>
+
+</layout>
