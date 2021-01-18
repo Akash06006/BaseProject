@@ -29,4 +29,9 @@
     <color name="tabColor">#80ffffff</color>
     <color name="terms_color">#989393</color>
     <color name="view_see">#9FDAE8</color>
+    <color name="colorPrice">#FF845B</color>
+
+    <color name="white">#ffff</color>
+    <color name="grey_20">#cccccc</color>
+    <color name="grey_80">#37474F</color>
 </resources>

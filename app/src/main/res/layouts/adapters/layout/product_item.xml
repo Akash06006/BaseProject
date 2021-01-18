@@ -23,8 +23,8 @@
 
         <com.makeramen.roundedimageview.RoundedImageView
                 android:id="@+id/imgCategory"
-                android:layout_width="80dp"
-                android:layout_height="80dp"
+                android:layout_width="70dp"
+                android:layout_height="70dp"
                 android:background="@drawable/ic_img_back"
                 android:scaleType="centerCrop"
                 app:riv_corner_radius="12dp"
@@ -35,17 +35,17 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="10dp"
-                android:layout_marginTop="10dp"
+                android:layout_marginTop="5dp"
                 android:layout_marginRight="5dp"
                 android:layout_toLeftOf="@+id/imgVegNonVeg"
                 android:layout_toRightOf="@+id/imgCategory"
                 android:gravity="center_vertical"
                 android:hint="@string/view_all"
-                android:textStyle="bold"
                 android:singleLine="true"
                 android:textColor="@color/colorBlack"
-                android:textSize="16sp"
-                app:font="@{`semibold`}" />
+                android:textSize="17sp"
+                android:textStyle="bold"
+                app:font="@{`bold`}" />
 
         <ImageView
                 android:id="@+id/imgVegNonVeg"
@@ -68,7 +68,7 @@
                 android:gravity="center_vertical"
                 android:hint="@string/view_all"
                 android:maxLines="2"
-                android:singleLine="true"
+                android:textSize="13sp"
                 app:font="@{`regular`}" />
 
         <TextView
@@ -81,11 +81,11 @@
                 android:layout_marginTop="5dp"
                 android:layout_marginRight="10dp"
                 android:gravity="center_vertical"
-                android:textStyle="bold"
                 android:singleLine="true"
                 android:text="$20"
-                android:textColor="@color/colorSecondary"
-                android:textSize="16sp"
+                android:textColor="@color/colorPrice"
+                android:textSize="17sp"
+                android:textStyle="bold"
                 app:font="@{`bold`}" />
 
         <View

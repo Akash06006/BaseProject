@@ -64,5 +64,7 @@ object GlobalConstants {
     var OTP_VERIFICATION_ID = "OTP_VERIFICATION_ID"
     @JvmStatic
     var VERIFICATION_TYPE = "VERIFICATION_TYPE"
+    @JvmStatic
+    var CURRENCY = "$"
 
 }

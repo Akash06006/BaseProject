@@ -68,6 +68,9 @@ class CategoryListActivity : BaseActivity(), ChoiceCallBack {
         addTruckBinding.menuViewModel = menuViewModel
         addTruckBinding.toolbarCommon.imgToolbarText.text =
             getString(R.string.add_menu)
+        if (UtilsFunctions.isNetworkConnected()) {
+            startProgressDialog()
+        }
         //  truckId = intent.extras?.get("id") as String
         //menuViewModel.truckDetail(truckId)
         menuViewModel.getCategoryListsRes().observe(this,
@@ -110,7 +113,6 @@ class CategoryListActivity : BaseActivity(), ChoiceCallBack {
             fun(it : String?) {
                 when (it) {
                     "rlAddCategory" -> {
-
                         addCategoryDialog()
                     }
                 }

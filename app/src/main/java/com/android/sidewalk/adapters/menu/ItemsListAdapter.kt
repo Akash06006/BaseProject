@@ -10,6 +10,7 @@ import androidx.annotation.RequiresApi
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.android.sidewalk.R
+import com.android.sidewalk.constants.GlobalConstants
 import com.android.sidewalk.databinding.ProductItemBinding
 import com.android.sidewalk.model.menu.CategoryListsResponse
 import com.android.sidewalk.model.menu.ItemListResponse
@@ -55,29 +56,29 @@ class ItemsListAdapter(
             )
             .into(holder.binding!!.imgCategory)
         holder.binding.txtCatName.setText(addressList!![position].name)
-        holder.binding.txtPrice.setText(addressList!![position].price)
+        holder.binding.txtPrice.setText(GlobalConstants.CURRENCY +addressList!![position].price)
         holder.binding.txtDescription.setText(addressList!![position].description)
-        if (addressList!![position].itemType.equals("nonveg")) {
-            val resId = categoryListActivity.resources.getDrawable(
-                R.drawable.ic_nonveg
-            )
-            holder.binding.imgVegNonVeg.setImageResource(resId)
-            /* holder.binding.imgVegNonVeg.imageResource =
+        /* if (addressList!![position].itemType.equals("nonveg")) {
+             val resId = categoryListActivity.resources.getDrawable(
+                 R.drawable.ic_nonveg
+             )
+             holder.binding.imgVegNonVeg.setImageResource(resId)
+             *//* holder.binding.imgVegNonVeg.imageResource =
                  categoryListActivity.resources.getDrawable(
                      R.drawable.ic_nonveg
-                 )*/
+                 )*//*
 
         } else {
-            /*holder.binding.imgVegNonVeg.imageResource =
+            *//*holder.binding.imgVegNonVeg.imageResource =
                 categoryListActivity.resources.getDrawable(
                     R.drawable.ic_veg
-                )*/
+                )*//*
             val resId = categoryListActivity.resources.getDrawable(
                 R.drawable.ic_veg
             )
             holder.binding.imgVegNonVeg.setImageResource(resId)
 
-        }
+        }*/
         /*holder.binding!!.imgCategory.setOnClickListener {
             categoryListActivity.callGalleryActivity()
         }*/
