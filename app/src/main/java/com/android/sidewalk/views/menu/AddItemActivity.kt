@@ -8,6 +8,7 @@ import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Environment
 import android.provider.MediaStore
+import android.text.TextUtils
 import android.widget.*
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
@@ -19,6 +20,7 @@ import com.android.sidewalk.callbacks.ChoiceCallBack
 import com.android.sidewalk.common.UtilsFunctions
 import com.android.sidewalk.databinding.ActivityAddItemBinding
 import com.android.sidewalk.model.CommonModel
+import com.android.sidewalk.model.menu.ItemDetailResponse
 import com.android.sidewalk.utils.BaseActivity
 import com.android.sidewalk.utils.DialogClass
 import com.android.sidewalk.utils.Utils
@@ -36,7 +38,7 @@ class AddItemActivity : BaseActivity(), ChoiceCallBack {
     private lateinit var addItemBinding : ActivityAddItemBinding
     private lateinit var menuViewModel : MenuViewModel
     var imagesList = ArrayList<String>()
-    var catId = ""
+    var itemId = ""
     var itemType = "veg"
     private val RESULT_LOAD_IMAGE = 100
     private val CAMERA_REQUEST = 1888
@@ -56,15 +58,36 @@ class AddItemActivity : BaseActivity(), ChoiceCallBack {
         addItemBinding.menuViewModel = menuViewModel
         addItemBinding.toolbarCommon.imgToolbarText.text =
             getString(R.string.add_item_title)
-        catId = intent.extras?.get("id") as String
-        // menuViewModel.itemsList(catId)
+        itemId = intent.extras?.get("id") as String
+        if (!TextUtils.isEmpty(itemId)) {
+            menuViewModel.itemsDetail(itemId)
+            addItemBinding.toolbarCommon.imgToolbarText.text =
+                getString(R.string.update_item)
+        }
+
         menuViewModel.getAddCategoryRes().observe(this,
             Observer<CommonModel> { addGalleryRes->
                 stopProgressDialog()
                 if (addGalleryRes != null) {
+                    showToastSuccess(addGalleryRes.message)
+                    finish()
+                }
+            })
+
+        menuViewModel.getItemDetailRes().observe(this,
+            Observer<ItemDetailResponse> { addGalleryRes->
+                stopProgressDialog()
+                if (addGalleryRes != null) {
+                    addItemBinding.itemDetailResponse = addGalleryRes.data
                     //val message = addGalleryRes.message
-                    finish();
-                    startActivity(getIntent())
+                    Glide.with(this).load(addGalleryRes.data!!.image).into(addItemBinding.imgView)
+                    itemImage = addGalleryRes.data!!.image!!
+                    if (addGalleryRes.data!!.itemType.equals("veg")) {
+                        vegNonVegSelected(true)
+                    } else {
+                        vegNonVegSelected(false)
+                    }
+
                 }
             })
 
@@ -75,22 +98,11 @@ class AddItemActivity : BaseActivity(), ChoiceCallBack {
                 fun(it : String?) {
                     when (it) {
                         "txtVeg" -> {
-                            itemType = "veg"
-                            addItemBinding.txtVeg.setTextColor(resources.getColor(R.color.colorWhite))
-                            addItemBinding.txtNonVeg.setTextColor(resources.getColor(R.color.colorGrey))
-                            addItemBinding.txtVeg.background =
-                                resources.getDrawable(R.drawable.ic_veg_selected)
-                            addItemBinding.txtNonVeg.background =
-                                resources.getDrawable(R.drawable.ic_veg_unselected)
+                            vegNonVegSelected(true)
+
                         }
                         "txtNonVeg" -> {
-                            itemType = "nonveg"
-                            addItemBinding.txtNonVeg.setTextColor(resources.getColor(R.color.colorWhite))
-                            addItemBinding.txtVeg.setTextColor(resources.getColor(R.color.colorGrey))
-                            addItemBinding.txtNonVeg.background =
-                                resources.getDrawable(R.drawable.ic_veg_selected)
-                            addItemBinding.txtVeg.background =
-                                resources.getDrawable(R.drawable.ic_veg_unselected)
+                            vegNonVegSelected(false)
                         }
                         "btnAddItem" -> {
                             val name = addItemBinding.edtItemName.text.toString()
@@ -121,9 +133,12 @@ class AddItemActivity : BaseActivity(), ChoiceCallBack {
                                     )
                                 )
                                 else -> {
+
                                     val mHashMap = HashMap<String, RequestBody>()
                                     mHashMap["name"] =
                                         Utils(this).createPartFromString(name)
+                                    mHashMap["itemId"] =
+                                        Utils(this).createPartFromString(itemId)
                                     mHashMap["price"] =
                                         Utils(this).createPartFromString(price)
                                     mHashMap["description"] =
@@ -131,15 +146,20 @@ class AddItemActivity : BaseActivity(), ChoiceCallBack {
                                     mHashMap["itemType"] =
                                         Utils(this).createPartFromString(itemType)
                                     mHashMap["categoryId"] =
-                                        Utils(this).createPartFromString(catId)
+                                        Utils(this).createPartFromString(itemId)
                                     var itemImagePart : MultipartBody.Part? = null
-                                    val f1 = File(itemImage)
-                                    itemImagePart =
-                                        Utils(this)
-                                            .prepareFilePart(
-                                                "image",
-                                                f1
-                                            )
+                                    if (itemImage.contains("http")) {
+                                        itemImagePart = null
+                                    } else {
+                                        val f1 = File(itemImage)
+                                        itemImagePart =
+                                            Utils(this)
+                                                .prepareFilePart(
+                                                    "image",
+                                                    f1
+                                                )
+
+                                    }
                                     if (UtilsFunctions.isNetworkConnected()) {
                                         startProgressDialog()
                                         menuViewModel.addItem(
@@ -147,6 +167,7 @@ class AddItemActivity : BaseActivity(), ChoiceCallBack {
                                             mHashMap
                                         )
                                     }
+
                                 }
                                 // addCategoryDialog()
                             }
@@ -164,6 +185,27 @@ class AddItemActivity : BaseActivity(), ChoiceCallBack {
                     }
                 })
         )
+    }
+
+    private fun vegNonVegSelected(isVeg : Boolean) {
+        if (isVeg) {
+            itemType = "veg"
+            addItemBinding.txtVeg.setTextColor(resources.getColor(R.color.colorWhite))
+            addItemBinding.txtNonVeg.setTextColor(resources.getColor(R.color.colorGrey))
+            addItemBinding.txtVeg.background =
+                resources.getDrawable(R.drawable.ic_veg_selected)
+            addItemBinding.txtNonVeg.background =
+                resources.getDrawable(R.drawable.ic_veg_unselected)
+        } else {
+            itemType = "nonveg"
+            addItemBinding.txtNonVeg.setTextColor(resources.getColor(R.color.colorWhite))
+            addItemBinding.txtVeg.setTextColor(resources.getColor(R.color.colorGrey))
+            addItemBinding.txtNonVeg.background =
+                resources.getDrawable(R.drawable.ic_veg_selected)
+            addItemBinding.txtVeg.background =
+                resources.getDrawable(R.drawable.ic_veg_unselected)
+        }
+
     }
 
     private fun showError(textView : EditText, error : String) {
@@ -244,9 +286,9 @@ class AddItemActivity : BaseActivity(), ChoiceCallBack {
 
             setImage(picturePath)
             cursor.close()
-        } else if (requestCode == CAMERA_REQUEST && resultCode == Activity.RESULT_OK /*&& null != data*/) {
-            setImage(itemImage)            // val extras = data!!.extras
-            // val imageBitmap = extras!!.get("data") as Bitmap
+        } else if (requestCode == CAMERA_REQUEST && resultCode == Activity.RESULT_OK /*&& null != categoryList*/) {
+            setImage(itemImage)            // val extras = categoryList!!.extras
+            // val imageBitmap = extras!!.get("categoryList") as Bitmap
             //getImageUri(imageBitmap)
         }
 

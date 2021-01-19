@@ -27,7 +27,6 @@ import com.android.sidewalk.callbacks.ChoiceCallBack
 import com.android.sidewalk.common.UtilsFunctions
 import com.android.sidewalk.databinding.ActivityProductListBinding
 import com.android.sidewalk.model.CommonModel
-import com.android.sidewalk.model.menu.CategoryListsResponse
 import com.android.sidewalk.model.menu.ItemListResponse
 import com.android.sidewalk.utils.BaseActivity
 import com.android.sidewalk.utils.DialogClass
@@ -35,7 +34,6 @@ import com.android.sidewalk.utils.Utils
 import com.android.sidewalk.viewmodels.menu.MenuViewModel
 import com.android.sidewalk.views.trucks.GalleryActivity
 import com.bumptech.glide.Glide
-import com.uniongoods.adapters.CategoryListAdapter
 import com.uniongoods.adapters.ItemsListAdapter
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
@@ -153,87 +151,13 @@ class ProductListActivity : BaseActivity(), ChoiceCallBack {
 
     }
 
-    fun callGalleryActivity() {
+    fun callEditItemActivity(id : String?) {
         val intent = Intent(
             this,
-            GalleryActivity::class.java
+            AddItemActivity::class.java
         )
-        intent.putExtra("id", catId)
+        intent.putExtra("id", id)
         startActivity(intent)
-    }
-
-    fun addCategoryDialog() {
-        val binding =
-            DataBindingUtil.inflate<ViewDataBinding>(
-                LayoutInflater.from(this),
-                R.layout.layout_add_category,
-                null,
-                false
-            )
-        val dialog = Dialog(this)
-        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
-        dialog.setContentView(binding.root)
-        dialog.setTitle(getString(R.string.app_name))
-        imageView = dialog.findViewById(R.id.imgView) as ImageView
-        val uploadImage = dialog.findViewById(R.id.rlUpload) as RelativeLayout
-        val edtCatname = dialog.findViewById(R.id.edtCatName) as EditText
-        val dialogButton = dialog.findViewById(R.id.dialogButtonOK) as ImageView
-        val btnAddCategory = dialog.findViewById(R.id.btnAddCategory) as Button
-        // if button is clicked, close the custom dialog
-        uploadImage.setOnClickListener {
-            if (checkPersmission()) {
-                confirmationDialog =
-                    mDialogClass.setUploadConfirmationDialog(
-                        this,
-                        this,
-                        "gallery"
-                    )
-            } else requestPermission()
-        }
-
-        dialogButton.setOnClickListener {
-            dialog.dismiss()
-        }
-        btnAddCategory.setOnClickListener {
-            val catname = edtCatname.text.toString()
-            //Gallery
-            when {
-                catImage.isEmpty() -> showToastError(
-                    getString(
-                        R.string.upload_img_error
-                    )
-                )
-                catname.isEmpty() -> showError(
-                    edtCatname,
-                    getString(R.string.empty) + " " + getString(
-                        R.string.category_name
-                    )
-                )
-                else -> {
-                    val mHashMap = HashMap<String, RequestBody>()
-                    mHashMap["name"] =
-                        Utils(this).createPartFromString(catname)
-                    var catImagePart : MultipartBody.Part? = null
-                    val f1 = File(catImage)
-                    catImagePart =
-                        Utils(this)
-                            .prepareFilePart(
-                                "image",
-                                f1
-                            )
-                    if (UtilsFunctions.isNetworkConnected()) {
-                        startProgressDialog()
-                        menuViewModel.addCategory(
-                            catImagePart,
-                            mHashMap
-                        )
-                    }
-                    dialog.dismiss()
-                }
-            }
-        }
-        dialog.show()
-/* */
     }
 
     private fun showError(textView : EditText, error : String) {
@@ -314,9 +238,9 @@ class ProductListActivity : BaseActivity(), ChoiceCallBack {
 
             setImage(picturePath)
             cursor.close()
-        } else if (requestCode == CAMERA_REQUEST && resultCode == Activity.RESULT_OK /*&& null != data*/) {
-            setImage(catImage)            // val extras = data!!.extras
-            // val imageBitmap = extras!!.get("data") as Bitmap
+        } else if (requestCode == CAMERA_REQUEST && resultCode == Activity.RESULT_OK /*&& null != categoryList*/) {
+            setImage(catImage)            // val extras = categoryList!!.extras
+            // val imageBitmap = extras!!.get("categoryList") as Bitmap
             //getImageUri(imageBitmap)
         }
 

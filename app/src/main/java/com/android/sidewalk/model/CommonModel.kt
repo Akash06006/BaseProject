@@ -10,7 +10,7 @@ class CommonModel {
     @SerializedName("message")
     @Expose
     var message : String? = null
-    @SerializedName("data")
+    @SerializedName("categoryList")
     @Expose
     var data : Any? = null
 

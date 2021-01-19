@@ -136,11 +136,11 @@ internal constructor(
                 if (results != null && results.count > 0) {
                     //  HomeActivity.search_icon.setVisibility(View.GONE);
                     // HomeActivity.cross_icon.setVisibility(View.VISIBLE);
-                    // The API returned at least one result, update the data.
+                    // The API returned at least one result, update the categoryList.
                     mResultList = results.values as ArrayList<AutocompletePrediction>
                     notifyDataSetChanged()
                 } else {
-                    // The API did not return any results, invalidate the data set.
+                    // The API did not return any results, invalidate the categoryList set.
                     notifyDataSetInvalidated()
                 }
             }
@@ -163,7 +163,7 @@ internal constructor(
      * Returns an empty latLongList if no results were found.
      * Returns null if the API client is not available or the query did not complete
      * successfully.
-     * This method MUST be called off the main UI thread, as it will block until data is returned
+     * This method MUST be called off the main UI thread, as it will block until categoryList is returned
      * from the API, which may include a network request.
      *
      * @param constraint Autocomplete query string

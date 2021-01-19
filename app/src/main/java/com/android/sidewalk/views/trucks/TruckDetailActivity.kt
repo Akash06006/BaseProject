@@ -64,6 +64,8 @@ class TruckDetailActivity : BaseActivity() {
         addTruckBinding.truckViewModel = trucksViewModel
         addTruckBinding.toolbarCommon.imgToolbarText.text =
             getString(R.string.details)
+        addTruckBinding.toolbarCommon.imgRight.visibility = View.VISIBLE
+
         truckId = intent.extras?.get("id") as String
 
         trucksViewModel.truckDetail(truckId)
@@ -75,7 +77,7 @@ class TruckDetailActivity : BaseActivity() {
                     val message = addGalleryRes.message
 
                     if (addGalleryRes.code == 200) {
-                        // galleryImagesIds.add(addGalleryRes.data!!.image!!)
+                        // galleryImagesIds.add(addGalleryRes.categoryList!!.image!!)
                         addTruckBinding.detailResponse = addGalleryRes.data
                         addTruckBinding.txtTime.setText(addGalleryRes.data!!.startTime + " - " + addGalleryRes.data!!.endTime)
                         //showToastSuccess(message)

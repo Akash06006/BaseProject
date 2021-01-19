@@ -7,6 +7,7 @@ import com.android.sidewalk.common.UtilsFunctions
 import com.android.sidewalk.model.CommonModel
 import com.android.sidewalk.model.LoginResponse
 import com.android.sidewalk.model.menu.CategoryListsResponse
+import com.android.sidewalk.model.menu.ItemDetailResponse
 import com.android.sidewalk.model.menu.ItemListResponse
 import com.android.sidewalk.repositories.menu.MenuRepository
 import com.android.sidewalk.viewmodels.BaseViewModel
@@ -17,6 +18,7 @@ import okhttp3.RequestBody
 class MenuViewModel : BaseViewModel() {
     private var categoryList = MutableLiveData<CategoryListsResponse>()
     private var itemsList = MutableLiveData<ItemListResponse>()
+    private var itemsDetail = MutableLiveData<ItemDetailResponse>()
     private var addCateogry = MutableLiveData<CommonModel>()
     private var profileDetail = MutableLiveData<LoginResponse>()
     private var menuRepository =
@@ -29,6 +31,7 @@ class MenuViewModel : BaseViewModel() {
             categoryList = menuRepository.getCategoryLists()
             addCateogry = menuRepository.addCategory(null, null)
             itemsList = menuRepository.getItemsLists(null)
+            itemsDetail = menuRepository.getItemDetail(null)
         }
 
     }
@@ -45,6 +48,10 @@ class MenuViewModel : BaseViewModel() {
         return addCateogry
     }
 
+    fun getItemDetailRes() : LiveData<ItemDetailResponse> {
+        return itemsDetail
+    }
+
     override fun isLoading() : LiveData<Boolean> {
         return mIsUpdating
     }
@@ -58,7 +65,7 @@ class MenuViewModel : BaseViewModel() {
     }
 
     fun addCategory(
-        catImagePart : MultipartBody.Part,
+        catImagePart : MultipartBody.Part?,
         mHashMap : java.util.HashMap<String, RequestBody>
     ) {
         if (UtilsFunctions.isNetworkConnected()) {
@@ -69,7 +76,7 @@ class MenuViewModel : BaseViewModel() {
     }
 
     fun addItem(
-        catImagePart : MultipartBody.Part,
+        catImagePart : MultipartBody.Part?,
         mHashMap : java.util.HashMap<String, RequestBody>
     ) {
         if (UtilsFunctions.isNetworkConnected()) {
@@ -90,6 +97,14 @@ class MenuViewModel : BaseViewModel() {
     fun itemsList(catId : String) {
         if (UtilsFunctions.isNetworkConnected()) {
             itemsList = menuRepository.getItemsLists(catId)
+            mIsUpdating.postValue(true)
+
+        }
+    }
+
+    fun itemsDetail(catId : String) {
+        if (UtilsFunctions.isNetworkConnected()) {
+            itemsDetail = menuRepository.getItemDetail(catId)
             mIsUpdating.postValue(true)
 
         }

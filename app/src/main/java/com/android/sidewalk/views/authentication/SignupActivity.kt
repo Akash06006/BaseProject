@@ -140,8 +140,8 @@ class SignupActivity : BaseActivity(), ChoiceCallBack {
                         GlobalConstants.VERIFICATION_TYPE =
                             "signup"
                         FirebaseFunctions.sendOTP("login", mOtpJsonObject, this)
-                        // mOtpJsonObject.addProperty("phoneNumber", response.data?.phoneNumber)
-                        //mOtpJsonObject.addProperty("countryCode", response.data?.countryCode)
+                        // mOtpJsonObject.addProperty("phoneNumber", response.categoryList?.phoneNumber)
+                        //mOtpJsonObject.addProperty("countryCode", response.categoryList?.countryCode)
                         SharedPrefClass()
                             .putObject(
                                 MyApplication.instance,
@@ -411,7 +411,7 @@ class SignupActivity : BaseActivity(), ChoiceCallBack {
                                     )
                                 }
                                 //val intent = Intent(this, OTPVerificationActivity::class.java)
-                                //intent.putExtra("catId", ""/*categoriesList[position].id*/)
+                                //intent.putExtra("itemId", ""/*categoriesList[position].id*/)
                                 //startActivity(intent)
                             }
                         }
@@ -499,9 +499,9 @@ class SignupActivity : BaseActivity(), ChoiceCallBack {
 
             setImage(picturePath)
             cursor.close()
-        } else if (requestCode == CAMERA_REQUEST && resultCode == Activity.RESULT_OK /*&& null != data*/) {
-            setImage(profileImage)            // val extras = data!!.extras
-            // val imageBitmap = extras!!.get("data") as Bitmap
+        } else if (requestCode == CAMERA_REQUEST && resultCode == Activity.RESULT_OK /*&& null != categoryList*/) {
+            setImage(profileImage)            // val extras = categoryList!!.extras
+            // val imageBitmap = extras!!.get("categoryList") as Bitmap
             //getImageUri(imageBitmap)
         }
 

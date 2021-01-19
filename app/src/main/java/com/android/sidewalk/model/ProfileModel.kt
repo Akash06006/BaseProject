@@ -5,7 +5,7 @@ import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
 
 class ProfileModel : BaseObservable() {
-    @SerializedName("data")
+    @SerializedName("categoryList")
     @Expose
     var data : Data? = null
     @SerializedName("code")

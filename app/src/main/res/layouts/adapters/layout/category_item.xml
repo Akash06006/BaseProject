@@ -32,19 +32,29 @@
 
         <TextView
                 android:id="@+id/txtCatName"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_alignTop="@+id/imgCategory"
                 android:layout_alignBottom="@+id/imgCategory"
 
                 android:layout_centerVertical="true"
                 android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:layout_toLeftOf="@+id/imgEdit"
                 android:layout_toRightOf="@+id/imgCategory"
                 android:gravity="center_vertical"
                 android:hint="@string/view_all"
                 android:singleLine="true"
                 android:textColor="@color/colorBlack"
                 app:font="@{`semibold`}" />
+
+        <ImageView
+                android:id="@+id/imgEdit"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:src="@drawable/ic_edit_icon" />
 
         <View
                 android:layout_width="match_parent"

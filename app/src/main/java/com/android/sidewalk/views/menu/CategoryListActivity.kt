@@ -28,6 +28,7 @@ import com.android.sidewalk.common.UtilsFunctions
 import com.android.sidewalk.databinding.ActivityCategoryListBinding
 import com.android.sidewalk.model.CommonModel
 import com.android.sidewalk.model.menu.CategoryListsResponse
+import com.android.sidewalk.model.truck.TruckListResponse
 import com.android.sidewalk.utils.BaseActivity
 import com.android.sidewalk.utils.DialogClass
 import com.android.sidewalk.utils.Utils
@@ -49,6 +50,8 @@ class CategoryListActivity : BaseActivity(), ChoiceCallBack {
     var viewPager : ViewPager? = null
     var imagesList = ArrayList<String>()
     var truckId = ""
+    //    var categoryList = ArrayList<CategoryListsResponse.Data>()
+    private var categoryList : ArrayList<CategoryListsResponse.Data>? = null
     private val RESULT_LOAD_IMAGE = 100
     private val CAMERA_REQUEST = 1888
     private val PERMISSION_REQUEST_CODE : Int = 101
@@ -82,8 +85,16 @@ class CategoryListActivity : BaseActivity(), ChoiceCallBack {
                     if (addGalleryRes.code == 200) {
                         addTruckBinding.txtNoRecord.visibility = View.GONE
                         addTruckBinding.rvCategory.visibility = View.VISIBLE
+                        if (categoryList != null) {
+                            categoryList!!.clear()
+                        }
 
-                        initRecyclerView(addGalleryRes.data)
+
+
+                        categoryList = addGalleryRes.data
+                        if (categoryList!!.size > 0) {
+                            initRecyclerView()
+                        }
 
                     } else {
                         UtilsFunctions.showToastError(message!!)
@@ -113,7 +124,7 @@ class CategoryListActivity : BaseActivity(), ChoiceCallBack {
             fun(it : String?) {
                 when (it) {
                     "rlAddCategory" -> {
-                        addCategoryDialog()
+                        addCategoryDialog(false, 0)
                     }
                 }
             })
@@ -121,9 +132,9 @@ class CategoryListActivity : BaseActivity(), ChoiceCallBack {
 
     }
 
-    private fun initRecyclerView(data : ArrayList<CategoryListsResponse.Data>?) {
+    private fun initRecyclerView() {
         val linearLayoutManager = LinearLayoutManager(this)
-        val imagesListAdapter = CategoryListAdapter(this, data, this)
+        val imagesListAdapter = CategoryListAdapter(this, categoryList, this)
         addTruckBinding.rvCategory.setHasFixedSize(true)
         linearLayoutManager.orientation = RecyclerView.VERTICAL
         addTruckBinding.rvCategory.layoutManager = linearLayoutManager
@@ -146,7 +157,8 @@ class CategoryListActivity : BaseActivity(), ChoiceCallBack {
         startActivity(intent)
     }
 
-    fun addCategoryDialog() {
+    fun addCategoryDialog(isEdit : Boolean, position : Int) {
+        var categoryId = ""
         val binding =
             DataBindingUtil.inflate<ViewDataBinding>(
                 LayoutInflater.from(this),
@@ -163,6 +175,7 @@ class CategoryListActivity : BaseActivity(), ChoiceCallBack {
         val edtCatname = dialog.findViewById(R.id.edtCatName) as EditText
         val dialogButton = dialog.findViewById(R.id.dialogButtonOK) as ImageView
         val btnAddCategory = dialog.findViewById(R.id.btnAddCategory) as Button
+        val title = dialog.findViewById(R.id.title) as TextView
         // if button is clicked, close the custom dialog
         uploadImage.setOnClickListener {
             if (checkPersmission()) {
@@ -177,6 +190,17 @@ class CategoryListActivity : BaseActivity(), ChoiceCallBack {
 
         dialogButton.setOnClickListener {
             dialog.dismiss()
+        }
+        if (isEdit) {
+            categoryId = categoryList!![position].id!!
+            catImage = categoryList!![position].image!!
+            title.setText(
+                getString(
+                    R.string.update_category
+                )
+            )
+            Glide.with(this).load(categoryList!![position].image!!).into(imageView!!)
+            edtCatname.setText(categoryList!![position].name!!)
         }
         btnAddCategory.setOnClickListener {
             val catname = edtCatname.text.toString()
@@ -197,14 +221,22 @@ class CategoryListActivity : BaseActivity(), ChoiceCallBack {
                     val mHashMap = HashMap<String, RequestBody>()
                     mHashMap["name"] =
                         Utils(this).createPartFromString(catname)
+                    mHashMap["categoryId"] =
+                        Utils(this).createPartFromString(categoryId)
                     var catImagePart : MultipartBody.Part? = null
-                    val f1 = File(catImage)
-                    catImagePart =
-                        Utils(this)
-                            .prepareFilePart(
-                                "image",
-                                f1
-                            )
+
+                    if (catImage.contains("http")) {
+                        catImagePart = null
+                    } else {
+                        val f1 = File(catImage)
+                        catImagePart =
+                            Utils(this)
+                                .prepareFilePart(
+                                    "image",
+                                    f1
+                                )
+                    }
+
                     if (UtilsFunctions.isNetworkConnected()) {
                         startProgressDialog()
                         menuViewModel.addCategory(
@@ -298,9 +330,9 @@ class CategoryListActivity : BaseActivity(), ChoiceCallBack {
 
             setImage(picturePath)
             cursor.close()
-        } else if (requestCode == CAMERA_REQUEST && resultCode == Activity.RESULT_OK /*&& null != data*/) {
-            setImage(catImage)            // val extras = data!!.extras
-            // val imageBitmap = extras!!.get("data") as Bitmap
+        } else if (requestCode == CAMERA_REQUEST && resultCode == Activity.RESULT_OK /*&& null != categoryList*/) {
+            setImage(catImage)            // val extras = categoryList!!.extras
+            // val imageBitmap = extras!!.get("categoryList") as Bitmap
             //getImageUri(imageBitmap)
         }
 

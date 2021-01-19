@@ -92,7 +92,7 @@ class ResetPasswordModel : BaseViewModel() {
              )
 
              if (UtilsFunctions.isNetworkConnected()) {
-                 data = resetPasswordRepository.getResetPasswordResponse(mJsonObject)
+                 categoryList = resetPasswordRepository.getResetPasswordResponse(mJsonObject)
                  mIsUpdating.postValue(true)
 
              }

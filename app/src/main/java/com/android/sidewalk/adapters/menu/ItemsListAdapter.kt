@@ -12,12 +12,9 @@ import androidx.recyclerview.widget.RecyclerView
 import com.android.sidewalk.R
 import com.android.sidewalk.constants.GlobalConstants
 import com.android.sidewalk.databinding.ProductItemBinding
-import com.android.sidewalk.model.menu.CategoryListsResponse
 import com.android.sidewalk.model.menu.ItemListResponse
-import com.android.sidewalk.views.menu.CategoryListActivity
 import com.android.sidewalk.views.menu.ProductListActivity
 import com.bumptech.glide.Glide
-import kotlinx.android.synthetic.main.product_item.view.*
 
 class ItemsListAdapter(
     context : ProductListActivity?,
@@ -27,11 +24,11 @@ class ItemsListAdapter(
     RecyclerView.Adapter<ItemsListAdapter.ViewHolder>() {
     private val categoryListActivity : ProductListActivity?
     private var viewHolder : ViewHolder? = null
-    private var addressList : ArrayList<ItemListResponse.Data>?
+    private var itemsList : ArrayList<ItemListResponse.Data>?
 
     init {
         this.categoryListActivity = context
-        this.addressList = addressList
+        this.itemsList = addressList
     }
 
     @NonNull
@@ -42,51 +39,44 @@ class ItemsListAdapter(
             parent,
             false
         ) as ProductItemBinding
-        return ViewHolder(binding.root, viewType, binding, addressList)
+        return ViewHolder(binding.root, viewType, binding, itemsList)
     }
 
     @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
     override fun onBindViewHolder(@NonNull holder : ViewHolder, position : Int) {
         viewHolder = holder
         Glide.with(categoryListActivity!!)
-            .load(addressList!![position].image)
-            //.apply(RequestOptions.bitmapTransform(RoundedCorners(20)))
+            .load(itemsList!![position].image)
             .placeholder(
                 R.drawable.ic_add_img
             )
             .into(holder.binding!!.imgCategory)
-        holder.binding.txtCatName.setText(addressList!![position].name)
-        holder.binding.txtPrice.setText(GlobalConstants.CURRENCY +addressList!![position].price)
-        holder.binding.txtDescription.setText(addressList!![position].description)
-        /* if (addressList!![position].itemType.equals("nonveg")) {
-             val resId = categoryListActivity.resources.getDrawable(
-                 R.drawable.ic_nonveg
-             )
-             holder.binding.imgVegNonVeg.setImageResource(resId)
-             *//* holder.binding.imgVegNonVeg.imageResource =
-                 categoryListActivity.resources.getDrawable(
-                     R.drawable.ic_nonveg
-                 )*//*
-
+        holder.binding.txtCatName.setText(itemsList!![position].name)
+        holder.binding.txtPrice.setText(GlobalConstants.CURRENCY + itemsList!![position].price)
+        holder.binding.txtDescription.setText(itemsList!![position].description)
+        if (itemsList!![position].itemType.equals("nonveg")) {
+            holder.binding.imgVegNonVeg.setImageDrawable(
+                categoryListActivity.resources.getDrawable(
+                    R.drawable.ic_nonveg
+                )
+            )
+            holder.binding.txtVegNonVeg.setText(categoryListActivity.resources.getString(R.string.non_veg))
         } else {
-            *//*holder.binding.imgVegNonVeg.imageResource =
+            holder.binding.imgVegNonVeg.setImageDrawable(
                 categoryListActivity.resources.getDrawable(
                     R.drawable.ic_veg
-                )*//*
-            val resId = categoryListActivity.resources.getDrawable(
-                R.drawable.ic_veg
+                )
             )
-            holder.binding.imgVegNonVeg.setImageResource(resId)
+            holder.binding.txtVegNonVeg.setText(categoryListActivity.resources.getString(R.string.veg))
 
-        }*/
-        /*holder.binding!!.imgCategory.setOnClickListener {
-            categoryListActivity.callGalleryActivity()
-        }*/
-
+        }
+        holder.binding!!.imgEdit.setOnClickListener {
+            categoryListActivity.callEditItemActivity(itemsList!![position].id)
+        }
     }
 
     override fun getItemCount() : Int {
-        return addressList!!.count()
+        return itemsList!!.count()
     }
 
     inner class ViewHolder//This constructor would switch what to findViewBy according to the type of viewType

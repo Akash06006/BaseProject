@@ -10,6 +10,7 @@ import com.android.sidewalk.common.UtilsFunctions
 import com.android.sidewalk.model.CommonModel
 import com.android.sidewalk.model.LoginResponse
 import com.android.sidewalk.model.menu.CategoryListsResponse
+import com.android.sidewalk.model.menu.ItemDetailResponse
 import com.android.sidewalk.model.menu.ItemListResponse
 import com.android.sidewalk.model.order.ListsResponse
 import com.google.gson.GsonBuilder
@@ -27,6 +28,7 @@ class MenuRepository {
     private val gson = GsonBuilder().serializeNulls().create()
     private var data3 : MutableLiveData<CategoryListsResponse>? = null
     private var itemList : MutableLiveData<ItemListResponse>? = null
+    private var itemDetail : MutableLiveData<ItemDetailResponse>? = null
 
     init {
         data = MutableLiveData()
@@ -35,6 +37,7 @@ class MenuRepository {
         data3 = MutableLiveData()
         addCateogry = MutableLiveData()
         itemList = MutableLiveData()
+        itemDetail = MutableLiveData()
 
     }
 
@@ -347,6 +350,45 @@ class MenuRepository {
             )
         }
         return itemList!!
+
+    }
+
+    fun getItemDetail(
+        catId : String?
+    ) : MutableLiveData<ItemDetailResponse> {
+        if (catId != null) {
+            val mApiService = ApiService<JsonObject>()
+            mApiService.get(
+                object : ApiResponse<JsonObject> {
+                    override fun onResponse(mResponse : Response<JsonObject>) {
+                        val loginResponse = if (mResponse.body() != null)
+                            gson.fromJson<ItemDetailResponse>(
+                                "" + mResponse.body(),
+                                ItemDetailResponse::class.java
+                            )
+                        else {
+                            gson.fromJson<ItemDetailResponse>(
+                                mResponse.errorBody()!!.charStream(),
+                                ItemDetailResponse::class.java
+                            )
+                        }
+
+                        itemDetail!!.postValue(loginResponse)
+
+                    }
+
+                    override fun onError(mKey : String) {
+                        UtilsFunctions.showToastError(
+                            MyApplication.instance.getString(R.string.internal_server_error)
+                        )
+                        itemDetail!!.postValue(null)
+
+                    }
+
+                }, ApiClient.getApiInterface().itemDetail(catId)
+            )
+        }
+        return itemDetail!!
 
     }
 }

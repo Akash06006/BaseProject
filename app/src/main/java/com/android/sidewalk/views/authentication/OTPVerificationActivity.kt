@@ -78,7 +78,7 @@ class OTPVerificationActivity : BaseActivity() {
             mJsonObject.addProperty("countryCode", countryCode)
             number = number.replace("\"", "")
             countryCode = countryCode.replace("\"", "")
-            /* mJsonObject = JSONObject(intent.extras.get("data").toString())
+            /* mJsonObject = JSONObject(intent.extras.get("categoryList").toString())
              var mob = mJsonObject.get("phoneNumber").toString()*/
             var msg = activityOtpVerificationBinding.tvOtpSent.getText().toString()
             activityOtpVerificationBinding.tvOtpSent.setText(msg + " " + number.toString())

@@ -1,4 +1,4 @@
-package com.android.sidewalk.views.trucks
+package com.android.sidewalk.views.events
 
 import android.Manifest
 import android.annotation.SuppressLint
@@ -18,32 +18,30 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.android.sidewalk.utils.BaseFragment
 import com.android.sidewalk.R
+import com.android.sidewalk.common.UtilsFunctions
 import com.android.sidewalk.common.UtilsFunctions.showToastError
-import com.android.sidewalk.databinding.FragmentTruckBinding
+import com.android.sidewalk.databinding.FragmentEventsBinding
 import com.android.sidewalk.maps.FusedLocationClass
-import com.android.sidewalk.model.truck.TruckListResponse
+import com.android.sidewalk.model.events.EventListResponse
 import com.android.sidewalk.utils.DialogClass
-import com.android.sidewalk.viewmodels.trucks.TrucksViewModel
+import com.android.sidewalk.viewmodels.events.EventsViewModel
 import com.google.android.gms.location.*
-import com.uniongoods.adapters.TruckListAdapter
+import com.uniongoods.adapters.EventListAdapter
 
 class
-TruckListFragment : BaseFragment() {
-    private var truckList = ArrayList<TruckListResponse.Data>()
+EventsListFragment : BaseFragment() {
+    private var eventList = ArrayList<EventListResponse.Data>()
     private var mFusedLocationClass : FusedLocationClass? =
         null
-    private lateinit var truckViewModel : TrucksViewModel
+    private lateinit var eventsViewModel : EventsViewModel
     val PERMISSION_ID = 42
     lateinit var mFusedLocationClient : FusedLocationProviderClient
     var currentLat = ""
     var currentLong = ""
-    private lateinit var fragmentTruckBinding : FragmentTruckBinding
-    private val PERMISSION_REQUEST_CODE : Int = 101
-    private var confirmationDialog : Dialog? = null
-    private var mDialogClass = DialogClass()
+    private lateinit var fragmentTruckBinding : FragmentEventsBinding
     //var categoriesList = null
     override fun getLayoutResId() : Int {
-        return R.layout.fragment_truck
+        return R.layout.fragment_events
     }
 
     override fun onResume() {
@@ -52,26 +50,30 @@ TruckListFragment : BaseFragment() {
 
     //api/mobile/services/getSubcat/b21a7c8f-078f-4323-b914-8f59054c4467
     override fun initView() {
-        fragmentTruckBinding = viewDataBinding as FragmentTruckBinding
-        truckViewModel = ViewModelProviders.of(this)
-            .get(TrucksViewModel::class.java)
-        fragmentTruckBinding.truckViewModel = truckViewModel
+        fragmentTruckBinding = viewDataBinding as FragmentEventsBinding
+        eventsViewModel = ViewModelProviders.of(this)
+            .get(EventsViewModel::class.java)
+        fragmentTruckBinding.truckViewModel = eventsViewModel
         // categoriesList=List<Service>()
-        truckViewModel.truckList()
+        if (UtilsFunctions.isNetworkConnected()) {
+            baseActivity.startProgressDialog()
+            eventsViewModel.eventList("0")
+        }
         fragmentTruckBinding.toolbarCommon.imgToolbarText.text =
-            getString(R.string.my_mobile_carts)
+            getString(R.string.events)
         mFusedLocationClass =
             FusedLocationClass(activity)
         mFusedLocationClient = LocationServices.getFusedLocationProviderClient(activity!!)
         // initRecyclerView()
-        truckViewModel.getTruckListRes().observe(this,
-            Observer<TruckListResponse> { loginResponse->
-            //stopProgressDialog()
+        eventsViewModel.getEventListRes().observe(this,
+            Observer<EventListResponse> { loginResponse->
+                baseActivity.stopProgressDialog()
                 if (loginResponse != null) {
                     val message = loginResponse.message
 
                     if (loginResponse.code == 200) {
-                        truckList = loginResponse.data!!
+                        eventList.clear()
+                        eventList = loginResponse.data!!
                         initRecyclerView()
                         /*if (!TextUtils.isEmpty(loginResponse.categoryList!!.vendorData!!.image)) {
                             Glide.with(activity!!).load(loginResponse.categoryList!!.vendorData!!.image)
@@ -90,10 +92,34 @@ TruckListFragment : BaseFragment() {
                 }
             })
 
-        truckViewModel.isClick().observe(
+        eventsViewModel.isClick().observe(
             this, Observer<String>(function =
             fun(it : String?) {
                 when (it) {
+                    "txtPending" -> {
+                        fragmentTruckBinding.txtPending.setTextColor(resources.getColor(R.color.colorWhite))
+                        fragmentTruckBinding.txtAccepted.setTextColor(resources.getColor(R.color.colorGrey))
+                        fragmentTruckBinding.txtPending.background =
+                            resources.getDrawable(R.drawable.ic_event_selected)
+                        fragmentTruckBinding.txtAccepted.background =
+                            resources.getDrawable(R.drawable.ic_event_unselected)
+                        if (UtilsFunctions.isNetworkConnected()) {
+                            baseActivity.startProgressDialog()
+                            eventsViewModel.eventList("0")
+                        }
+                    }
+                    "txtAccepted" -> {
+                        fragmentTruckBinding.txtAccepted.setTextColor(resources.getColor(R.color.colorWhite))
+                        fragmentTruckBinding.txtPending.setTextColor(resources.getColor(R.color.colorGrey))
+                        fragmentTruckBinding.txtAccepted.background =
+                            resources.getDrawable(R.drawable.ic_event_selected)
+                        fragmentTruckBinding.txtPending.background =
+                            resources.getDrawable(R.drawable.ic_event_unselected)
+                        if (UtilsFunctions.isNetworkConnected()) {
+                            baseActivity.startProgressDialog()
+                            eventsViewModel.eventList("1")
+                        }
+                    }
                 }
             })
         )
@@ -102,7 +128,7 @@ TruckListFragment : BaseFragment() {
 
     private fun initRecyclerView() {
         val linearLayoutManager1 = LinearLayoutManager(activity)
-        val truckListAdapter = TruckListAdapter(this, this, truckList, activity!!)
+        val truckListAdapter = EventListAdapter(this, this, eventList, activity!!)
         fragmentTruckBinding.rvTrucks.setHasFixedSize(true)
         linearLayoutManager1.orientation = RecyclerView.VERTICAL
         fragmentTruckBinding.rvTrucks.layoutManager = linearLayoutManager1

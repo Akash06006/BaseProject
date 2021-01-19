@@ -15,7 +15,6 @@ import com.android.sidewalk.databinding.CategoryItemBinding
 import com.android.sidewalk.model.menu.CategoryListsResponse
 import com.android.sidewalk.views.menu.CategoryListActivity
 import com.android.sidewalk.views.menu.ProductListActivity
-import com.android.sidewalk.views.trucks.GalleryActivity
 import com.bumptech.glide.Glide
 
 class CategoryListAdapter(
@@ -68,6 +67,10 @@ class CategoryListAdapter(
             intent.putExtra("id", addressList!![position].id)
             intent.putExtra("name", addressList!![position].name)
             categoryListActivity.startActivity(intent)
+        }
+
+        holder.binding!!.imgEdit.setOnClickListener {
+            categoryListActivity.addCategoryDialog(true, position)
         }
 
     }

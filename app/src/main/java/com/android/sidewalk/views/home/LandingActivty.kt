@@ -4,6 +4,7 @@ import androidx.fragment.app.Fragment
 import com.android.sidewalk.R
 import com.android.sidewalk.utils.BaseActivity
 import com.android.sidewalk.databinding.ActivityLandingActivtyBinding
+import com.android.sidewalk.views.events.EventsListFragment
 import com.android.sidewalk.views.home.fragments.HomeFragment
 import com.android.sidewalk.views.profile.ProfileFragment
 import com.android.sidewalk.views.trucks.TruckListFragment
@@ -42,7 +43,8 @@ class LandingActivty : BaseActivity() {
                             TruckListFragment()
                     }
                     2 -> {
-                        showToastSuccess("Coming Soon")
+                        fragment =
+                            EventsListFragment()
                     }
                     3 -> {
                         /*  activityOtpVerificationBinding!!.toolbarCommon.imgToolbarText.setText(

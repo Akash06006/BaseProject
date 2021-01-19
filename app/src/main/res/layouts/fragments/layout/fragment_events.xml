@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <import type="com.android.sidewalk.common.BindingUtils" />
+
+        <variable
+                name="truckViewModel"
+                type="com.android.sidewalk.viewmodels.events.EventsViewModel" />
+
+    </data>
+
+    <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+        <ScrollView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+            <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical">
+
+                <include
+                        android:id="@+id/toolbarCommon"
+                        layout="@layout/common_toolbar_back"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/dp_50" />
+
+                <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginTop="5dp"
+                        android:orientation="horizontal">
+
+                    <TextView
+                            android:id="@+id/txtPending"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/dp_2"
+                            android:layout_toLeftOf="@+id/chkTruckOn"
+                            android:background="@drawable/ic_event_selected"
+                            android:gravity="center"
+                            android:minWidth="120dp"
+                            android:onClick="@{(v) -> truckViewModel.clickListener(v)}"
+                            android:singleLine="true"
+                            android:text="@string/pending"
+                            android:textColor="@color/colorWhite"
+                            android:textSize="@dimen/sp_16"
+                            app:font="@{`regular`}" />
+
+                    <TextView
+                            android:id="@+id/txtAccepted"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="10dp"
+                            android:layout_marginTop="@dimen/dp_2"
+                            android:layout_toLeftOf="@+id/chkTruckOn"
+                            android:background="@drawable/ic_event_unselected"
+                            android:gravity="center"
+                            android:minWidth="120dp"
+                            android:onClick="@{(v) -> truckViewModel.clickListener(v)}"
+                            android:singleLine="true"
+                            android:text="@string/accepted"
+                            android:textColor="@color/colorGrey"
+                            app:font="@{`regular`}" />
+
+                </LinearLayout>
+
+                <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/rvTrucks"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/dp_5"
+                        android:gravity="center"
+                        android:padding="@dimen/dp_5"
+                        android:visibility="visible" />
+            </LinearLayout>
+        </ScrollView>
+
+    </RelativeLayout>
+</layout>

@@ -164,7 +164,7 @@ class ProfileFragment : BaseFragment(),
                             data.name = "Select Region"
                             reginRes.add(data)
                             reginRes.addAll(response.data!!)
-                            // profileBinding.model = response.data
+                            // profileBinding.model = response.categoryList
                             for (count in 0 until response.data!!.count()) {
                                 region.add(response.data!![count].name!!)
 
@@ -211,7 +211,7 @@ class ProfileFragment : BaseFragment(),
                     val message = response.message
                     when {
                         response.code == 200 -> {
-                            // profileBinding.model = response.data
+                            // profileBinding.model = response.categoryList
                             message?.let { showToastSuccess(it) }
                             if (UtilsFunctions.isNetworkConnected()) {
                                 baseActivity.startProgressDialog()
@@ -220,12 +220,12 @@ class ProfileFragment : BaseFragment(),
                             /*SharedPrefClass().putObject(
                                 activity!!,
                                 GlobalConstants.USER_IMAGE,
-                                response.data!!.image
+                                response.categoryList!!.image
                             )
                             SharedPrefClass().putObject(
                                 activity!!,
                                 getString(R.string.fname),
-                                response.data!!.firstName + " " + response.data!!.lastName
+                                response.categoryList!!.firstName + " " + response.categoryList!!.lastName
                             )
 */
                             makeEnableDisableViews(false)
@@ -445,9 +445,9 @@ class ProfileFragment : BaseFragment(),
             profileImage = picturePath
             setImage(picturePath)
             cursor.close()
-        } else if (requestCode == CAMERA_REQUEST && resultCode == Activity.RESULT_OK /*&& null != data*/) {
-            setImage(profileImage)            // val extras = data!!.extras
-            // val imageBitmap = extras!!.get("data") as Bitmap
+        } else if (requestCode == CAMERA_REQUEST && resultCode == Activity.RESULT_OK /*&& null != categoryList*/) {
+            setImage(profileImage)            // val extras = categoryList!!.extras
+            // val imageBitmap = extras!!.get("categoryList") as Bitmap
             //getImageUri(imageBitmap)
         }
 

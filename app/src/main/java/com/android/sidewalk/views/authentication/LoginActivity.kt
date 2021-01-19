@@ -100,7 +100,7 @@ class LoginActivity : BaseActivity() {
 //                            this,
 //                            LandingActivty::class.java
 //                        )
-//                        //intent.putExtra("catId", ""/*categoriesList[position].id*/)
+//                        //intent.putExtra("itemId", ""/*categoriesList[position].id*/)
 //                        startActivity(intent)
 //                        finish()
 
@@ -152,7 +152,7 @@ class LoginActivity : BaseActivity() {
                             this,
                             ForgotPasswrodActivity::class.java
                         )
-                        //intent.putExtra("catId", ""/*categoriesList[position].id*/)
+                        //intent.putExtra("itemId", ""/*categoriesList[position].id*/)
                         startActivity(intent)
 
                     }
@@ -239,7 +239,7 @@ class LoginActivity : BaseActivity() {
                                     val request =
                                         GraphRequest.newMeRequest(loginResult.accessToken) { `object`, response->
                                             try {
-                                                //here is the data that you want
+                                                //here is the categoryList that you want
                                                 Log.d("FBLOGIN_JSON_RES", `object`.toString())
 
                                                 if (`object`.has("id")) {

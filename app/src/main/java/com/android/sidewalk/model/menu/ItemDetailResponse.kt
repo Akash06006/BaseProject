@@ -3,10 +3,10 @@ package com.android.sidewalk.model.menu
 import com.google.gson.annotations.SerializedName
 import com.google.gson.annotations.Expose
 
-class ItemListResponse {
+class ItemDetailResponse {
     @SerializedName("body")
     @Expose
-    var data : ArrayList<Data>? = null
+    var data : Data? = null
     @SerializedName("message")
     var message : String? = null
     var code : Int? = null

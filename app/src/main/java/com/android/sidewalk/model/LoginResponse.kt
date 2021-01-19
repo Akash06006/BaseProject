@@ -12,7 +12,7 @@ class LoginResponse {
     var code : Int? = null
 
     override fun toString() : String {
-        return "ClassPojo [data = $data, message = $message, status = $code]"
+        return "ClassPojo [categoryList = $data, message = $message, status = $code]"
     }
 
     class Data {

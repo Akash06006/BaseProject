@@ -23,8 +23,8 @@
 
         <com.makeramen.roundedimageview.RoundedImageView
                 android:id="@+id/imgCategory"
-                android:layout_width="70dp"
-                android:layout_height="70dp"
+                android:layout_width="90dp"
+                android:layout_height="90dp"
                 android:background="@drawable/ic_img_back"
                 android:scaleType="centerCrop"
                 app:riv_corner_radius="12dp"
@@ -37,7 +37,7 @@
                 android:layout_marginLeft="10dp"
                 android:layout_marginTop="5dp"
                 android:layout_marginRight="5dp"
-                android:layout_toLeftOf="@+id/imgVegNonVeg"
+                android:layout_toLeftOf="@+id/imgEdit"
                 android:layout_toRightOf="@+id/imgCategory"
                 android:gravity="center_vertical"
                 android:hint="@string/view_all"
@@ -48,13 +48,13 @@
                 app:font="@{`bold`}" />
 
         <ImageView
-                android:id="@+id/imgVegNonVeg"
+                android:id="@+id/imgEdit"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"
-                android:layout_marginTop="10dp"
+                android:layout_marginTop="8dp"
                 android:layout_marginRight="10dp"
-                android:src="@drawable/ic_nonveg" />
+                android:src="@drawable/ic_edit_icon" />
 
         <TextView
                 android:id="@+id/txtDescription"
@@ -62,8 +62,8 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/txtCatName"
                 android:layout_marginLeft="10dp"
-                android:layout_marginTop="5dp"
-                android:layout_toLeftOf="@+id/txtPrice"
+                android:layout_marginTop="2dp"
+                android:layout_marginRight="13dp"
                 android:layout_toRightOf="@+id/imgCategory"
                 android:gravity="center_vertical"
                 android:hint="@string/view_all"
@@ -71,22 +71,48 @@
                 android:textSize="13sp"
                 app:font="@{`regular`}" />
 
-        <TextView
-                android:id="@+id/txtPrice"
-                android:layout_width="wrap_content"
+        <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/txtCatName"
-                android:layout_alignParentRight="true"
+                android:layout_below="@+id/txtDescription"
                 android:layout_marginLeft="10dp"
                 android:layout_marginTop="5dp"
-                android:layout_marginRight="10dp"
-                android:gravity="center_vertical"
-                android:singleLine="true"
-                android:text="$20"
-                android:textColor="@color/colorPrice"
-                android:textSize="17sp"
-                android:textStyle="bold"
-                app:font="@{`bold`}" />
+                android:layout_toRightOf="@+id/imgCategory"
+                android:orientation="horizontal">
+
+            <ImageView
+                    android:id="@+id/imgVegNonVeg"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_veg" />
+
+            <TextView
+                    android:id="@+id/txtVegNonVeg"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="7dp"
+                    android:layout_marginRight="5dp"
+                    android:hint="@string/veg"
+                    android:singleLine="true"
+                    android:textSize="12sp"
+                    app:font="@{`regular`}" />
+
+            <TextView
+                    android:id="@+id/txtPrice"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="end"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp"
+                    android:gravity="end"
+                    android:singleLine="true"
+                    android:text="$20"
+                    android:textColor="@color/colorPrice"
+                    android:textSize="17sp"
+                    android:textStyle="bold"
+                    app:font="@{`bold`}" />
+
+        </LinearLayout>
 
         <View
                 android:layout_width="match_parent"

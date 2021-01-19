@@ -47,7 +47,10 @@ interface ApiInterface {
     @GET("vendor/menu/listItem/{categoryId}")
     fun getItemsList(@Path("categoryId") id : String) : Call<JsonObject>
 
-    //catId
+    @GET("vendor/menu/itemDetail/{itemId}")
+    fun itemDetail(@Path("itemId") id : String) : Call<JsonObject>
+
+    //itemId
     @POST("vendor/auth/login")
     fun callLogin(@Body jsonObject : JsonObject) : Call<JsonObject>
 
@@ -82,6 +85,9 @@ interface ApiInterface {
 
     @GET("vendor/truck/list")
     fun truckList() : Call<JsonObject>
+
+    @GET("vendor/event/list")
+    fun eventsList(@Query("status") id : String) : Call<JsonObject>
 
     @GET("vendor/truck/detail/{id}")
     fun truckDetail(@Path("id") id : String) : Call<JsonObject>

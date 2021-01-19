@@ -12,6 +12,10 @@
                 name="menuViewModel"
                 type="com.android.sidewalk.viewmodels.menu.MenuViewModel" />
 
+        <variable
+                name="itemDetailResponse"
+                type="com.android.sidewalk.model.menu.ItemDetailResponse.Data" />
+
     </data>
 
     <ScrollView
@@ -61,7 +65,6 @@
                         android:layout_height="150dp"
                         android:scaleType="centerCrop"
                         app:riv_corner_radius="12dp"
-
                         app:riv_mutate_background="true" />
 
             </RelativeLayout>
@@ -81,6 +84,7 @@
                     android:maxLength="16"
                     android:paddingLeft="15dp"
                     android:singleLine="true"
+                    android:text="@{itemDetailResponse.name}"
                     android:textSize="14sp"
                     app:font="@{`regular`}" />
 
@@ -99,6 +103,7 @@
                     android:maxLength="16"
                     android:paddingLeft="15dp"
                     android:singleLine="true"
+                    android:text="@{itemDetailResponse.price}"
                     android:textSize="14sp"
                     app:font="@{`regular`}" />
 
@@ -118,6 +123,7 @@
                     android:minLines="5"
                     android:paddingLeft="20dp"
                     android:paddingTop="15dp"
+                    android:text="@{itemDetailResponse.description}"
                     android:textSize="14sp"
                     app:font="@{`regular`}" />
 
