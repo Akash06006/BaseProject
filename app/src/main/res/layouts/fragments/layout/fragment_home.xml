@@ -21,14 +21,13 @@
         <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="@color/colorWhite"
                 android:orientation="vertical">
 
             <include
                     android:id="@+id/toolbarCommon"
                     layout="@layout/common_toolbar_back"
                     android:layout_width="match_parent"
-                    android:layout_height="@dimen/dp_50"
+                    android:layout_height="@dimen/dp_55"
                     android:visibility="gone" />
 
             <RelativeLayout
@@ -141,6 +140,7 @@
                         android:layout_alignParentRight="true"
                         android:layout_gravity="center_vertical"
                         android:layout_marginRight="5dp"
+                        android:onClick="@{(v) -> homeViewModel.clickListener(v)}"
                         android:text="@string/see_all"
                         android:textColor="@color/view_see"
                         android:textSize="12sp"
@@ -163,6 +163,7 @@
                     android:orientation="vertical">
 
                 <TextView
+                        android:id="@+id/txtEventsTitle"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_vertical"
@@ -179,6 +180,7 @@
                         android:layout_alignParentRight="true"
                         android:layout_gravity="center_vertical"
                         android:layout_marginRight="5dp"
+                        android:onClick="@{(v) -> homeViewModel.clickListener(v)}"
                         android:text="@string/see_all"
                         android:textColor="@color/view_see"
                         android:textSize="12sp"

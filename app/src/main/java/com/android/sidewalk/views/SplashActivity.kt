@@ -10,6 +10,7 @@ import com.android.sidewalk.databinding.ActivitySplashBinding
 import com.android.sidewalk.sharedpreference.SharedPrefClass
 import com.android.sidewalk.utils.BaseActivity
 import com.android.sidewalk.views.authentication.LoginActivity
+import com.android.sidewalk.views.events.EventDetailActivity
 import com.android.sidewalk.views.home.LandingActivty
 import com.android.sidewalk.views.menu.CategoryListActivity
 import com.android.sidewalk.views.trucks.AddTruckActivity

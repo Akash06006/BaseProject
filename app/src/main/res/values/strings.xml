@@ -277,6 +277,7 @@
     <string name="mobile_cart_partner">Mobile cart  information</string>
     <string name="save">Save</string>
     <string name="add_mobile_cart">Add Mobile Cart</string>
+    <string name="update_mobile_cart">Update Mobile Cart</string>
     <string name="events">Events</string>
     <string name="my_mobile_carts">My Mobile Carts</string>
     <string name="upload_img_error">Please upload image</string>

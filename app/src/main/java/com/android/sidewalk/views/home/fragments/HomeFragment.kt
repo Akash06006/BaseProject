@@ -22,6 +22,8 @@ import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.android.sidewalk.constants.GlobalConstants
 import com.android.sidewalk.utils.BaseFragment
 import com.bumptech.glide.Glide
@@ -34,12 +36,15 @@ import com.android.sidewalk.databinding.FragmentHomeBinding
 import com.android.sidewalk.maps.FusedLocationClass
 import com.android.sidewalk.model.CommonModel
 import com.android.sidewalk.model.home.HomeListResponse
+import com.android.sidewalk.model.truck.TruckListResponse
 import com.android.sidewalk.sharedpreference.SharedPrefClass
 import com.android.sidewalk.utils.DialogClass
 import com.android.sidewalk.utils.Utils
 import com.android.sidewalk.viewmodels.home.HomeViewModel
 import com.android.sidewalk.views.home.LandingActivty
 import com.google.android.gms.location.*
+import com.uniongoods.adapters.HomeTrucksListAdapter
+import com.uniongoods.adapters.TruckListAdapter
 import okhttp3.MultipartBody
 import java.io.File
 import java.io.IOException
@@ -62,6 +67,7 @@ HomeFragment : BaseFragment(), ChoiceCallBack {
     private var confirmationDialog : Dialog? = null
     private var mDialogClass = DialogClass()
     private var profileImage = ""
+    private var truckList = ArrayList<HomeListResponse.PopularData>()
     //var categoriesList = null
     override fun getLayoutResId() : Int {
         return R.layout.fragment_home
@@ -120,6 +126,13 @@ HomeFragment : BaseFragment(), ChoiceCallBack {
                                 .placeholder(R.drawable.ic_home_banner)
                                 .into(fragmentHomeBinding.imgBanner)
                         }
+                        if (loginResponse.data!!.popularData != null) {
+                            fragmentHomeBinding.rvTrucks.visibility = View.VISIBLE
+                            truckList = loginResponse.data!!.popularData!!
+                            initRecyclerView()
+                        } else {
+                            fragmentHomeBinding.rvTrucks.visibility = View.GONE
+                        }
                     } else {
                         showToastError(message!!)
                     }
@@ -159,10 +172,28 @@ HomeFragment : BaseFragment(), ChoiceCallBack {
                                 )
                         } else requestPermission()
                     }
+                    "txtTruckAll" -> {
+                        (activity as LandingActivty?)!!.callTruckFragment()
+                    }
                 }
             })
         )
 
+    }
+
+    private fun initRecyclerView() {
+        val linearLayoutManager1 = LinearLayoutManager(activity)
+        val truckListAdapter = HomeTrucksListAdapter(this, truckList, activity!!)
+        fragmentHomeBinding.rvTrucks.setHasFixedSize(true)
+        linearLayoutManager1.orientation = RecyclerView.HORIZONTAL
+        fragmentHomeBinding.rvTrucks.layoutManager = linearLayoutManager1
+        fragmentHomeBinding.rvTrucks.adapter = truckListAdapter
+        fragmentHomeBinding.rvTrucks.addOnScrollListener(object :
+            RecyclerView.OnScrollListener() {
+            override fun onScrolled(recyclerView : RecyclerView, dx : Int, dy : Int) {
+
+            }
+        })
     }
 
     @SuppressLint("MissingPermission")

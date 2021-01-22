@@ -1,22 +1,8 @@
 package com.android.sidewalk.views.trucks
 
-import android.Manifest
-import android.app.Activity
-import android.app.Dialog
-import android.app.TimePickerDialog
+import android.annotation.SuppressLint
 import android.content.Intent
-import android.content.pm.PackageManager
-import android.net.Uri
-import android.os.Environment
-import android.provider.MediaStore
-import android.text.TextUtils
 import android.view.View
-import android.widget.EditText
-import android.widget.TimePicker
-import android.widget.Toast
-import androidx.core.app.ActivityCompat
-import androidx.core.content.ContextCompat
-import androidx.core.content.FileProvider
 import androidx.lifecycle.ViewModelProviders
 import com.android.sidewalk.R
 import androidx.lifecycle.Observer
@@ -24,38 +10,26 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager.widget.ViewPager
 import com.android.sidewalk.adapters.trucks.TruckImageAdapter
-import com.android.sidewalk.callbacks.ChoiceCallBack
 import com.android.sidewalk.common.UtilsFunctions
 import com.android.sidewalk.databinding.ActivityTruckDetailBinding
-import com.android.sidewalk.model.CommonModel
+import com.android.sidewalk.model.ImagesModel
 import com.android.sidewalk.model.truck.TruckDetailResponse
-import com.android.sidewalk.repositories.truck.AddGalleryModel
 import com.android.sidewalk.utils.BaseActivity
-import com.android.sidewalk.utils.DialogClass
-import com.android.sidewalk.utils.Utils
-import com.android.sidewalk.utils.ValidationsClass
 import com.android.sidewalk.viewmodels.trucks.TrucksViewModel
-import com.bumptech.glide.Glide
-import com.uniongoods.adapters.GalleryImagesListAdapter
 import com.uniongoods.adapters.ImagesListAdapter
-import okhttp3.MultipartBody
-import okhttp3.RequestBody
-import java.io.File
-import java.io.IOException
-import java.text.SimpleDateFormat
 import java.util.*
 
 class TruckDetailActivity : BaseActivity() {
     private var truckImages : ArrayList<String>? = null
     private lateinit var addTruckBinding : ActivityTruckDetailBinding
     private lateinit var trucksViewModel : TrucksViewModel
-    var viewPager : ViewPager? = null
-    var imagesList = ArrayList<String>()
+    private var imagesList = ArrayList<ImagesModel>()
     var truckId = ""
     override fun getLayoutId() : Int {
         return R.layout.activity_truck_detail
     }
 
+    @SuppressLint("SetTextI18n")
     override fun initViews() {
         addTruckBinding = viewDataBinding as ActivityTruckDetailBinding
 
@@ -65,6 +39,7 @@ class TruckDetailActivity : BaseActivity() {
         addTruckBinding.toolbarCommon.imgToolbarText.text =
             getString(R.string.details)
         addTruckBinding.toolbarCommon.imgRight.visibility = View.VISIBLE
+        addTruckBinding.toolbarCommon.imgRight.setImageResource(R.drawable.ic_edit)
 
         truckId = intent.extras?.get("id") as String
 
@@ -90,7 +65,10 @@ class TruckDetailActivity : BaseActivity() {
                             addTruckBinding.txtGallery.visibility = View.VISIBLE
                             addTruckBinding.rvGallery.visibility = View.VISIBLE
                             for (item in addGalleryRes.data!!.galleries!!) {
-                                imagesList.add(item.image!!)
+                                val imageModel = ImagesModel()
+                                imageModel.image = item.image
+                                imageModel.name = item.image
+                                imagesList.add(imageModel)
                             }
                             initRecyclerView()
                         }
@@ -107,6 +85,15 @@ class TruckDetailActivity : BaseActivity() {
             this, Observer<String>(function =
             fun(it : String?) {
                 when (it) {
+                    "img_right" -> {
+                        val intent = Intent(
+                            this,
+                            AddTruckActivity::class.java
+                        )
+                        intent.putExtra("id", truckId/*categoriesList[position].id*/)
+
+                        startActivity(intent)
+                    }
                 }
             })
         )
@@ -138,7 +125,7 @@ class TruckDetailActivity : BaseActivity() {
         startActivity(intent)
     }
 
-    fun setBannerAdapter() {
+    private fun setBannerAdapter() {
 //        if (banners.size > 0) {
         //  bannerAdapter = PromoBannerAdapter(this, bannersList, this)
         val adapterBanner = TruckImageAdapter(this, truckImages)

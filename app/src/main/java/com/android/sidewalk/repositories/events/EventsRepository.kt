@@ -8,10 +8,10 @@ import com.android.sidewalk.api.ApiService
 import com.android.sidewalk.application.MyApplication
 import com.android.sidewalk.common.UtilsFunctions
 import com.android.sidewalk.model.CommonModel
+import com.android.sidewalk.model.events.EventDetailResponse
 import com.android.sidewalk.model.events.EventListResponse
 import com.android.sidewalk.model.truck.GalleryListResponse
 import com.android.sidewalk.model.truck.TruckDetailResponse
-import com.android.sidewalk.model.truck.TruckListResponse
 import com.android.sidewalk.repositories.truck.AddGalleryModel
 import com.google.gson.GsonBuilder
 import com.google.gson.JsonObject
@@ -23,7 +23,7 @@ import java.util.HashMap
 class EventsRepository {
     private var data1 : MutableLiveData<CommonModel>? = null
     private var addGallery : MutableLiveData<AddGalleryModel>? = null
-    private var truckDetail : MutableLiveData<TruckDetailResponse>? = null
+    private var eventDetail : MutableLiveData<EventDetailResponse>? = null
     private var eventList : MutableLiveData<EventListResponse>? = null
     private var galleryList : MutableLiveData<GalleryListResponse>? = null
     private val gson = GsonBuilder().serializeNulls().create()
@@ -32,7 +32,7 @@ class EventsRepository {
         data1 = MutableLiveData()
         addGallery = MutableLiveData()
         eventList = MutableLiveData()
-        truckDetail = MutableLiveData()
+        eventDetail = MutableLiveData()
         galleryList = MutableLiveData()
     }
 
@@ -124,26 +124,26 @@ class EventsRepository {
 
     }
 
-    fun truckDetail(id : String?) : MutableLiveData<TruckDetailResponse> {
+    fun eventDetail(id : String?) : MutableLiveData<EventDetailResponse> {
         if (id != null) {
             val mApiService = ApiService<JsonObject>()
             mApiService.get(
                 object : ApiResponse<JsonObject> {
                     override fun onResponse(mResponse : Response<JsonObject>) {
                         val loginResponse = if (mResponse.body() != null)
-                            gson.fromJson<TruckDetailResponse>(
+                            gson.fromJson<EventDetailResponse>(
                                 "" + mResponse.body(),
-                                TruckDetailResponse::class.java
+                                EventDetailResponse::class.java
                             )
                         else {
-                            gson.fromJson<TruckDetailResponse>(
+                            gson.fromJson<EventDetailResponse>(
                                 mResponse.errorBody()!!.charStream(),
-                                TruckDetailResponse::class.java
+                                EventDetailResponse::class.java
                             )
                         }
 
 
-                        truckDetail!!.postValue(loginResponse)
+                        eventDetail!!.postValue(loginResponse)
 
                     }
 
@@ -153,15 +153,15 @@ class EventsRepository {
                                 R.string.internal_server_error
                             )
                         )
-                        truckDetail!!.postValue(null)
+                        eventDetail!!.postValue(null)
 
                     }
 
                 },
-                ApiClient.getApiInterface().truckDetail(id)
+                ApiClient.getApiInterface().eventDetail(id)
             )
         }
-        return truckDetail!!
+        return eventDetail!!
 
     }
 

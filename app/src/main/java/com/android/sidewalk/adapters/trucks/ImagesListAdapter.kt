@@ -12,6 +12,7 @@ import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.android.sidewalk.R
 import com.android.sidewalk.databinding.ImageItemBinding
+import com.android.sidewalk.model.ImagesModel
 import com.android.sidewalk.views.trucks.AddTruckActivity
 import com.android.sidewalk.views.trucks.GalleryActivity
 import com.android.sidewalk.views.trucks.TruckDetailActivity
@@ -20,14 +21,14 @@ import com.bumptech.glide.Glide
 class ImagesListAdapter(
     context : TruckDetailActivity?,
     addimageContext : AddTruckActivity?,
-    addressList : ArrayList<String>,
+    addressList : ArrayList<ImagesModel>,
     var activity : Context
 ) :
     RecyclerView.Adapter<ImagesListAdapter.ViewHolder>() {
     private val truckDetailActivity : TruckDetailActivity?
     private val addImageContext : AddTruckActivity?
     private var viewHolder : ViewHolder? = null
-    private var addressList : ArrayList<String>
+    private var addressList : ArrayList<ImagesModel>
 
     init {
         this.truckDetailActivity = context
@@ -52,7 +53,7 @@ class ImagesListAdapter(
         if (addImageContext != null) {
             holder.binding!!.imgCross.visibility = View.VISIBLE
             Glide.with(addImageContext!!)
-                .load(addressList[position])
+                .load(addressList[position].image)
                 //.apply(RequestOptions.bitmapTransform(RoundedCorners(20)))
                 .placeholder(
                     R.drawable.ic_add_img
@@ -64,7 +65,7 @@ class ImagesListAdapter(
         } else {
             holder.binding!!.imgCross.visibility = View.GONE
             Glide.with(truckDetailActivity!!)
-                .load(addressList[position])
+                .load(addressList[position].image)
                 //.apply(RequestOptions.bitmapTransform(RoundedCorners(20)))
                 .placeholder(
                     R.drawable.ic_add_img
@@ -101,7 +102,7 @@ class ImagesListAdapter(
         (
         v : View, val viewType : Int, //These are the general elements in the RecyclerView
         val binding : ImageItemBinding?,
-        addressList : ArrayList<String>
+        addressList : ArrayList<ImagesModel>
     ) : RecyclerView.ViewHolder(v) {
         /*init {
             binding.linAddress.setOnClickListener {

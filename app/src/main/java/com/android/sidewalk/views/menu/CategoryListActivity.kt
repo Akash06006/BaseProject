@@ -75,7 +75,7 @@ class CategoryListActivity : BaseActivity(), ChoiceCallBack {
             startProgressDialog()
         }
         //  truckId = intent.extras?.get("id") as String
-        //menuViewModel.truckDetail(truckId)
+        //menuViewModel.eventDetail(truckId)
         menuViewModel.getCategoryListsRes().observe(this,
             Observer<CategoryListsResponse> { addGalleryRes->
                 stopProgressDialog()

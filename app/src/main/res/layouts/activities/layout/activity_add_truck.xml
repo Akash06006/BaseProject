@@ -12,6 +12,10 @@
                 name="truckViewModel"
                 type="com.android.sidewalk.viewmodels.trucks.TrucksViewModel" />
 
+        <variable
+                name="detailResponse"
+                type="com.android.sidewalk.model.truck.TruckDetailResponse.Data" />
+
     </data>
 
     <ScrollView
@@ -29,7 +33,7 @@
                     android:id="@+id/toolbarCommon"
                     layout="@layout/common_toolbar_back"
                     android:layout_width="match_parent"
-                    android:layout_height="@dimen/dp_50" />
+                    android:layout_height="@dimen/dp_55" />
 
             <TextView
                     android:id="@+id/txtUploadImage"
@@ -83,6 +87,7 @@
                     android:maxLength="16"
                     android:paddingLeft="15dp"
                     android:singleLine="true"
+                    android:text="@{detailResponse.name}"
                     android:textSize="14sp"
                     app:font="@{`regular`}" />
 
@@ -99,6 +104,7 @@
                     android:maxLength="16"
                     android:paddingLeft="15dp"
                     android:singleLine="true"
+                    android:text="@{detailResponse.location}"
                     android:textSize="14sp"
                     app:font="@{`regular`}" />
 
@@ -115,6 +121,7 @@
                     android:maxLength="16"
                     android:paddingLeft="15dp"
                     android:singleLine="true"
+                    android:text="@{detailResponse.registrationNo}"
                     android:textSize="14sp"
                     app:font="@{`regular`}" />
 
@@ -146,6 +153,7 @@
                         android:paddingLeft="15dp"
                         android:paddingRight="10dp"
                         android:singleLine="true"
+                        android:text="@{detailResponse.startTime}"
                         android:textSize="14sp"
                         app:font="@{`regular`}" />
 
@@ -171,6 +179,7 @@
                         android:paddingLeft="15dp"
                         android:paddingRight="10dp"
                         android:singleLine="true"
+                        android:text="@{detailResponse.endTime}"
                         android:textSize="14sp"
                         app:font="@{`regular`}" />
             </LinearLayout>
@@ -244,6 +253,7 @@
                     android:maxLength="16"
                     android:paddingLeft="15dp"
                     android:singleLine="true"
+                    android:text="@{detailResponse.partnerName}"
                     android:textSize="14sp"
                     app:font="@{`regular`}" />
 
@@ -260,6 +270,7 @@
                     android:maxLength="16"
                     android:paddingLeft="15dp"
                     android:singleLine="true"
+                    android:text="@{detailResponse.partnerNumber}"
                     android:textSize="14sp"
                     app:font="@{`regular`}" />
 

@@ -1,6 +1,7 @@
 package com.android.sidewalk.views.trucks
 
 import android.Manifest
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.app.Dialog
 import android.app.TimePickerDialog
@@ -26,13 +27,13 @@ import com.android.sidewalk.callbacks.ChoiceCallBack
 import com.android.sidewalk.common.UtilsFunctions
 import com.android.sidewalk.databinding.ActivityAddTruckBinding
 import com.android.sidewalk.model.CommonModel
+import com.android.sidewalk.model.ImagesModel
+import com.android.sidewalk.model.truck.TruckDetailResponse
 import com.android.sidewalk.repositories.truck.AddGalleryModel
 import com.android.sidewalk.utils.BaseActivity
 import com.android.sidewalk.utils.DialogClass
 import com.android.sidewalk.utils.Utils
-import com.android.sidewalk.utils.ValidationsClass
 import com.android.sidewalk.viewmodels.trucks.TrucksViewModel
-import com.bumptech.glide.Glide
 import com.uniongoods.adapters.GalleryImagesListAdapter
 import com.uniongoods.adapters.ImagesListAdapter
 import okhttp3.MultipartBody
@@ -51,15 +52,16 @@ class AddTruckActivity : BaseActivity(), ChoiceCallBack {
     private var confirmationDialog : Dialog? = null
     private var mDialogClass = DialogClass()
     private var profileImage = ""
-    var imagesListAdapter : ImagesListAdapter? = null
-    var imagesList = ArrayList<String>()
-    var galleryImagesListAdapter : GalleryImagesListAdapter? = null
-    var galleryImagesList = ArrayList<String>()
-    var galleryImagesIds = ArrayList<String>()
-    var isProfile = false
-    var startTime = ""
-    var endTime = ""
-    var mTimePicker : TimePickerDialog? = null
+    private var imagesListAdapter : ImagesListAdapter? = null
+    private var imagesList = ArrayList<ImagesModel>()
+    private var galleryImagesListAdapter : GalleryImagesListAdapter? = null
+    private var galleryImagesList = ArrayList<ImagesModel>()
+    private var galleryImagesDeletedIds = ArrayList<String>()
+    private var truckImagesDeletedIds = ArrayList<String>()
+    private var isProfile = false
+    private var startTime = ""
+    private var endTime = ""
+    private var mTimePicker : TimePickerDialog? = null
     override fun getLayoutId() : Int {
         return R.layout.activity_add_truck
     }
@@ -72,6 +74,15 @@ class AddTruckActivity : BaseActivity(), ChoiceCallBack {
         addTruckBinding.truckViewModel = trucksViewModel
         addTruckBinding.toolbarCommon.imgToolbarText.text =
             getString(R.string.add_mobile_cart)
+        val truckId = intent.extras?.get("id") as String
+        if (!TextUtils.isEmpty(truckId)) {
+            addTruckBinding.toolbarCommon.imgToolbarText.text =
+                getString(R.string.update_mobile_cart)
+            if (UtilsFunctions.isNetworkConnected()) {
+                startProgressDialog()
+                trucksViewModel.truckDetail(truckId)
+            }
+        }
         val linearLayoutManager1 = LinearLayoutManager(this)
         imagesListAdapter = ImagesListAdapter(null, this, imagesList, this)
         addTruckBinding.rvImages.setHasFixedSize(true)
@@ -104,11 +115,13 @@ class AddTruckActivity : BaseActivity(), ChoiceCallBack {
                     val message = addGalleryRes.message
 
                     if (addGalleryRes.code == 200) {
-                        galleryImagesIds.add(addGalleryRes.data!!.image!!)
+                        val last = galleryImagesList.get(galleryImagesList.size - 1)
+                        last.id = addGalleryRes.data!!.image!!
+                        galleryImagesList[galleryImagesList.size - 1] = last
+
                     } else {
                         UtilsFunctions.showToastError(message!!)
                     }
-
                 }
             })
 
@@ -124,200 +137,302 @@ class AddTruckActivity : BaseActivity(), ChoiceCallBack {
                     } else {
                         UtilsFunctions.showToastError(message!!)
                     }
+                }
+            })
+        trucksViewModel.getTruckDetail().observe(this,
+            Observer<TruckDetailResponse> { addGalleryRes->
+                stopProgressDialog()
+                if (addGalleryRes != null) {
+                    val message = addGalleryRes.message
 
+                    if (addGalleryRes.code == 200) {
+                        // galleryImagesIds.add(addGalleryRes.categoryList!!.image!!)
+                        addTruckBinding.detailResponse = addGalleryRes.data
+
+                        for (item in addGalleryRes.data!!.truckImages!!) {
+                            val imagesModel = ImagesModel()
+                            imagesModel.image = item
+                            imagesModel.name = "http"
+                            imagesList.add(imagesModel)
+                        }
+                        if (addGalleryRes.data!!.galleries != null) {
+                            for (item1 in addGalleryRes.data!!.galleries!!) {
+                                val imagesModel = ImagesModel()
+                                imagesModel.image = item1.image!!
+                                imagesModel.name = item1.image!!
+                                galleryImagesList.add(imagesModel)
+                            }
+                        }
+                        if (imagesList.size > 0) {
+                            addTruckBinding.txtUploadImage.visibility = View.GONE
+                            addTruckBinding.imgAddImage.visibility = View.VISIBLE
+                        }
+                        if (imagesList.size < 3) {
+                            addTruckBinding.imgAddImage.visibility = View.VISIBLE
+                        } else {
+                            addTruckBinding.imgAddImage.visibility = View.GONE
+                        }
+                        galleryImagesListAdapter?.notifyDataSetChanged()
+                        imagesListAdapter?.notifyDataSetChanged()
+                    } else {
+                        UtilsFunctions.showToastError(message!!)
+                    }
                 }
             })
 
-
-
         trucksViewModel.isClick().observe(
-            this, Observer<String>(function =
-            fun(it : String?) {
-                when (it) {
-                    "edtStartTime" -> {
-                        val mcurrentTime = Calendar.getInstance()
-                        val hour = mcurrentTime.get(Calendar.HOUR_OF_DAY)
-                        val minute = mcurrentTime.get(Calendar.MINUTE)
+            this, Observer<String>(
+                function =
+                fun(it : String?) {
+                    when (it) {
+                        "edtStartTime" -> {
+                            val mcurrentTime = Calendar.getInstance()
+                            val hour = mcurrentTime.get(Calendar.HOUR_OF_DAY)
+                            val minute = mcurrentTime.get(Calendar.MINUTE)
 
-                        mTimePicker =
-                            TimePickerDialog(this, object : TimePickerDialog.OnTimeSetListener {
-                                override fun onTimeSet(
-                                    view : TimePicker?,
-                                    hourOfDay : Int,
-                                    minute : Int
-                                ) {
-                                    addTruckBinding.edtStartTime.setText(
-                                        String.format(
-                                            "%d : %d",
-                                            hourOfDay,
-                                            minute
-                                        )
-                                    )
-                                }
-                            }, hour, minute, true)
-                        mTimePicker!!.show()
-                    }
-                    "edtEndTime" -> {
-                        val mcurrentTime = Calendar.getInstance()
-                        val hour = mcurrentTime.get(Calendar.HOUR_OF_DAY)
-                        val minute = mcurrentTime.get(Calendar.MINUTE)
+                            mTimePicker =
+                                TimePickerDialog(this, object : TimePickerDialog.OnTimeSetListener {
+                                    @SuppressLint("SetTextI18n")
+                                    override fun onTimeSet(
+                                        view : TimePicker?,
+                                        hourOfDay : Int,
+                                        minute : Int
+                                    ) {
+                                        var hours = hourOfDay
+                                        var amPmformat = ""
 
-                        mTimePicker =
-                            TimePickerDialog(this, object : TimePickerDialog.OnTimeSetListener {
-                                override fun onTimeSet(
-                                    view : TimePicker?,
-                                    hourOfDay : Int,
-                                    minute : Int
-                                ) {
-                                    addTruckBinding.edtEndTime.setText(
-                                        String.format(
-                                            "%d : %d",
-                                            hourOfDay,
-                                            minute
-                                        )
-                                    )
-                                }
-                            }, hour, minute, true)
-                        mTimePicker!!.show()
-                    }
-                    "txtUploadImage" -> {
-                        isProfile = true
-                        if (checkPersmission()) {
-                            confirmationDialog =
-                                mDialogClass.setUploadConfirmationDialog(
-                                    this,
-                                    this,
-                                    "gallery"
-                                )
-                        } else requestPermission()
-                    }
-                    "imgAddImage" -> {
-                        isProfile = true
-                        if (checkPersmission()) {
-                            confirmationDialog =
-                                mDialogClass.setUploadConfirmationDialog(
-                                    this,
-                                    this,
-                                    "gallery"
-                                )
-                        } else requestPermission()
-                    }
-                    "txtAddGallery" -> {
-                        isProfile = false
-                        if (checkPersmission()) {
-                            confirmationDialog =
-                                mDialogClass.setUploadConfirmationDialog(
-                                    this,
-                                    this,
-                                    "gallery"
-                                )
-                        } else requestPermission()
-                    }
-                    "btnSave" -> {
-                        val truckName = addTruckBinding.edtTruckName.text.toString()
-                        val location = addTruckBinding.edtLocation.text.toString()
-                        val regName = addTruckBinding.edtRegNo.text.toString()
-                        startTime = addTruckBinding.edtStartTime.text.toString()
-                        endTime = addTruckBinding.edtEndTime.text.toString()
-                        //Gallery
-                        val partnerName = addTruckBinding.edtName.text.toString()
-                        val partnerPhone = addTruckBinding.edtPhone.text.toString()
-                        when {
-                            imagesList.size == 0 -> showToastError(
-                                getString(
-                                    R.string.upload_img_error
-                                )
-                            )
-                            truckName.isEmpty() -> showError(
-                                addTruckBinding.edtTruckName,
-                                getString(R.string.empty) + " " + getString(
-                                    R.string.mobile_cart_name
-                                )
-                            )
-                            location.isEmpty() -> showError(
-                                addTruckBinding.edtLocation,
-                                getString(R.string.empty) + " " + getString(
-                                    R.string.lname
-                                )
-                            )
-                            regName.isEmpty() -> showError(
-                                addTruckBinding.edtRegNo,
-                                getString(R.string.empty) + " " + getString(
-                                    R.string.reg_no
-                                )
-                            )
-                            startTime.isEmpty() -> showToastError(
-                                getString(
-                                    R.string.select_start_time
-                                )
-                            )
-                            endTime.isEmpty() -> showToastError(
-                                getString(
-                                    R.string.select_end_time
-                                )
-                            )
-                            partnerName.isEmpty() -> showError(
-                                addTruckBinding.edtName,
-                                getString(R.string.empty) + " " + getString(
-                                    R.string.name
-                                )
-                            )
-                            partnerPhone.isEmpty() -> showError(
-                                addTruckBinding.edtPhone,
-                                getString(R.string.empty) + " " + getString(
-                                    R.string.phone_number
-                                )
-                            )
-                            else -> {
-                                val mHashMap = HashMap<String, RequestBody>()
-                                mHashMap["name"] =
-                                    Utils(this).createPartFromString(truckName)
-                                mHashMap["location"] =
-                                    Utils(this).createPartFromString(location)
-                                mHashMap["registrationNo"] =
-                                    Utils(this).createPartFromString(regName)
-                                mHashMap["startTime"] =
-                                    Utils(this).createPartFromString(startTime)
-                                mHashMap["endTime"] =
-                                    Utils(this).createPartFromString(endTime)
-                                mHashMap["partnerName"] =
-                                    Utils(this).createPartFromString(partnerName)
-                                mHashMap["partnerNumber"] =
-                                    Utils(this).createPartFromString(partnerPhone)
-                                var ids = ""
-                                for (item in galleryImagesIds) {
-                                    if (TextUtils.isEmpty(ids)) {
-                                        ids = item
-                                    } else {
-                                        ids = ids + "," + item
+                                        if (hours == 0) {
+                                            hours += 12
+
+                                            amPmformat = "AM"
+                                        } else if (hours == 12) {
+                                            amPmformat = "PM"
+
+                                        } else if (hours > 12) {
+                                            hours -= 12
+
+                                            amPmformat = "PM"
+
+                                        } else {
+                                            amPmformat = "AM"
+                                        }
+
+                                        addTruckBinding.edtStartTime.setText("$hours : $minute $amPmformat")
                                     }
+
                                 }
-                                mHashMap["galleryImages"] =
-                                    Utils(this).createPartFromString(ids/*galleryImagesIds.toString()*/)
-                                var imagesParts : Array<MultipartBody.Part?>? = null
-                                if (imagesList.size > 0) {
-                                    imagesParts =
-                                        arrayOfNulls<MultipartBody.Part>(imagesList.count())
-                                    for (i in 0 until imagesList.count()) {
-                                        val f1 = File(imagesList[i])
-                                        imagesParts!![i] = Utils(this).prepareFilePart("image", f1)
+                                    , hour, minute, false)
+                            mTimePicker!!.show()
+                        }
+                        "edtEndTime" -> {
+                            val mcurrentTime = Calendar.getInstance()
+                            val hour = mcurrentTime.get(Calendar.HOUR_OF_DAY)
+                            val minute = mcurrentTime.get(Calendar.MINUTE)
+
+                            mTimePicker =
+                                TimePickerDialog(this, object : TimePickerDialog.OnTimeSetListener {
+                                    @SuppressLint("SetTextI18n")
+                                    override fun onTimeSet(
+                                        view : TimePicker?,
+                                        hourOfDay : Int,
+                                        minute : Int
+                                    ) {
+                                        var hours = hourOfDay
+                                        var format = ""
+
+                                        if (hours == 0) {
+                                            hours += 12
+
+                                            format = "AM"
+                                        } else if (hours == 12) {
+                                            format = "PM"
+
+                                        } else if (hours > 12) {
+                                            hours -= 12
+
+                                            format = "PM"
+
+                                        } else {
+                                            format = "AM"
+                                        }
+
+                                        addTruckBinding.edtEndTime.setText("$hours : $minute $format")
 
                                     }
-                                }
-
-
-                                if (UtilsFunctions.isNetworkConnected()) {
-                                    startProgressDialog()
-                                    trucksViewModel.addUpdateTruck(
-                                        imagesParts,
-                                        mHashMap
+                                }, hour, minute, false)
+                            mTimePicker!!.show()
+                        }
+                        "txtUploadImage" -> {
+                            isProfile = true
+                            if (checkPersmission()) {
+                                confirmationDialog =
+                                    mDialogClass.setUploadConfirmationDialog(
+                                        this,
+                                        this,
+                                        "gallery"
                                     )
+                            } else requestPermission()
+                        }
+                        "imgAddImage" -> {
+                            isProfile = true
+                            if (checkPersmission()) {
+                                confirmationDialog =
+                                    mDialogClass.setUploadConfirmationDialog(
+                                        this,
+                                        this,
+                                        "gallery"
+                                    )
+                            } else requestPermission()
+                        }
+                        "txtAddGallery" -> {
+                            isProfile = false
+                            if (checkPersmission()) {
+                                confirmationDialog =
+                                    mDialogClass.setUploadConfirmationDialog(
+                                        this,
+                                        this,
+                                        "gallery"
+                                    )
+                            } else requestPermission()
+                        }
+                        "btnSave" -> {
+                            val truckName = addTruckBinding.edtTruckName.text.toString()
+                            val location = addTruckBinding.edtLocation.text.toString()
+                            val regName = addTruckBinding.edtRegNo.text.toString()
+                            startTime = addTruckBinding.edtStartTime.text.toString()
+                            endTime = addTruckBinding.edtEndTime.text.toString()
+                            //Gallery
+                            val partnerName = addTruckBinding.edtName.text.toString()
+                            val partnerPhone = addTruckBinding.edtPhone.text.toString()
+                            when {
+                                imagesList.size == 0 -> showToastError(
+                                    getString(
+                                        R.string.upload_img_error
+                                    )
+                                )
+                                truckName.isEmpty() -> showError(
+                                    addTruckBinding.edtTruckName,
+                                    getString(R.string.empty) + " " + getString(
+                                        R.string.mobile_cart_name
+                                    )
+                                )
+                                location.isEmpty() -> showError(
+                                    addTruckBinding.edtLocation,
+                                    getString(R.string.empty) + " " + getString(
+                                        R.string.lname
+                                    )
+                                )
+                                regName.isEmpty() -> showError(
+                                    addTruckBinding.edtRegNo,
+                                    getString(R.string.empty) + " " + getString(
+                                        R.string.reg_no
+                                    )
+                                )
+                                startTime.isEmpty() -> showToastError(
+                                    getString(
+                                        R.string.select_start_time
+                                    )
+                                )
+                                endTime.isEmpty() -> showToastError(
+                                    getString(
+                                        R.string.select_end_time
+                                    )
+                                )
+                                partnerName.isEmpty() -> showError(
+                                    addTruckBinding.edtName,
+                                    getString(R.string.empty) + " " + getString(
+                                        R.string.name
+                                    )
+                                )
+                                partnerPhone.isEmpty() -> showError(
+                                    addTruckBinding.edtPhone,
+                                    getString(R.string.empty) + " " + getString(
+                                        R.string.phone_number
+                                    )
+                                )
+                                else -> {
+                                    val mHashMap = HashMap<String, RequestBody>()
+                                    mHashMap["name"] =
+                                        Utils(this).createPartFromString(truckName)
+                                    mHashMap["location"] =
+                                        Utils(this).createPartFromString(location)
+                                    mHashMap["registrationNo"] =
+                                        Utils(this).createPartFromString(regName)
+                                    mHashMap["startTime"] =
+                                        Utils(this).createPartFromString(startTime)
+                                    mHashMap["endTime"] =
+                                        Utils(this).createPartFromString(endTime)
+                                    mHashMap["partnerName"] =
+                                        Utils(this).createPartFromString(partnerName)
+                                    mHashMap["partnerNumber"] =
+                                        Utils(this).createPartFromString(partnerPhone)
+                                    mHashMap["truckId"] =
+                                        Utils(this).createPartFromString(truckId)
+                                    var ids = ""
+                                    for (item in galleryImagesList) {
+                                        if (!item.image!!.contains("http")) {
+                                            if (TextUtils.isEmpty(ids)) {
+                                                ids = item.id!!
+                                            } else {
+                                                ids = ids + "," + item.id
+                                            }
+                                        }
+                                    }
+
+                                    mHashMap["galleryImages"] =
+                                        Utils(this).createPartFromString(ids/*galleryImagesIds.toString()*/)
+                                    var galleryDeletedIds = ""
+                                    for (item in galleryImagesDeletedIds) {
+                                        if (TextUtils.isEmpty(galleryDeletedIds)) {
+                                            galleryDeletedIds = item
+                                        } else {
+                                            galleryDeletedIds = galleryDeletedIds + "," + item
+                                        }
+                                    }
+                                    mHashMap["deleteGalImg"] =
+                                        Utils(this).createPartFromString(galleryDeletedIds)
+                                    var truckDeletedIds = ""
+                                    for (item in truckImagesDeletedIds) {
+                                        if (TextUtils.isEmpty(truckDeletedIds)) {
+                                            truckDeletedIds = item
+                                        } else {
+                                            truckDeletedIds = truckDeletedIds + "," + item
+                                        }
+                                    }
+                                    mHashMap["deleteImgs"] =
+                                        Utils(this).createPartFromString(truckDeletedIds)
+                                    var finalUploadedImages = ArrayList<String>()
+                                    for (item in imagesList) {
+                                        if (!item.name.equals("http")) {
+                                            // imagesList.remove(item)
+                                            finalUploadedImages.add(item.name!!)
+                                        }
+                                    }
+                                    var imagesParts : Array<MultipartBody.Part?>? = null
+                                    if (finalUploadedImages.size > 0) {
+                                        imagesParts =
+                                            arrayOfNulls<MultipartBody.Part>(finalUploadedImages.count())
+                                        for (i in 0 until finalUploadedImages.count()) {
+                                            val f1 = File(finalUploadedImages[i])
+                                            imagesParts!![i] =
+                                                Utils(this).prepareFilePart("image", f1)
+
+                                        }
+                                    }
+
+
+                                    if (UtilsFunctions.isNetworkConnected()) {
+                                        startProgressDialog()
+                                        trucksViewModel.addUpdateTruck(
+                                            imagesParts,
+                                            mHashMap
+                                        )
+                                    }
                                 }
                             }
                         }
                     }
-                }
-            })
+                })
         )
 
     }
@@ -434,6 +549,7 @@ class AddTruckActivity : BaseActivity(), ChoiceCallBack {
         }
     }
 
+    @SuppressLint("SimpleDateFormat")
     private fun createImageFile() : File {
         // Create an image file name
         val timeStamp : String = SimpleDateFormat("yyyyMMdd_HHmmss").format(Date())
@@ -451,7 +567,10 @@ class AddTruckActivity : BaseActivity(), ChoiceCallBack {
 
     private fun setImage(path : String) {
         if (isProfile) {
-            imagesList.add(path)
+            val imagesModel = ImagesModel()
+            imagesModel.image = path
+            imagesModel.name = path
+            imagesList.add(imagesModel)
             if (imagesList.size > 0) {
                 addTruckBinding.txtUploadImage.visibility = View.GONE
                 addTruckBinding.imgAddImage.visibility = View.VISIBLE
@@ -464,7 +583,10 @@ class AddTruckActivity : BaseActivity(), ChoiceCallBack {
             imagesListAdapter?.notifyDataSetChanged()
         } else {
             startProgressDialog()
-            galleryImagesList.add(path)
+            val imageModel = ImagesModel()
+            imageModel.image = path
+            imageModel.name = path
+            galleryImagesList.add(imageModel)
             galleryImagesListAdapter?.notifyDataSetChanged()
             var bannerImage : MultipartBody.Part? = null
             if (!profileImage.isEmpty()) {
@@ -504,7 +626,11 @@ class AddTruckActivity : BaseActivity(), ChoiceCallBack {
     }
 
     fun removeImage(pos : Int) {
+        if (imagesList[pos].image!!.contains("http")) {
+            truckImagesDeletedIds.add(imagesList[pos].image!!)
+        }
         imagesList.removeAt(pos)
+
         if (imagesList.size > 0) {
             addTruckBinding.txtUploadImage.visibility = View.GONE
             addTruckBinding.imgAddImage.visibility = View.VISIBLE
@@ -521,14 +647,21 @@ class AddTruckActivity : BaseActivity(), ChoiceCallBack {
               .into(profileBinding.imgProfile)*/
     }
 
-    fun removeGalleryImage(pos : Int) {
-        galleryImagesList.removeAt(pos)
-        galleryImagesIds.removeAt(pos)
+    fun removeGalleryImage(pos : Int, path : String) {
+        for (item in galleryImagesList) {
+            if (item.image!!.contains("http")) {
+                if (item.image.equals(path)) {
+                    galleryImagesDeletedIds.add(galleryImagesList[pos].image!!)
+                    galleryImagesList.remove(item)
+                }
+            } else {
+                if (item.image.equals(path)) {
+                    galleryImagesList.remove(item)
+                }
+            }
+        }
         galleryImagesListAdapter?.notifyDataSetChanged()
-        /*  Glide.with(this)
-              .load(path)
-              .placeholder(R.drawable.user)
-              .into(profileBinding.imgProfile)*/
+
     }
 
 }

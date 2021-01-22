@@ -292,7 +292,7 @@
 
         <View
                 android:id="@+id/v_underemail"
-                android:layout_width="@dimen/dp_50"
+                android:layout_width="@dimen/dp_5"
                 android:layout_height="@dimen/dp_2"
                 android:layout_marginLeft="@dimen/dp_10"
                 android:layout_marginTop="@dimen/dp_15"

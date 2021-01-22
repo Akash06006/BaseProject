@@ -75,4 +75,11 @@ class LandingActivty : BaseActivity() {
 
     }
 
+    fun callTruckFragment() {
+        val fragment =
+            TruckListFragment()
+        callFragments(fragment, supportFragmentManager, false, "send_data", "")
+        activityOtpVerificationBinding!!.tablayout.getTabAt(1)!!.select()
+    }
+
 }

@@ -38,6 +38,7 @@ EventsListFragment : BaseFragment() {
     lateinit var mFusedLocationClient : FusedLocationProviderClient
     var currentLat = ""
     var currentLong = ""
+    var eventType = "pending"
     private lateinit var fragmentTruckBinding : FragmentEventsBinding
     //var categoriesList = null
     override fun getLayoutResId() : Int {
@@ -97,6 +98,7 @@ EventsListFragment : BaseFragment() {
             fun(it : String?) {
                 when (it) {
                     "txtPending" -> {
+                        eventType = "pending"
                         fragmentTruckBinding.txtPending.setTextColor(resources.getColor(R.color.colorWhite))
                         fragmentTruckBinding.txtAccepted.setTextColor(resources.getColor(R.color.colorGrey))
                         fragmentTruckBinding.txtPending.background =
@@ -109,6 +111,7 @@ EventsListFragment : BaseFragment() {
                         }
                     }
                     "txtAccepted" -> {
+                        eventType = "accept"
                         fragmentTruckBinding.txtAccepted.setTextColor(resources.getColor(R.color.colorWhite))
                         fragmentTruckBinding.txtPending.setTextColor(resources.getColor(R.color.colorGrey))
                         fragmentTruckBinding.txtAccepted.background =
@@ -128,7 +131,7 @@ EventsListFragment : BaseFragment() {
 
     private fun initRecyclerView() {
         val linearLayoutManager1 = LinearLayoutManager(activity)
-        val truckListAdapter = EventListAdapter(this, this, eventList, activity!!)
+        val truckListAdapter = EventListAdapter(this, eventType, eventList, activity!!)
         fragmentTruckBinding.rvTrucks.setHasFixedSize(true)
         linearLayoutManager1.orientation = RecyclerView.VERTICAL
         fragmentTruckBinding.rvTrucks.layoutManager = linearLayoutManager1

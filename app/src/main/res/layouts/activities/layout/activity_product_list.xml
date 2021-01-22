@@ -45,7 +45,7 @@
                         android:id="@+id/toolbarCommon"
                         layout="@layout/common_toolbar_back"
                         android:layout_width="match_parent"
-                        android:layout_height="@dimen/dp_50" />
+                        android:layout_height="@dimen/dp_55" />
 
                 <LinearLayout
                         android:id="@+id/rlAddCategory"

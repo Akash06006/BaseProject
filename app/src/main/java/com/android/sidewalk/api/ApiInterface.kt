@@ -92,6 +92,9 @@ interface ApiInterface {
     @GET("vendor/truck/detail/{id}")
     fun truckDetail(@Path("id") id : String) : Call<JsonObject>
 
+    @GET("/api/vendor/event/detail/{eventId}")
+    fun eventDetail(@Path("eventId") id : String) : Call<JsonObject>
+
     @GET("vendor/truck/viewGallery")
     fun viewGallery(@Query("truckId") id : String) : Call<JsonObject>
 
