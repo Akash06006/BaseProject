@@ -226,18 +226,13 @@ class EditProfileActivity : BaseActivity(), ChoiceCallBack {
                                 )
                             )
                             else -> {
-                                mOtpJsonObject.addProperty(
-                                    "countryCode",
-                                    "+" + activityEditProfileBinding.btnCcp.selectedCountryCode
-                                )
-                                mOtpJsonObject.addProperty("phoneNumber", phone)
                                 val mHashMap = HashMap<String, RequestBody>()
                                 mHashMap["firstName"] =
                                     Utils(this).createPartFromString(fName)
                                 mHashMap["lastName"] =
                                     Utils(this).createPartFromString(lName)
                                 mHashMap["countryCode"] =
-                                    Utils(this).createPartFromString("+" + activityEditProfileBinding.btnCcp.selectedCountryCode)
+                                    Utils(this).createPartFromString(activityEditProfileBinding.edtCountryCode.text.toString())
                                 mHashMap["phoneNumber"] =
                                     Utils(this).createPartFromString(phone)
                                 mHashMap["email"] =
