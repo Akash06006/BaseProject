@@ -32,7 +32,7 @@ interface ApiInterface {
                 RequestBody>, @Part image : MultipartBody.Part?
     ) : Call<JsonObject>
 
-    @GET("mobile/auth/profile")
+    @GET("vendor/auth/getProfile")
     fun getProfile() : Call<JsonObject>
 
     @GET("mobile/auth/getRegion")

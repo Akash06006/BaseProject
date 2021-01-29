@@ -13,6 +13,7 @@ import com.android.sidewalk.views.authentication.LoginActivity
 import com.android.sidewalk.views.events.EventDetailActivity
 import com.android.sidewalk.views.home.LandingActivty
 import com.android.sidewalk.views.menu.CategoryListActivity
+import com.android.sidewalk.views.profile.EditProfileActivity
 import com.android.sidewalk.views.trucks.AddTruckActivity
 import com.android.sidewalk.views.tutorials.TutorialActivity
 import com.facebook.AccessToken
@@ -83,7 +84,8 @@ class SplashActivity : BaseActivity() {
             // Intent(this, LandingActivty::class.java)
             Intent(
                 this,
-                LandingActivty::class.java
+                /*   LandingActivty::class.java*/
+                EditProfileActivity::class.java
             )
         } else {
             // Intent(this, LoginActivity::class.java)
