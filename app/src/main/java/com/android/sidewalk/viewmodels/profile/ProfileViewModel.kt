@@ -6,6 +6,7 @@ import android.view.View
 import com.android.sidewalk.common.UtilsFunctions
 import com.android.sidewalk.common.UtilsFunctions.isNetworkConnectedReturn
 import com.android.sidewalk.model.LoginResponse
+import com.android.sidewalk.model.profile.ProfileResponse
 import com.android.sidewalk.model.profile.RegionResponse
 import com.android.sidewalk.repositories.profile.ProfileRepository
 import com.android.sidewalk.viewmodels.BaseViewModel
@@ -18,7 +19,7 @@ class ProfileViewModel : BaseViewModel() {
     private var data =
         MutableLiveData<LoginResponse>()
     private var profileDetail =
-        MutableLiveData<LoginResponse>()
+        MutableLiveData<ProfileResponse>()
     private var profileRepository =
         ProfileRepository()
     private val mIsUpdating = MutableLiveData<Boolean>()
@@ -26,14 +27,14 @@ class ProfileViewModel : BaseViewModel() {
 
     init {
         if (isNetworkConnectedReturn()) {
-            profileDetail = profileRepository.getUserProfile(null)
+            profileDetail = profileRepository.getUserProfile()
             data = profileRepository.updateUserProfile(null, null)
             regionResponse = profileRepository.getRegoins()
         }
 
     }
 
-    fun getDetail() : LiveData<LoginResponse> {
+    fun getDetail() : LiveData<ProfileResponse> {
         return profileDetail
     }
 
@@ -59,7 +60,7 @@ class ProfileViewModel : BaseViewModel() {
 
     fun getProfileDetail(mJsonObject : JsonObject) {
         if (UtilsFunctions.isNetworkConnected()) {
-            profileDetail = profileRepository.getUserProfile(mJsonObject)
+            profileDetail = profileRepository.getUserProfile(/*mJsonObject*/)
             mIsUpdating.postValue(true)
         }
 

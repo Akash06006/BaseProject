@@ -9,6 +9,7 @@ import com.android.sidewalk.application.MyApplication
 import com.android.sidewalk.common.UtilsFunctions
 import com.android.sidewalk.model.CommonModel
 import com.android.sidewalk.model.LoginResponse
+import com.android.sidewalk.model.profile.ProfileResponse
 import com.android.sidewalk.model.profile.RegionResponse
 import com.google.gson.GsonBuilder
 import com.google.gson.JsonObject
@@ -19,7 +20,7 @@ import java.util.HashMap
 
 class ProfileRepository {
     private var data : MutableLiveData<LoginResponse>? = null
-    private var data1 : MutableLiveData<LoginResponse>? = null
+    private var data1 : MutableLiveData<ProfileResponse>? = null
     private var data2 : MutableLiveData<CommonModel>? = null
     private val gson = GsonBuilder().serializeNulls().create()
     private var data3 : MutableLiveData<RegionResponse>? = null
@@ -74,37 +75,36 @@ class ProfileRepository {
 
     }
 
-    fun getUserProfile(jsonObject : JsonObject?) : MutableLiveData<LoginResponse> {
-        if (jsonObject != null) {
-            val mApiService = ApiService<JsonObject>()
-            mApiService.get(
-                object : ApiResponse<JsonObject> {
-                    override fun onResponse(mResponse : Response<JsonObject>) {
-                        val loginResponse = if (mResponse.body() != null)
-                            gson.fromJson<LoginResponse>(
-                                "" + mResponse.body(),
-                                LoginResponse::class.java
-                            )
-                        else {
-                            gson.fromJson<LoginResponse>(
-                                mResponse.errorBody()!!.charStream(),
-                                LoginResponse::class.java
-                            )
-                        }
-                        data1!!.postValue(loginResponse)
-                    }
-
-                    override fun onError(mKey : String) {
-                        UtilsFunctions.showToastError(
-                            MyApplication.instance.getString(R.string.internal_server_error)
+    fun getUserProfile(/*jsonObject : JsonObject?*/) : MutableLiveData<ProfileResponse> {
+        //if (jsonObject != null) {
+        val mApiService = ApiService<JsonObject>()
+        mApiService.get(
+            object : ApiResponse<JsonObject> {
+                override fun onResponse(mResponse : Response<JsonObject>) {
+                    val loginResponse = if (mResponse.body() != null)
+                        gson.fromJson<ProfileResponse>(
+                            "" + mResponse.body(),
+                            ProfileResponse::class.java
                         )
-                        data1!!.postValue(null)
+                    else {
+                        gson.fromJson<ProfileResponse>(
+                            mResponse.errorBody()!!.charStream(),
+                            ProfileResponse::class.java
+                        )
                     }
+                    data1!!.postValue(loginResponse)
+                }
 
-                }, ApiClient.getApiInterface().getProfile(/*jsonObject*/)
-            )
+                override fun onError(mKey : String) {
+                    UtilsFunctions.showToastError(
+                        MyApplication.instance.getString(R.string.internal_server_error)
+                    )
+                    data1!!.postValue(null)
+                }
 
-        }
+            }, ApiClient.getApiInterface().getProfile(/*jsonObject*/)
+        )
+        //}
         return data1!!
 
     }

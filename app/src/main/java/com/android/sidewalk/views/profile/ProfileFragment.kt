@@ -38,6 +38,7 @@ import java.text.SimpleDateFormat
 import java.util.*
 import com.android.sidewalk.databinding.ActivityProfileBinding
 import com.android.sidewalk.model.LoginResponse
+import com.android.sidewalk.model.profile.ProfileResponse
 import com.android.sidewalk.model.profile.RegionResponse
 import com.android.sidewalk.sharedpreference.SharedPrefClass
 import com.android.sidewalk.utils.BaseFragment
@@ -103,13 +104,13 @@ class ProfileFragment : BaseFragment(){
 
 
         profieViewModel.getDetail().observe(this,
-            Observer<LoginResponse> { response->
+            Observer<ProfileResponse> { response->
                 baseActivity.stopProgressDialog()
                 if (response != null) {
                     val message = response.message
                     when {
                         response.code == 200 -> {
-                            profileBinding.model = response
+                            /*profileBinding.model = response
 
                             SharedPrefClass()
                                 .putObject(
@@ -126,7 +127,7 @@ class ProfileFragment : BaseFragment(){
 
                             profileBinding.txtEmail.setText(response.data?.email)
                             profileBinding.txtUsername.setText(response.data?.firstName + " " + response.data?.lastName)
-
+*/
                         }
                         else -> message?.let { showToastError(it) }
                     }

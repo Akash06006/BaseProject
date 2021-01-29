@@ -1,4 +1,4 @@
-package com.android.sidewalk.views.authentication
+package com.android.sidewalk.views.profile
 
 import android.Manifest
 import android.app.Activity
@@ -10,6 +10,7 @@ import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Environment
 import android.provider.MediaStore
+import android.text.TextUtils
 import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
@@ -25,29 +26,27 @@ import com.android.sidewalk.callbacks.ChoiceCallBack
 import com.android.sidewalk.common.FirebaseFunctions
 import com.android.sidewalk.common.UtilsFunctions
 import com.android.sidewalk.constants.GlobalConstants
-import com.android.sidewalk.databinding.ActivitySignupBinding
-import com.android.sidewalk.model.CommonModel
+import com.android.sidewalk.databinding.ActivityEditProfileBinding
 import com.android.sidewalk.model.LoginResponse
+import com.android.sidewalk.model.profile.ProfileResponse
 import com.android.sidewalk.sharedpreference.SharedPrefClass
 import com.android.sidewalk.utils.DialogClass
 import com.android.sidewalk.utils.Utils
 import com.android.sidewalk.utils.ValidationsClass
-import com.android.sidewalk.viewmodels.LoginViewModel
-import com.android.sidewalk.views.home.LandingActivty
+import com.android.sidewalk.viewmodels.profile.ProfileViewModel
 import com.bumptech.glide.Glide
 import com.google.gson.JsonObject
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
-import org.json.JSONObject
 import java.io.File
 import java.io.IOException
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
 
-class SignupActivity : BaseActivity(), ChoiceCallBack {
-    private lateinit var activitySignupbinding : ActivitySignupBinding
-    private lateinit var loginViewModel : LoginViewModel
+class EditProfileActivity : BaseActivity(), ChoiceCallBack {
+    private lateinit var activityEditProfileBinding : ActivityEditProfileBinding
+    private lateinit var loginViewModel : ProfileViewModel
     val mOtpJsonObject = JsonObject()
     var isSocial = false
     var socialType = ""
@@ -62,130 +61,52 @@ class SignupActivity : BaseActivity(), ChoiceCallBack {
     private var lincesFront = ""
     private var lincesBack = ""
     override fun getLayoutId() : Int {
-        return R.layout.activity_signup
+        return R.layout.activity_edit_profile
     }
 
     override fun initViews() {
-        activitySignupbinding =
-            viewDataBinding as ActivitySignupBinding //DataBindingUtil.setContentView(this, R.layout.activity_login)
+        activityEditProfileBinding =
+            viewDataBinding as ActivityEditProfileBinding //DataBindingUtil.setContentView(this, R.layout.activity_login)
         loginViewModel = ViewModelProviders.of(this)
-            .get(LoginViewModel::class.java)
-        activitySignupbinding.loginViewModel = loginViewModel
-        val fbSocial = intent.extras.get("fbSocial").toString()
-        if (fbSocial.equals("true")) {
-            isSocial = true
-            socialType = "facebook"
-            val fbDetails = JSONObject(intent.extras.get("fbData").toString())
-            if (fbDetails.has("id")) {
-                socialId = fbDetails.getString("id")
-            }
+            .get(ProfileViewModel::class.java)
+        activityEditProfileBinding.loginViewModel = loginViewModel
 
-            if (fbDetails.has("name")) {
-                val fullname = fbDetails.getString("name")
-                if (fullname.contains(" ")) {
-                    var name = fullname.split(" ")
-                    val firstName = name[0]
-                    val lastname = name[1]
-
-                    activitySignupbinding.edtFirstName.setText(firstName)
-                    activitySignupbinding.edtLastName.setText(lastname)
-                } else {
-                    activitySignupbinding.edtFirstName.setText(fullname)
-                }
-            }
-            if (fbDetails.has("email")) {
-                val email = fbDetails.getString("email")
-                activitySignupbinding.edtEmail.setText(email)
-
-            }
-        }
+        activityEditProfileBinding.toolbarCommon.imgToolbarText.text =
+            getString(R.string.my_profile)
         // activityLoginbinding.tvForgotPassword.paintFlags = Paint.UNDERLINE_TEXT_FLAG
-        loginViewModel.getSignupRes().observe(this,
-            Observer<LoginResponse> { loginResponse->
+        loginViewModel.getDetail().observe(this,
+            Observer<ProfileResponse> { profileResponse->
                 stopProgressDialog()
                 // FirebaseFunctions.sendOTP("login", mOtpJsonObject, this)
-                if (loginResponse != null) {
-                    val message = loginResponse.message
+                if (profileResponse != null) {
+                    val message = profileResponse.message
 
-                    if (loginResponse.code == 200) {
+                    if (profileResponse.code == 200) {
                         /* SharedPrefClass().putObject(
                              MyApplication.instance,
                              "isLogin",
                              true
                          )*/
-                        GlobalConstants.VERIFICATION_TYPE =
-                            "signup"
-                        FirebaseFunctions.sendOTP("login", mOtpJsonObject, this)
-                        // mOtpJsonObject.addProperty("phoneNumber", response.categoryList?.phoneNumber)
-                        //mOtpJsonObject.addProperty("countryCode", response.categoryList?.countryCode)
-                        SharedPrefClass()
-                            .putObject(
-                                MyApplication.instance,
-                                GlobalConstants.ACCESS_TOKEN,
-                                loginResponse.data!!.token
-                            )
-                        SharedPrefClass()
-                            .putObject(
-                                MyApplication.instance,
-                                GlobalConstants.USERID,
-                                loginResponse.data!!.id
-                            )
-                        SharedPrefClass()
-                            .putObject(
-                                MyApplication.instance,
-                                GlobalConstants.IS_SOCIAL,
-                                isSocial
-                            )
+                        activityEditProfileBinding.profileResponse = profileResponse.data
 
-                        SharedPrefClass()
-                            .putObject(
-                                MyApplication.instance,
-                                GlobalConstants.USERNAME,
-                                activitySignupbinding.edtFirstName.text.toString() + " " + activitySignupbinding.edtLastName.text.toString()
-                            )
-                        val mJsonObject = JsonObject()
-                        mJsonObject.addProperty("userId", loginResponse.data!!.id)
-                        mJsonObject.addProperty("sessionToken", loginResponse.data!!.token)
-                        //loginViewModel.callVerifyUserApi(mJsonObject)
-                        /*showToastSuccess(message)
-                        val intent = Intent(this, OTPVerificationActivity::class.java)
-                        startActivity(intent)
-                        finish()*/
+                        if (!TextUtils.isEmpty(profileResponse.data!!.licenseFront)) {
+                            activityEditProfileBinding.imgFrontPlus.visibility = View.GONE
+                            activityEditProfileBinding.txtFront.visibility = View.GONE
+                            Glide.with(this).load(profileResponse.data!!.licenseFront)
+                                .into(activityEditProfileBinding.imgFront)
+                        }
 
-                    } else if (loginResponse.code == 408) {
+                        if (!TextUtils.isEmpty(profileResponse.data!!.licenseBack)) {
+                            activityEditProfileBinding.imgBackPlus.visibility = View.GONE
+                            activityEditProfileBinding.txtBack.visibility = View.GONE
+                            Glide.with(this).load(profileResponse.data!!.licenseBack)
+                                .into(activityEditProfileBinding.imgBack)
+                        }
+
+                    } else if (profileResponse.code == 408) {
                         showToastError(message)
                     } else {
                         showToastError(message)
-                    }
-
-                }
-            })
-
-        loginViewModel.getVerifyUserRes().observe(this,
-            Observer<CommonModel> { loginResponse->
-                stopProgressDialog()
-                if (loginResponse != null) {
-                    val message = loginResponse.message
-
-                    if (loginResponse.code == 200) {
-                        SharedPrefClass()
-                            .putObject(
-                                MyApplication.instance,
-                                "isLogin",
-                                true
-                            )
-                        //showToastSuccess(message)
-                        val intent = Intent(
-                            this,
-                            LandingActivty::class.java
-                        )
-                        intent.flags =
-                            Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-                        startActivity(intent)
-                        finish()
-
-                    } else {
-                        //showToastError(message)
                     }
 
                 }
@@ -238,12 +159,11 @@ class SignupActivity : BaseActivity(), ChoiceCallBack {
                         } else requestPermission()
                     }
                     "btnSignup" -> {
-                        val fName = activitySignupbinding.edtFirstName.text.toString()
-                        val lName = activitySignupbinding.edtLastName.text.toString()
-                        val email = activitySignupbinding.edtEmail.text.toString()
-                        val phone = activitySignupbinding.edtPhone.text.toString()
-                        val experience = activitySignupbinding.edtExperience.text.toString()
-
+                        val fName = activityEditProfileBinding.edtFirstName.text.toString()
+                        val lName = activityEditProfileBinding.edtLastName.text.toString()
+                        val email = activityEditProfileBinding.edtEmail.text.toString()
+                        val phone = activityEditProfileBinding.edtPhone.text.toString()
+                        val experience = activityEditProfileBinding.edtExperience.text.toString()
                         when {
                             profileImage.isEmpty() -> showToastError(
                                 getString(
@@ -251,38 +171,38 @@ class SignupActivity : BaseActivity(), ChoiceCallBack {
                                 )
                             )
                             fName.isEmpty() -> showError(
-                                activitySignupbinding.edtFirstName,
+                                activityEditProfileBinding.edtFirstName,
                                 getString(R.string.empty) + " " + getString(
                                     R.string.fname
                                 )
                             )
                             lName.isEmpty() -> showError(
-                                activitySignupbinding.edtLastName,
+                                activityEditProfileBinding.edtLastName,
                                 getString(R.string.empty) + " " + getString(
                                     R.string.lname
                                 )
                             )
                             email.isEmpty() -> showError(
-                                activitySignupbinding.edtEmail,
+                                activityEditProfileBinding.edtEmail,
                                 getString(R.string.empty) + " " + getString(
                                     R.string.email
                                 )
                             )
                             !email.matches((ValidationsClass.EMAIL_PATTERN).toRegex()) ->
                                 showError(
-                                    activitySignupbinding.edtEmail,
+                                    activityEditProfileBinding.edtEmail,
                                     getString(R.string.invalid) + " " + getString(
                                         R.string.email
                                     )
                                 )
                             phone.isEmpty() -> showError(
-                                activitySignupbinding.edtPhone,
+                                activityEditProfileBinding.edtPhone,
                                 getString(R.string.empty) + " " + getString(
                                     R.string.phone_number
                                 )
                             )
                             phone.length < 10 -> showError(
-                                activitySignupbinding.edtPhone,
+                                activityEditProfileBinding.edtPhone,
                                 getString(R.string.phone_number) + " " + getString(
                                     R.string.phone_min
                                 )
@@ -297,17 +217,10 @@ class SignupActivity : BaseActivity(), ChoiceCallBack {
                                     R.string.license_back_img_error
                                 )
                             )
-                            !activitySignupbinding.chkTerms.isChecked() -> {
-                                showToastError(
-                                    getString(
-                                        R.string.agree_terms_msg
-                                    )
-                                )
-                            }
                             else -> {
                                 mOtpJsonObject.addProperty(
                                     "countryCode",
-                                    "+" + activitySignupbinding.btnCcp.selectedCountryCode
+                                    "+" + activityEditProfileBinding.btnCcp.selectedCountryCode
                                 )
                                 mOtpJsonObject.addProperty("phoneNumber", phone)
                                 val mHashMap = HashMap<String, RequestBody>()
@@ -316,23 +229,13 @@ class SignupActivity : BaseActivity(), ChoiceCallBack {
                                 mHashMap["lastName"] =
                                     Utils(this).createPartFromString(lName)
                                 mHashMap["countryCode"] =
-                                    Utils(this).createPartFromString("+" + activitySignupbinding.btnCcp.selectedCountryCode)
+                                    Utils(this).createPartFromString("+" + activityEditProfileBinding.btnCcp.selectedCountryCode)
                                 mHashMap["phoneNumber"] =
                                     Utils(this).createPartFromString(phone)
                                 mHashMap["email"] =
                                     Utils(this).createPartFromString(email)
-                                mHashMap["isSocial"] =
-                                    Utils(this).createPartFromString(isSocial.toString())
                                 /* mHashMap["password"] =
                                      Utils(this).createPartFromString("12345678")*/
-                                mHashMap["deviceToken"] =
-                                    Utils(this).createPartFromString("deivce_token")
-                                mHashMap["platform"] =
-                                    Utils(this).createPartFromString("android")
-                                mHashMap["socialType"] =
-                                    Utils(this).createPartFromString(socialType)
-                                mHashMap["socialId"] =
-                                    Utils(this).createPartFromString(socialId)
                                 mHashMap["experience"] =
                                     Utils(this).createPartFromString(experience)
                                 var userImage : MultipartBody.Part? = null
@@ -365,32 +268,15 @@ class SignupActivity : BaseActivity(), ChoiceCallBack {
                                                 f1
                                             )
                                 }
-                                //val mJsonObject = JsonObject()
-                                //mJsonObject.addProperty("firstName", fName)
-                                // mJsonObject.addProperty("lastName", lName)
-                                /* mJsonObject.addProperty(
-                                     "countryCode",
-                                     "+" + activitySignupbinding.btnCcp.selectedCountryCode
-                                 )*/
-                                // mJsonObject.addProperty("phoneNumber", phone)
-                                // mJsonObject.addProperty("email", email)
-                                // mJsonObject.addProperty("password", password)
-                                //mJsonObject.addProperty("isSocial", isSocial)
-                                // mJsonObject.addProperty("deviceToken", "deivce_token")
-                                // mJsonObject.addProperty("platform", "android")
-                                // mJsonObject.addProperty("socialType", socialType)
-                                // mJsonObject.addProperty("socialId", socialId)
-                                if (UtilsFunctions.isNetworkConnected()) {
-                                    loginViewModel.callSignupApi(
-                                        mHashMap,
-                                        userImage,
-                                        licenseFront,
-                                        licenseBack
-                                    )
-                                }
-                                //val intent = Intent(this, OTPVerificationActivity::class.java)
-                                //intent.putExtra("itemId", ""/*categoriesList[position].id*/)
-                                //startActivity(intent)
+                                /* if (UtilsFunctions.isNetworkConnected()) {
+                                     loginViewModel.callSignupApi(
+                                         mHashMap,
+                                         userImage,
+                                         licenseFront,
+                                         licenseBack
+                                     )
+                                 }*/
+
                             }
                         }
 
@@ -537,19 +423,19 @@ class SignupActivity : BaseActivity(), ChoiceCallBack {
             Glide.with(this)
                 .load(path)
                 .placeholder(R.drawable.ic_user_profile)
-                .into(activitySignupbinding.imgProfile)
+                .into(activityEditProfileBinding.imgProfile)
         } else if (imageClicked == 2) {
-            activitySignupbinding.imgFrontPlus.visibility = View.GONE
-            activitySignupbinding.txtFront.visibility = View.GONE
+            activityEditProfileBinding.imgFrontPlus.visibility = View.GONE
+            activityEditProfileBinding.txtFront.visibility = View.GONE
             Glide.with(this)
                 .load(path)
-                .into(activitySignupbinding.imgFront)
+                .into(activityEditProfileBinding.imgFront)
         } else {
-            activitySignupbinding.imgBackPlus.visibility = View.GONE
-            activitySignupbinding.txtBack.visibility = View.GONE
+            activityEditProfileBinding.imgBackPlus.visibility = View.GONE
+            activityEditProfileBinding.txtBack.visibility = View.GONE
             Glide.with(this)
                 .load(path)
-                .into(activitySignupbinding.imgBack)
+                .into(activityEditProfileBinding.imgBack)
         }
 
     }

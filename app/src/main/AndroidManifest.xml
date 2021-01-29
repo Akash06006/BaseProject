@@ -53,6 +53,11 @@
                 android:windowSoftInputMode="stateHidden"></activity>
 
         <activity
+                android:name=".views.profile.EditProfileActivity"
+                android:screenOrientation="portrait"
+                android:windowSoftInputMode="stateHidden"></activity>
+
+        <activity
                 android:name=".views.events.EventDetailActivity"
                 android:screenOrientation="portrait"
                 android:windowSoftInputMode="stateHidden"></activity>
