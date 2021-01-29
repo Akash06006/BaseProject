@@ -62,6 +62,14 @@ interface ApiInterface {
         @Part licenseBack : MultipartBody.Part?
     ) : Call<JsonObject>
 
+    @Multipart
+    @POST("vendor/auth/updateProfile")
+    fun callUpdateProfile(
+        @PartMap jsonObject : HashMap<String, RequestBody>, @Part userImage : MultipartBody.Part?,
+        @Part licenseFront : MultipartBody.Part?,
+        @Part licenseBack : MultipartBody.Part?
+    ) : Call<JsonObject>
+
     @POST("vendor/auth/verify")
     fun callVerifyUser(@Body jsonObject : JsonObject) : Call<JsonObject>
 
@@ -118,7 +126,11 @@ interface ApiInterface {
     ) : Call<JsonObject>
 
     @GET("outlet-services/")
-    fun getHomeList(@Query("page") page : String, @Query("limit") limit : String, @Query("companyId") companyId : String) : Call<JsonObject>
+    fun getHomeList(
+        @Query("page") page : String,
+        @Query("limit") limit : String,
+        @Query("companyId") companyId : String
+    ) : Call<JsonObject>
 
     @POST("outlet-group-services/")
     fun getClassesList(@Body mJsonObject : JsonObject) : Call<JsonObject>

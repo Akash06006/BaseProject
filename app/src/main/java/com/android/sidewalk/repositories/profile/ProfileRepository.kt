@@ -22,6 +22,7 @@ class ProfileRepository {
     private var data : MutableLiveData<LoginResponse>? = null
     private var data1 : MutableLiveData<ProfileResponse>? = null
     private var data2 : MutableLiveData<CommonModel>? = null
+    private var profileUpdate : MutableLiveData<CommonModel>? = null
     private val gson = GsonBuilder().serializeNulls().create()
     private var data3 : MutableLiveData<RegionResponse>? = null
 
@@ -29,6 +30,7 @@ class ProfileRepository {
         data = MutableLiveData()
         data1 = MutableLiveData()
         data2 = MutableLiveData()
+        profileUpdate = MutableLiveData()
         data3 = MutableLiveData()
 
     }
@@ -147,44 +149,52 @@ class ProfileRepository {
 
     }
 
-    fun updateUserProfile(
-        hashMap : HashMap<String, RequestBody>?,
-        image : MultipartBody.Part?
-    ) : MutableLiveData<LoginResponse> {
-        if (hashMap != null) {
+    fun callUpdateProfile(
+        jsonObject : HashMap<String, RequestBody>?,
+        userImage : MultipartBody.Part?,
+        licenseFront : MultipartBody.Part?,
+        licenseBack : MultipartBody.Part?
+    ) : MutableLiveData<CommonModel> {
+        if (jsonObject != null) {
             val mApiService = ApiService<JsonObject>()
             mApiService.get(
                 object : ApiResponse<JsonObject> {
                     override fun onResponse(mResponse : Response<JsonObject>) {
                         val loginResponse = if (mResponse.body() != null)
-                            gson.fromJson<LoginResponse>(
+                            gson.fromJson<CommonModel>(
                                 "" + mResponse.body(),
-                                LoginResponse::class.java
+                                CommonModel::class.java
                             )
                         else {
-                            gson.fromJson<LoginResponse>(
+                            gson.fromJson<CommonModel>(
                                 mResponse.errorBody()!!.charStream(),
-                                LoginResponse::class.java
+                                CommonModel::class.java
                             )
                         }
 
 
-                        data!!.postValue(loginResponse)
+                        profileUpdate!!.postValue(loginResponse)
 
                     }
 
                     override fun onError(mKey : String) {
                         UtilsFunctions.showToastError(
-                            MyApplication.instance.getString(R.string.internal_server_error)
+                            MyApplication.instance.getString(
+                                R.string.internal_server_error
+                            )
                         )
-                        data!!.postValue(null)
+                        profileUpdate!!.postValue(null)
 
                     }
 
-                }, ApiClient.getApiInterface().callUpdateProfile(hashMap, image)
+                },
+                ApiClient.getApiInterface().callUpdateProfile(
+                    jsonObject, userImage, licenseFront, licenseBack
+                )
             )
+
         }
-        return data!!
+        return profileUpdate!!
 
     }
 

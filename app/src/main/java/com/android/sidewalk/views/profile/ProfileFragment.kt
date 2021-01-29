@@ -148,62 +148,7 @@ class ProfileFragment : BaseFragment(),
                 }
             })
 
-        profieViewModel.getRegionsRes().observe(this,
-            Observer<RegionResponse> { response->
-                baseActivity.stopProgressDialog()
-                if (UtilsFunctions.isNetworkConnected()) {
-                    baseActivity.startProgressDialog()
-                    profieViewModel.getProfileDetail(mJsonObject)
-                }
-                if (response != null) {
-                    val message = response.message
-                    when {
-                        response.code == 200 -> {
-                            val data =
-                                RegionResponse.Data()
-                            data.id = "0"
-                            data.name = "Select Region"
-                            reginRes.add(data)
-                            reginRes.addAll(response.data!!)
-                            // profileBinding.model = response.categoryList
-                            for (count in 0 until response.data!!.count()) {
-                                region.add(response.data!![count].name!!)
 
-                            }
-
-                            if (profileBinding.spinner != null) {
-                                val adapter = ArrayAdapter(
-                                    activity!!,
-                                    android.R.layout.simple_spinner_item, region
-                                )
-                                profileBinding.spinner.adapter = adapter
-                                profileBinding.spinner.onItemSelectedListener = object :
-                                    AdapterView.OnItemSelectedListener {
-                                    override fun onItemSelected(
-                                        parent : AdapterView<*>,
-                                        view : View, position : Int, id : Long
-                                    ) {
-                                        if (position != 0) {
-                                            regionId = reginRes[position].id!!
-                                            regionPos = position
-                                        } else {
-                                            regionId = "0"
-                                            regionPos = position
-                                        }
-
-                                    }
-
-                                    override fun onNothingSelected(parent : AdapterView<*>) {
-                                        // write code to perform some action
-                                    }
-                                }
-                            }
-
-                        }
-                        else -> message?.let { showToastError(it) }
-                    }
-                }
-            })
 
         profieViewModel.getUpdateDetail().observe(this,
             Observer<LoginResponse> { response->
@@ -262,81 +207,6 @@ class ProfileFragment : BaseFragment(),
                                     this,
                                     "gallery"
                                 )
-                        }
-
-                    }
-                    "btn_submit" -> {
-                        val fname = profileBinding.etFirstname.text.toString()
-                        val lname = profileBinding.etLastname.text.toString()
-                        val email = profileBinding.etEmail.text.toString()
-                        val phone = profileBinding.etPhone.text.toString()
-                        when {
-                            fname.isEmpty() -> showError(
-                                profileBinding.etFirstname,
-                                getString(R.string.empty) + " " + getString(
-                                    R.string.fname
-                                )
-                            )
-                            lname.isEmpty() -> showError(
-                                profileBinding.etLastname,
-                                getString(R.string.empty) + " " + getString(
-                                    R.string.lname
-                                )
-                            )
-                            email.isEmpty() -> showError(
-                                profileBinding.etEmail,
-                                getString(R.string.empty) + " " + getString(
-                                    R.string.email
-                                )
-                            )
-                            !email.matches((ValidationsClass.EMAIL_PATTERN).toRegex()) ->
-                                showError(
-                                    profileBinding.etEmail,
-                                    getString(R.string.invalid) + " " + getString(
-                                        R.string.email
-                                    )
-                                )
-                            regionId.equals("0") -> {
-                                showToastError("Please select region")
-                            }
-                            else -> {
-                                /* val phonenumber = SharedPrefClass().getPrefValue(
-                                     MyApplication.instance,
-                                     getString(R.string.key_phone)
-                                 ) as String
-                                 val countrycode = SharedPrefClass().getPrefValue(
-                                     MyApplication.instance,
-                                     getString(R.string.key_country_code)
-                                 ) as String*/
-                                val androidId = UtilsFunctions.getAndroidID()
-                                val mHashMap = HashMap<String, RequestBody>()
-                                mHashMap["firstName"] =
-                                    Utils(activity!!).createPartFromString(fname)
-                                mHashMap["lastName"] =
-                                    Utils(activity!!).createPartFromString(lname)
-                                mHashMap["email"] =
-                                    Utils(activity!!).createPartFromString(email)
-                                mHashMap["phoneNumber"] =
-                                    Utils(activity!!).createPartFromString(phone)
-                                mHashMap["regionId"] =
-                                    Utils(activity!!).createPartFromString(reginRes[regionPos].id!!)
-                                //  mHashMap["password"] = Utils(this).createPartFromString(password)
-                                var userImage : MultipartBody.Part? = null
-                                if (!profileImage.isEmpty()) {
-                                    val f1 = File(profileImage)
-                                    userImage =
-                                        Utils(activity!!)
-                                            .prepareFilePart(
-                                                "profileImage",
-                                                f1
-                                            )
-                                }
-                                if (UtilsFunctions.isNetworkConnected()) {
-                                    baseActivity.startProgressDialog()
-                                    profieViewModel.updateProfile(mHashMap, userImage)
-                                }
-
-                            }
                         }
 
                     }
@@ -460,6 +330,5 @@ class ProfileFragment : BaseFragment(),
             .placeholder(R.drawable.ic_user_profile)
             .into(profileBinding.imgProfile)
     }
-
 
 }

@@ -12,8 +12,6 @@ import android.os.Environment
 import android.provider.MediaStore
 import android.text.TextUtils
 import android.view.View
-import android.widget.AdapterView
-import android.widget.ArrayAdapter
 import android.widget.EditText
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
@@ -21,15 +19,11 @@ import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
 import com.android.sidewalk.utils.BaseActivity
 import com.android.sidewalk.R
-import com.android.sidewalk.application.MyApplication
 import com.android.sidewalk.callbacks.ChoiceCallBack
-import com.android.sidewalk.common.FirebaseFunctions
 import com.android.sidewalk.common.UtilsFunctions
-import com.android.sidewalk.constants.GlobalConstants
 import com.android.sidewalk.databinding.ActivityEditProfileBinding
-import com.android.sidewalk.model.LoginResponse
+import com.android.sidewalk.model.CommonModel
 import com.android.sidewalk.model.profile.ProfileResponse
-import com.android.sidewalk.sharedpreference.SharedPrefClass
 import com.android.sidewalk.utils.DialogClass
 import com.android.sidewalk.utils.Utils
 import com.android.sidewalk.utils.ValidationsClass
@@ -42,11 +36,10 @@ import java.io.File
 import java.io.IOException
 import java.text.SimpleDateFormat
 import java.util.*
-import kotlin.collections.ArrayList
 
 class EditProfileActivity : BaseActivity(), ChoiceCallBack {
     private lateinit var activityEditProfileBinding : ActivityEditProfileBinding
-    private lateinit var loginViewModel : ProfileViewModel
+    private lateinit var profileViewModel : ProfileViewModel
     val mOtpJsonObject = JsonObject()
     var isSocial = false
     var socialType = ""
@@ -67,14 +60,32 @@ class EditProfileActivity : BaseActivity(), ChoiceCallBack {
     override fun initViews() {
         activityEditProfileBinding =
             viewDataBinding as ActivityEditProfileBinding //DataBindingUtil.setContentView(this, R.layout.activity_login)
-        loginViewModel = ViewModelProviders.of(this)
+        profileViewModel = ViewModelProviders.of(this)
             .get(ProfileViewModel::class.java)
-        activityEditProfileBinding.loginViewModel = loginViewModel
+        activityEditProfileBinding.loginViewModel = profileViewModel
 
         activityEditProfileBinding.toolbarCommon.imgToolbarText.text =
             getString(R.string.my_profile)
         // activityLoginbinding.tvForgotPassword.paintFlags = Paint.UNDERLINE_TEXT_FLAG
-        loginViewModel.getDetail().observe(this,
+        profileViewModel.geUpdateProfileRes().observe(this,
+            Observer<CommonModel> { profileResponse->
+                stopProgressDialog()
+                // FirebaseFunctions.sendOTP("login", mOtpJsonObject, this)
+                if (profileResponse != null) {
+                    val message = profileResponse.message
+
+                    if (profileResponse.code == 200) {
+                        showToastSuccess(message)
+                    } else if (profileResponse.code == 408) {
+                        showToastError(message)
+                    } else {
+                        showToastError(message)
+                    }
+
+                }
+            })
+
+        profileViewModel.getDetail().observe(this,
             Observer<ProfileResponse> { profileResponse->
                 stopProgressDialog()
                 // FirebaseFunctions.sendOTP("login", mOtpJsonObject, this)
@@ -90,6 +101,7 @@ class EditProfileActivity : BaseActivity(), ChoiceCallBack {
                         activityEditProfileBinding.profileResponse = profileResponse.data
 
                         if (!TextUtils.isEmpty(profileResponse.data!!.licenseFront)) {
+                            lincesFront = profileResponse.data!!.licenseFront!!
                             activityEditProfileBinding.imgFrontPlus.visibility = View.GONE
                             activityEditProfileBinding.txtFront.visibility = View.GONE
                             Glide.with(this).load(profileResponse.data!!.licenseFront)
@@ -97,6 +109,7 @@ class EditProfileActivity : BaseActivity(), ChoiceCallBack {
                         }
 
                         if (!TextUtils.isEmpty(profileResponse.data!!.licenseBack)) {
+                            lincesBack = profileResponse.data!!.licenseBack!!
                             activityEditProfileBinding.imgBackPlus.visibility = View.GONE
                             activityEditProfileBinding.txtBack.visibility = View.GONE
                             Glide.with(this).load(profileResponse.data!!.licenseBack)
@@ -113,7 +126,7 @@ class EditProfileActivity : BaseActivity(), ChoiceCallBack {
             })
 
 
-        loginViewModel.isLoading().observe(this, Observer<Boolean> { aBoolean->
+        profileViewModel.isLoading().observe(this, Observer<Boolean> { aBoolean->
             if (aBoolean!!) {
                 startProgressDialog()
             } else {
@@ -121,7 +134,7 @@ class EditProfileActivity : BaseActivity(), ChoiceCallBack {
             }
         })
 
-        loginViewModel.isClick().observe(
+        profileViewModel.isClick().observe(
             this, Observer<String>(function =
             fun(it : String?) {
                 when (it) {
@@ -165,11 +178,6 @@ class EditProfileActivity : BaseActivity(), ChoiceCallBack {
                         val phone = activityEditProfileBinding.edtPhone.text.toString()
                         val experience = activityEditProfileBinding.edtExperience.text.toString()
                         when {
-                            profileImage.isEmpty() -> showToastError(
-                                getString(
-                                    R.string.profile_img_error
-                                )
-                            )
                             fName.isEmpty() -> showError(
                                 activityEditProfileBinding.edtFirstName,
                                 getString(R.string.empty) + " " + getString(
@@ -250,7 +258,7 @@ class EditProfileActivity : BaseActivity(), ChoiceCallBack {
                                                 f1
                                             )
                                 }
-                                if (!lincesFront.isEmpty()) {
+                                if (!lincesFront.isEmpty() && !lincesFront.contains("http")) {
                                     val f1 = File(lincesFront)
                                     licenseFront =
                                         Utils(this)
@@ -259,23 +267,23 @@ class EditProfileActivity : BaseActivity(), ChoiceCallBack {
                                                 f1
                                             )
                                 }
-                                if (!lincesBack.isEmpty()) {
+                                if (!lincesBack.isEmpty() && !lincesBack.contains("http")) {
                                     val f1 = File(lincesBack)
                                     licenseBack =
                                         Utils(this)
                                             .prepareFilePart(
-                                                "licenseBack ",
+                                                "licenseBack",
                                                 f1
                                             )
                                 }
-                                /* if (UtilsFunctions.isNetworkConnected()) {
-                                     loginViewModel.callSignupApi(
-                                         mHashMap,
-                                         userImage,
-                                         licenseFront,
-                                         licenseBack
-                                     )
-                                 }*/
+                                if (UtilsFunctions.isNetworkConnected()) {
+                                    profileViewModel.callUpdateProfile(
+                                        mHashMap,
+                                        userImage,
+                                        licenseFront,
+                                        licenseBack
+                                    )
+                                }
 
                             }
                         }
