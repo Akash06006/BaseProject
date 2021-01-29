@@ -9,6 +9,9 @@
     <string name="sorry_text">Sorry we couldn\'t find any matches</string>
     <string name="please_wait">Please wait…</string>
     <string name="dummy">dummy</string>
+    <string name="privacy">Privacy Policy</string>
+    <string name="terms">Terms and Conditions</string>
+    <string name="contactus">Contact Us</string>
     <string name="title_notifications">Notifications</string>
     <string name="email_c">E-MAIL</string>
     <string name="already_exist">Phone number is already exist</string>
