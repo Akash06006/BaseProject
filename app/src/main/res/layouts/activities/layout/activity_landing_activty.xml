@@ -31,12 +31,13 @@
                 android:background="@color/colorSecondary"
                 android:visibility="visible"
                 app:tabIndicatorColor="@color/colorWhite"
-
+                app:tabIconTint="@color/colorWhite"
                 app:tabSelectedTextColor="@color/colorWhite"
                 app:tabTextAppearance="@style/customizeTabText"
                 app:tabTextColor="@color/tabColor">
 
             <com.google.android.material.tabs.TabItem
+                    android:id="@+id/tab0"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:icon="@drawable/ic_home_tab_selected"
@@ -44,18 +45,21 @@
             <!---->
 
             <com.google.android.material.tabs.TabItem
+                    android:id="@+id/tab1"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:icon="@drawable/ic_truck_tab"
                     android:text="@string/truck" />
             <!-- android:icon="@drawable/ic_booking_tab"-->
             <com.google.android.material.tabs.TabItem
+                    android:id="@+id/tab2"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:icon="@drawable/ic_event_tab"
                     android:text="@string/events" />
             <!-- android:icon="@drawable/ic_wallet_tab"-->
             <com.google.android.material.tabs.TabItem
+                    android:id="@+id/tab3"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:icon="@drawable/ic_setting_tab"

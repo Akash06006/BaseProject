@@ -2,6 +2,7 @@ package com.android.sidewalk.views.trucks
 
 import android.annotation.SuppressLint
 import android.content.Intent
+import android.text.TextUtils
 import android.view.View
 import androidx.lifecycle.ViewModelProviders
 import com.android.sidewalk.R
@@ -65,10 +66,12 @@ class TruckDetailActivity : BaseActivity() {
                             addTruckBinding.txtGallery.visibility = View.VISIBLE
                             addTruckBinding.rvGallery.visibility = View.VISIBLE
                             for (item in addGalleryRes.data!!.galleries!!) {
-                                val imageModel = ImagesModel()
-                                imageModel.image = item.image
-                                imageModel.name = item.image
-                                imagesList.add(imageModel)
+                                if (!TextUtils.isEmpty(item.image)) {
+                                    val imageModel = ImagesModel()
+                                    imageModel.image = item.image
+                                    imageModel.name = item.image
+                                    imagesList.add(imageModel)
+                                }
                             }
                             initRecyclerView()
                         }

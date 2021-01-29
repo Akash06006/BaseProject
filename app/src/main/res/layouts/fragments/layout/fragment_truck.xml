@@ -41,8 +41,54 @@
                         android:gravity="center"
                         android:padding="@dimen/dp_5"
                         android:visibility="visible" />
+
+
             </LinearLayout>
         </ScrollView>
+        <RelativeLayout
+                android:id="@+id/rl"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentBottom="true"
+                android:padding="@dimen/dp_5"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
 
+
+            <com.google.android.material.floatingactionbutton.FloatingActionButton
+                    android:id="@+id/fab2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="bottom|end"
+                    android:layout_marginTop="@dimen/dp_250"
+                    android:layout_marginStart="@dimen/dp_5"
+                    app:backgroundTint="@color/colorWhite"
+                    android:layout_marginEnd="@dimen/dp_20"
+                    android:src="@drawable/truck_blue" />
+
+            <com.google.android.material.floatingactionbutton.FloatingActionButton
+                    android:id="@+id/fab1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="bottom|end"
+                    android:layout_marginTop="@dimen/dp_250"
+                    android:layout_marginStart="@dimen/dp_5"
+                    android:layout_marginEnd="@dimen/dp_20"
+                    android:src="@drawable/menu_blue"
+                    app:backgroundTint="@color/colorWhite"
+                    android:outlineAmbientShadowColor="@color/colorPrimary"
+                    />
+
+            <com.google.android.material.floatingactionbutton.FloatingActionButton
+                    android:id="@+id/fab"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="bottom"
+                    android:layout_marginTop="@dimen/dp_250"
+                    android:layout_marginStart="@dimen/dp_5"
+                    android:layout_marginEnd="@dimen/dp_20"
+                    android:layout_marginBottom="@dimen/dp_20"
+                    app:backgroundTint="@color/colorPrimary"
+                    android:src="@drawable/ic_plus" />
+        </RelativeLayout>
     </RelativeLayout>
 </layout>

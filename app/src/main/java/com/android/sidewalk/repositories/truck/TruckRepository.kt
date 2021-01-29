@@ -39,7 +39,7 @@ class TruckRepository {
         truckImages : Array<MultipartBody.Part?>?,
         mHashMap : HashMap<String, RequestBody>?
     ) : MutableLiveData<CommonModel> {
-        if (truckImages != null) {
+        if (mHashMap != null) {
             val mApiService = ApiService<JsonObject>()
             mApiService.get(
                 object : ApiResponse<JsonObject> {

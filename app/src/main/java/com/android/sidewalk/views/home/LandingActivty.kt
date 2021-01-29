@@ -24,6 +24,15 @@ class LandingActivty : BaseActivity() {
         activityOtpVerificationBinding!!.tablayout.addOnTabSelectedListener(object :
             TabLayout.OnTabSelectedListener {
             override fun onTabSelected(tab : TabLayout.Tab?) {
+                activityOtpVerificationBinding!!.tablayout!!.getTabAt(0)!!
+                    .setIcon(resources.getDrawable(R.drawable.ic_home_tab))
+                activityOtpVerificationBinding!!.tablayout!!.getTabAt(1)!!
+                    .setIcon(resources.getDrawable(R.drawable.ic_truck_tab))
+                activityOtpVerificationBinding!!.tablayout!!.getTabAt(2)!!
+                    .setIcon(resources.getDrawable(R.drawable.ic_event_tab))
+                activityOtpVerificationBinding!!.tablayout!!.getTabAt(3)!!
+                    .setIcon(resources.getDrawable(R.drawable.ic_setting_tab))
+
                 var fragment : Fragment? = null
                 fragment =
                     HomeFragment()
@@ -35,16 +44,22 @@ class LandingActivty : BaseActivity() {
                                  R.string.home
                              )
                          )*/
+                        activityOtpVerificationBinding!!.tablayout!!.getTabAt(0)!!
+                            .setIcon(resources.getDrawable(R.drawable.ic_home_tab_selected))
                         fragment =
                             HomeFragment()
                     }
                     1 -> {
                         fragment =
                             TruckListFragment()
+                        activityOtpVerificationBinding!!.tablayout!!.getTabAt(1)!!
+                            .setIcon(resources.getDrawable(R.drawable.ic_truck_tab_selected))
                     }
                     2 -> {
                         fragment =
                             EventsListFragment()
+                        activityOtpVerificationBinding!!.tablayout!!.getTabAt(2)!!
+                            .setIcon(resources.getDrawable(R.drawable.ic_event_tab_selected))
                     }
                     3 -> {
                         /*  activityOtpVerificationBinding!!.toolbarCommon.imgToolbarText.setText(
@@ -54,6 +69,8 @@ class LandingActivty : BaseActivity() {
                           )*/
                         fragment =
                             ProfileFragment()
+                        activityOtpVerificationBinding!!.tablayout!!.getTabAt(3)!!
+                            .setIcon(resources.getDrawable(R.drawable.ic_setting_tab_selected))
                     }
                 }
                 callFragments(fragment, supportFragmentManager, false, "send_data", "")

@@ -51,12 +51,13 @@ class LoginActivity : BaseActivity() {
                     val message = loginResponse.message
 
                     if (loginResponse.code == 200) {
-                        /*SharedPrefClass()
+                        //TODO comment the below is login
+                        SharedPrefClass()
                             .putObject(
                                 MyApplication.instance,
                                 "isLogin",
                                 true
-                            )*/
+                            )
                         SharedPrefClass()
                             .putObject(
                                 MyApplication.instance,
@@ -94,15 +95,16 @@ class LoginActivity : BaseActivity() {
                                 loginResponse.data!!.image
                             )
                         GlobalConstants.VERIFICATION_TYPE = "login"
-                        FirebaseFunctions.sendOTP("login", mOtpJsonObject, this)
-//                        showToastSuccess(message)
-//                        val intent = Intent(
-//                            this,
-//                            LandingActivty::class.java
-//                        )
-//                        //intent.putExtra("itemId", ""/*categoriesList[position].id*/)
-//                        startActivity(intent)
-//                        finish()
+                        //TODO uncomment
+                       // FirebaseFunctions.sendOTP("login", mOtpJsonObject, this)
+                        showToastSuccess(message)
+                        val intent = Intent(
+                            this,
+                            LandingActivty::class.java
+                        )
+                        //intent.putExtra("itemId", ""/*categoriesList[position].id*/)
+                        startActivity(intent)
+                        finish()
 
                     } else {
                         showToastError(message)

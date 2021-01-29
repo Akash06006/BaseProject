@@ -39,6 +39,7 @@ class AddItemActivity : BaseActivity(), ChoiceCallBack {
     private lateinit var menuViewModel : MenuViewModel
     var imagesList = ArrayList<String>()
     var itemId = ""
+    var catId = ""
     var itemType = "veg"
     private val RESULT_LOAD_IMAGE = 100
     private val CAMERA_REQUEST = 1888
@@ -58,7 +59,8 @@ class AddItemActivity : BaseActivity(), ChoiceCallBack {
         addItemBinding.menuViewModel = menuViewModel
         addItemBinding.toolbarCommon.imgToolbarText.text =
             getString(R.string.add_item_title)
-        itemId = intent.extras?.get("id") as String
+        catId = intent.extras?.get("id") as String
+        itemId = intent.extras?.get("itemId") as String
         if (!TextUtils.isEmpty(itemId)) {
             menuViewModel.itemsDetail(itemId)
             addItemBinding.toolbarCommon.imgToolbarText.text =
@@ -78,16 +80,18 @@ class AddItemActivity : BaseActivity(), ChoiceCallBack {
             Observer<ItemDetailResponse> { addGalleryRes->
                 stopProgressDialog()
                 if (addGalleryRes != null) {
-                    addItemBinding.itemDetailResponse = addGalleryRes.data
-                    //val message = addGalleryRes.message
-                    Glide.with(this).load(addGalleryRes.data!!.image).into(addItemBinding.imgView)
-                    itemImage = addGalleryRes.data!!.image!!
-                    if (addGalleryRes.data!!.itemType.equals("veg")) {
-                        vegNonVegSelected(true)
-                    } else {
-                        vegNonVegSelected(false)
+                    if(addGalleryRes.data!= null) {
+                        addItemBinding.itemDetailResponse = addGalleryRes.data
+                        //val message = addGalleryRes.message
+                        Glide.with(this).load(addGalleryRes.data!!.image)
+                            .into(addItemBinding.imgView)
+                        itemImage = addGalleryRes.data!!.image!!
+                        if (addGalleryRes.data!!.itemType.equals("veg")) {
+                            vegNonVegSelected(true)
+                        } else {
+                            vegNonVegSelected(false)
+                        }
                     }
-
                 }
             })
 
@@ -146,7 +150,7 @@ class AddItemActivity : BaseActivity(), ChoiceCallBack {
                                     mHashMap["itemType"] =
                                         Utils(this).createPartFromString(itemType)
                                     mHashMap["categoryId"] =
-                                        Utils(this).createPartFromString(itemId)
+                                        Utils(this).createPartFromString(catId)
                                     var itemImagePart : MultipartBody.Part? = null
                                     if (itemImage.contains("http")) {
                                         itemImagePart = null

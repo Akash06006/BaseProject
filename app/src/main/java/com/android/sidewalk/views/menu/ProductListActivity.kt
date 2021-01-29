@@ -126,6 +126,7 @@ class ProductListActivity : BaseActivity(), ChoiceCallBack {
                             AddItemActivity::class.java
                         )
                         intent.putExtra("id", catId)
+                        intent.putExtra("itemId", "")
                         startActivity(intent)
                         // addCategoryDialog()
                     }
@@ -156,7 +157,8 @@ class ProductListActivity : BaseActivity(), ChoiceCallBack {
             this,
             AddItemActivity::class.java
         )
-        intent.putExtra("id", id)
+        intent.putExtra("id", catId)
+        intent.putExtra("itemId", id)
         startActivity(intent)
     }
 

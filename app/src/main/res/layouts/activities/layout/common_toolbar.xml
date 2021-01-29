@@ -18,7 +18,7 @@
                 android:layout_width="@dimen/dp_55"
                 android:layout_height="@dimen/dp_55"
                 android:padding="@dimen/dp_16"
-                android:src="@drawable/menu"
+                android:src="@drawable/menu_blue"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"

@@ -157,10 +157,12 @@ class AddTruckActivity : BaseActivity(), ChoiceCallBack {
                         }
                         if (addGalleryRes.data!!.galleries != null) {
                             for (item1 in addGalleryRes.data!!.galleries!!) {
-                                val imagesModel = ImagesModel()
-                                imagesModel.image = item1.image!!
-                                imagesModel.name = item1.image!!
-                                galleryImagesList.add(imagesModel)
+                                if (!TextUtils.isEmpty(item1.image)) {
+                                    val imagesModel = ImagesModel()
+                                    imagesModel.image = item1.image!!
+                                    imagesModel.name = item1.image!!
+                                    galleryImagesList.add(imagesModel)
+                                }
                             }
                         }
                         if (imagesList.size > 0) {
@@ -305,7 +307,7 @@ class AddTruckActivity : BaseActivity(), ChoiceCallBack {
                             val partnerName = addTruckBinding.edtName.text.toString()
                             val partnerPhone = addTruckBinding.edtPhone.text.toString()
                             when {
-                                imagesList.size == 0 -> showToastError(
+                                (imagesList.size == 0 && TextUtils.isEmpty(truckId)) -> showToastError(
                                     getString(
                                         R.string.upload_img_error
                                     )
@@ -650,9 +652,12 @@ class AddTruckActivity : BaseActivity(), ChoiceCallBack {
     fun removeGalleryImage(pos : Int, path : String) {
         for (item in galleryImagesList) {
             if (item.image!!.contains("http")) {
-                if (item.image.equals(path)) {
-                    galleryImagesDeletedIds.add(galleryImagesList[pos].image!!)
-                    galleryImagesList.remove(item)
+                if (!TextUtils.isEmpty(path)) {
+                    if (item.image.equals(path)) {
+                        galleryImagesDeletedIds.add(galleryImagesList[pos].image!!)
+                        galleryImagesList.remove(item)
+                        break
+                    }
                 }
             } else {
                 if (item.image.equals(path)) {

@@ -9,21 +9,24 @@ import android.content.pm.PackageManager
 import android.location.Location
 import android.location.LocationManager
 import android.os.Looper
-import android.widget.Toast
 import android.provider.Settings
+import android.view.View
+import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.android.sidewalk.utils.BaseFragment
 import com.android.sidewalk.R
 import com.android.sidewalk.common.UtilsFunctions.showToastError
 import com.android.sidewalk.databinding.FragmentTruckBinding
 import com.android.sidewalk.maps.FusedLocationClass
 import com.android.sidewalk.model.truck.TruckListResponse
+import com.android.sidewalk.utils.BaseFragment
 import com.android.sidewalk.utils.DialogClass
 import com.android.sidewalk.viewmodels.trucks.TrucksViewModel
+import com.android.sidewalk.views.home.LandingActivty
+import com.android.sidewalk.views.menu.CategoryListActivity
 import com.google.android.gms.location.*
 import com.uniongoods.adapters.TruckListAdapter
 
@@ -37,6 +40,7 @@ TruckListFragment : BaseFragment() {
     lateinit var mFusedLocationClient : FusedLocationProviderClient
     var currentLat = ""
     var currentLong = ""
+    var isFABOpen : Boolean? = false
     private lateinit var fragmentTruckBinding : FragmentTruckBinding
     private val PERMISSION_REQUEST_CODE : Int = 101
     private var confirmationDialog : Dialog? = null
@@ -98,6 +102,44 @@ TruckListFragment : BaseFragment() {
             })
         )
 
+        fragmentTruckBinding.fab.setOnClickListener(object : View.OnClickListener {
+            override fun onClick(view : View?) {
+                if (!isFABOpen!!) {
+                    showFABMenu()
+                } else {
+                    closeFABMenu()
+                }
+            }
+        })
+
+        fragmentTruckBinding.fab2.setOnClickListener{
+           val intent= Intent(
+                context,
+                AddTruckActivity::class.java
+            )
+            intent.putExtra("id","")
+            startActivity(intent)
+        }
+        fragmentTruckBinding.fab1.setOnClickListener{
+            val intent= Intent(
+                context,
+                CategoryListActivity::class.java
+            )
+            startActivity(intent)
+        }
+
+    }
+
+    private fun showFABMenu() {
+        isFABOpen = true
+        fragmentTruckBinding.fab1.animate().translationY(-resources.getDimension(R.dimen.dp_70))
+        fragmentTruckBinding.fab2.animate().translationY(-resources.getDimension(R.dimen.dp_140))
+    }
+
+    private fun closeFABMenu() {
+        isFABOpen = false
+        fragmentTruckBinding.fab1.animate().translationY(0F)
+        fragmentTruckBinding.fab2.animate().translationY(0F)
     }
 
     private fun initRecyclerView() {
