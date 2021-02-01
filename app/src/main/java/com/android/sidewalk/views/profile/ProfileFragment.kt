@@ -45,15 +45,15 @@ import com.android.sidewalk.utils.BaseFragment
 import com.android.sidewalk.utils.DialogClass
 import com.android.sidewalk.utils.ValidationsClass
 import com.android.sidewalk.viewmodels.profile.ProfileViewModel
+import com.android.sidewalk.views.trucks.AddTruckActivity
 import kotlin.collections.HashMap
 
-class ProfileFragment : BaseFragment(){
+class ProfileFragment : BaseFragment() {
     private var reginRes =
         ArrayList<RegionResponse.Data>()
     private lateinit var profileBinding : ActivityProfileBinding
     private lateinit var profieViewModel : ProfileViewModel
-    private var sharedPrefClass : SharedPrefClass? =
-        null
+    private var sharedPrefClass : SharedPrefClass? = null
     private var confirmationDialog : Dialog? = null
     private var mDialogClass = DialogClass()
     private val mJsonObject = JsonObject()
@@ -78,7 +78,6 @@ class ProfileFragment : BaseFragment(){
         profileBinding.toolbarCommon.toolbar.visibility = View.INVISIBLE
         profileBinding.toolbarCommon.imgToolbarText.text = resources.getString(R.string.settings)
         val languages = resources.getStringArray(R.array.Languages)
-
         val userId =
             SharedPrefClass()
                 .getPrefValue(
@@ -90,7 +89,6 @@ class ProfileFragment : BaseFragment(){
                 activity!!,
                 GlobalConstants.USERNAME
             )
-
         val image =
             SharedPrefClass().getPrefValue(
                 activity!!,
@@ -142,12 +140,11 @@ class ProfileFragment : BaseFragment(){
                     "toolbar" -> {
                         showToastError("clicked")
                     }
-                    "iv_edit" -> {
-
+                    "upload_profile_layer" -> {
+                        val intent = Intent(context, ViewProfileActivity::class.java)
+                        startActivity(intent)
                     }
                     "img_right" -> {
-
-
                     }
                 }
             })
@@ -155,13 +152,10 @@ class ProfileFragment : BaseFragment(){
 
     }
 
-
-
     private fun showError(textView : TextView, error : String) {
         textView.requestFocus()
         textView.error = error
     }
-
 
     private fun setImage(path : String) {
         Glide.with(this)

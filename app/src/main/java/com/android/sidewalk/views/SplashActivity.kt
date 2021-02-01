@@ -84,8 +84,8 @@ class SplashActivity : BaseActivity() {
             // Intent(this, LandingActivty::class.java)
             Intent(
                 this,
-                /*   LandingActivty::class.java*/
-                EditProfileActivity::class.java
+                   LandingActivty::class.java
+               /* EditProfileActivity::class.java*/
             )
         } else {
             // Intent(this, LoginActivity::class.java)
