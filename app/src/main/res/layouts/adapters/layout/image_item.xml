@@ -31,6 +31,7 @@
                     android:layout_width="80dp"
                     android:layout_height="80dp"
                     android:layout_centerVertical="true"
+                    android:layout_weight="1"
                     android:elevation="@dimen/dp_5"
                     android:scaleType="centerCrop"
                     android:src="@drawable/ic_add_img"
@@ -47,7 +48,7 @@
                 android:src="@drawable/ic_cross_grey" />
 
         <RelativeLayout
-                android:layout_width="80dp"
+                android:layout_width="@dimen/dp_80"
                 android:layout_height="80dp"
                 android:layout_marginLeft="3dp"
                 android:layout_marginTop="5dp">
@@ -60,7 +61,7 @@
                     android:gravity="center"
                     android:text="@string/view_all"
                     android:textColor="@color/colorWhite"
-                    android:visibility="gone" />
+                    android:visibility="visible" />
         </RelativeLayout>
     </RelativeLayout>
     <!-- </androidx.cardview.widget.CardView>-->
