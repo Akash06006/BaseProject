@@ -133,6 +133,40 @@ class ProfileFragment : BaseFragment() {
             })
 
 
+
+        profieViewModel.getUpdateDetail().observe(this,
+            Observer<LoginResponse> { response->
+                baseActivity.stopProgressDialog()
+                if (response != null) {
+                    val message = response.message
+                    when {
+                        response.code == 200 -> {
+                            // profileBinding.model = response.categoryList
+                            message?.let { showToastSuccess(it) }
+                            if (UtilsFunctions.isNetworkConnected()) {
+                                baseActivity.startProgressDialog()
+                                profieViewModel.getProfileDetail(mJsonObject)
+                            }
+                            /*SharedPrefClass().putObject(
+                                activity!!,
+                                GlobalConstants.USER_IMAGE,
+                                response.categoryList!!.image
+                            )
+                            SharedPrefClass().putObject(
+                                activity!!,
+                                getString(R.string.fname),
+                                response.categoryList!!.firstName + " " + response.categoryList!!.lastName
+                            )
+*/
+                            makeEnableDisableViews(false)
+                        }
+                        else -> message?.let { showToastError(it) }
+                    }
+
+                }
+            })
+
+
         profieViewModel.isClick().observe(
             this, Observer<String>(function =
             fun(it : String?) {
@@ -145,6 +179,15 @@ class ProfileFragment : BaseFragment() {
                         startActivity(intent)
                     }
                     "img_right" -> {
+                        if (baseActivity.checkAndRequestPermissions()) {
+                            confirmationDialog =
+                                mDialogClass.setUploadConfirmationDialog(
+                                    activity!!,
+                                    this,
+                                    "gallery"
+                                )
+                        }
+
                     }
                 }
             })

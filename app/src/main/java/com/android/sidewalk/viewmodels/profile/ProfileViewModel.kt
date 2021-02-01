@@ -5,6 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import android.view.View
 import com.android.sidewalk.common.UtilsFunctions
 import com.android.sidewalk.common.UtilsFunctions.isNetworkConnectedReturn
+import com.android.sidewalk.model.CommonModel
 import com.android.sidewalk.model.LoginResponse
 import com.android.sidewalk.model.profile.ProfileResponse
 import com.android.sidewalk.model.profile.RegionResponse
@@ -20,6 +21,8 @@ class ProfileViewModel : BaseViewModel() {
         MutableLiveData<LoginResponse>()
     private var profileDetail =
         MutableLiveData<ProfileResponse>()
+    private var updateProfile =
+        MutableLiveData<CommonModel>()
     private var profileRepository =
         ProfileRepository()
     private val mIsUpdating = MutableLiveData<Boolean>()
@@ -28,7 +31,7 @@ class ProfileViewModel : BaseViewModel() {
     init {
         if (isNetworkConnectedReturn()) {
             profileDetail = profileRepository.getUserProfile()
-            data = profileRepository.updateUserProfile(null, null)
+            updateProfile = profileRepository.callUpdateProfile(null, null, null, null)
             regionResponse = profileRepository.getRegoins()
         }
 
@@ -42,8 +45,8 @@ class ProfileViewModel : BaseViewModel() {
         return data
     }
 
-    fun getRegionsRes() : LiveData<RegionResponse> {
-        return regionResponse
+    fun geUpdateProfileRes() : LiveData<CommonModel> {
+        return updateProfile
     }
 
     override fun isLoading() : LiveData<Boolean> {
@@ -66,20 +69,24 @@ class ProfileViewModel : BaseViewModel() {
 
     }
 
-    fun updateProfile(hashMap : HashMap<String, RequestBody>, image : MultipartBody.Part?) {
+    fun callUpdateProfile(
+        mJsonObject : java.util.HashMap<String, RequestBody>,
+        userImage : MultipartBody.Part?,
+        licenseFront : MultipartBody.Part?,
+        licenseBack : MultipartBody.Part?
+    ) {
         if (UtilsFunctions.isNetworkConnected()) {
-            data = profileRepository.updateUserProfile(hashMap, image)
+            //emialExistenceResponse = loginRepository.checkPhoneExistence(mJsonObject)
+            updateProfile =
+                profileRepository.callUpdateProfile(
+                    mJsonObject,
+                    userImage,
+                    licenseFront,
+                    licenseBack
+                )
             mIsUpdating.postValue(true)
-
         }
-    }
 
-    fun getRegions(hashMap : HashMap<String, RequestBody>, image : MultipartBody.Part?) {
-        if (UtilsFunctions.isNetworkConnected()) {
-            data = profileRepository.updateUserProfile(hashMap, image)
-            mIsUpdating.postValue(true)
-
-        }
     }
 
 }

@@ -49,9 +49,9 @@
                         android:background="@drawable/ic_top_circle"
                         android:gravity="center"
                         android:orientation="vertical"
-                        android:paddingBottom="15dp"
                         android:paddingLeft="15dp"
-                        android:paddingRight="15dp">
+                        android:paddingRight="15dp"
+                        android:paddingBottom="15dp">
 
                     <RelativeLayout
                             android:layout_width="wrap_content"
@@ -78,7 +78,7 @@
                                 android:layout_alignEnd="@+id/img_profile"
                                 android:layout_alignRight="@+id/img_profile"
                                 android:layout_alignBottom="@+id/img_profile"
-                                android:background="@drawable/ic_edit_image"
+                                android:background="@drawable/ic_edit_profile"
                                 android:elevation="@dimen/dp_10"
                                 android:onClick="@{(v) -> loginViewModel.clickListener(v)}"
                                 android:padding="@dimen/dp_8"
@@ -161,6 +161,7 @@
                                 android:paddingTop="@dimen/dp_2"
                                 android:paddingRight="@dimen/dp_5"
                                 android:paddingBottom="@dimen/dp_2"
+                                android:visibility="gone"
                                 app:ccpDialog_showNameCode="false"
                                 app:ccp_arrowSize="@dimen/dp_20"
                                 app:ccp_clickable="true"
@@ -169,6 +170,27 @@
                                 app:ccp_showFlag="true"
                                 app:ccp_showPhoneCode="true"
                                 app:ccp_textSize="@dimen/sp_14" />
+
+                        <EditText
+                                android:id="@+id/edtCountryCode"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center_vertical"
+                                android:layout_marginLeft="10dp"
+                                android:layout_marginRight="10dp"
+                                android:background="@null"
+                                android:digits="0123456789"
+                                android:editable="false"
+                                android:enabled="false"
+                                android:focusable="false"
+                                android:focusableInTouchMode="false"
+                                android:hint="@string/country_code"
+                                android:imeOptions="actionDone"
+                                android:inputType="number"
+                                android:singleLine="true"
+                                android:text="@{profileResponse.countryCode}"
+                                android:textSize="14sp"
+                                app:font="@{`regular`}" />
 
                         <EditText
                                 android:id="@+id/edtPhone"

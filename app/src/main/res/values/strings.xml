@@ -1,8 +1,11 @@
 <!DOCTYPE resources [<!ENTITY app_name "SideWalk">]>
 <resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="MissingTranslation">
     <string name="app_name">&app_name;</string>
-    <string name="facebook_app_id">630169387861716</string>
+    <!-- <string name="facebook_app_id">630169387861716</string>
+     <string name="fb_login_protocol_scheme">fb630169387861716</string>-->
+    <string name="facebook_app_id">1098465737337881</string>
     <string name="fb_login_protocol_scheme">fb630169387861716</string>
+    <string name="web_client_id">27036329346-e80av2pekjeojtrepubv08m734pjtl4u.apps.googleusercontent.com</string>
 
     <string name="internal_server_error">Internal server error, so please try after some time!</string>
     <string name="internet_connection">Please check your internet connection and try after some time!</string>
@@ -328,6 +331,7 @@
     <string name="reject">Reject</string>
     <string name="my_profile">My Profile</string>
     <string name="experience">Experience eg: 2 Years.</string>
+    <string name="country_code">Country-Code</string>
     <string-array name="Languages">
         <item>Java</item>
         <item>Kotlin</item>

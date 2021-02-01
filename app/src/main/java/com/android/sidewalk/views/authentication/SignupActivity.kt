@@ -72,10 +72,15 @@ class SignupActivity : BaseActivity(), ChoiceCallBack {
             .get(LoginViewModel::class.java)
         activitySignupbinding.loginViewModel = loginViewModel
         val fbSocial = intent.extras.get("fbSocial").toString()
-        if (fbSocial.equals("true")) {
+        val googleSocial = intent.extras.get("googleSocial").toString()
+        if (fbSocial.equals("true") || googleSocial.equals("true")) {
             isSocial = true
-            socialType = "facebook"
-            val fbDetails = JSONObject(intent.extras.get("fbData").toString())
+            if (fbSocial.equals("true")) {
+                socialType = "facebook"
+            } else {
+                socialType = "google"
+            }
+            val fbDetails = JSONObject(intent.extras.get("data").toString())
             if (fbDetails.has("id")) {
                 socialId = fbDetails.getString("id")
             }
@@ -361,7 +366,7 @@ class SignupActivity : BaseActivity(), ChoiceCallBack {
                                     licenseBack =
                                         Utils(this)
                                             .prepareFilePart(
-                                                "licenseBack ",
+                                                "licenseBack",
                                                 f1
                                             )
                                 }
