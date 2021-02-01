@@ -45,16 +45,15 @@ import com.android.sidewalk.utils.BaseFragment
 import com.android.sidewalk.utils.DialogClass
 import com.android.sidewalk.utils.ValidationsClass
 import com.android.sidewalk.viewmodels.profile.ProfileViewModel
+import com.android.sidewalk.views.trucks.AddTruckActivity
 import kotlin.collections.HashMap
 
-class ProfileFragment : BaseFragment(),
-    ChoiceCallBack {
+class ProfileFragment : BaseFragment() {
     private var reginRes =
         ArrayList<RegionResponse.Data>()
     private lateinit var profileBinding : ActivityProfileBinding
     private lateinit var profieViewModel : ProfileViewModel
-    private var sharedPrefClass : SharedPrefClass? =
-        null
+    private var sharedPrefClass : SharedPrefClass? = null
     private var confirmationDialog : Dialog? = null
     private var mDialogClass = DialogClass()
     private val mJsonObject = JsonObject()
@@ -73,20 +72,12 @@ class ProfileFragment : BaseFragment(),
         profieViewModel = ViewModelProviders.of(this)
             .get(ProfileViewModel::class.java)
         profileBinding.profileViewModel = profieViewModel
-        profileBinding.toolbarCommon.imgRight.visibility = View.VISIBLE
-        //profileBinding.toolbarCommon.topToolbar.visibility = View.GONE
-        profileBinding.toolbarCommon.imgRight.setImageResource(R.drawable.ic_nav_edit_icon)
-        profileBinding.toolbarCommon.toolbar.setImageResource(R.drawable.ic_side_menu)
-        //  profileBinding.toolbarCommon.imgToolbarText.text =  resources.getString(R.string.view_profile)
+        //profileBinding.toolbarCommon.imgRight.visibility = View.VISIBLE
+        profileBinding.toolbarCommon.imgRight.visibility = View.INVISIBLE
+        //profileBinding.toolbarCommon.imgRight.setImageResource(R.drawable.ic_nav_edit_icon)
+        profileBinding.toolbarCommon.toolbar.visibility = View.INVISIBLE
+        profileBinding.toolbarCommon.imgToolbarText.text = resources.getString(R.string.settings)
         val languages = resources.getStringArray(R.array.Languages)
-        /*  profileBinding.btnSubmit.setBackgroundTintList(
-              ColorStateList.valueOf(
-                  Color.parseColor(
-                      GlobalConstants.COLOR_CODE
-                  )
-              )*//*mContext.getResources().getColorStateList(R.color.colorOrange)*//*
-        )*/
-        region.add("Select Region")
         val userId =
             SharedPrefClass()
                 .getPrefValue(
@@ -95,18 +86,19 @@ class ProfileFragment : BaseFragment(),
                 ).toString()
         val name =
             SharedPrefClass().getPrefValue(
-                MyApplication.instance.applicationContext,
-                getString(R.string.fname)
+                activity!!,
+                GlobalConstants.USERNAME
             )
-        /* if (TextUtils.isEmpty(name.toString()) || name.toString().equals("null")) {
-             makeEnableDisableViews(true)
-         } else {*/
-        makeEnableDisableViews(false)
-        //}
+        val image =
+            SharedPrefClass().getPrefValue(
+                activity!!,
+                GlobalConstants.USER_IMAGE
+            )
+        profileBinding.txtUsername.text = name.toString()
         mJsonObject.addProperty(
             "userId", userId
         )
-
+        setImage(image.toString())
 
 
         profieViewModel.getDetail().observe(this,
@@ -130,15 +122,7 @@ class ProfileFragment : BaseFragment(),
                                     getString(R.string.fname),
                                     response.data!!.firstName + " " + response.data!!.lastName
                                 )
-                            if (!TextUtils.isEmpty(response.data?.regionId)) {
-                                regionId = response.data?.regionId!!
-                                if (region.size > 0) {
-                                    for (i in 0 until region.count())
-                                        if (regionId.equals(reginRes[i].id)) {
-                                            profileBinding.spinner.setSelection(i)
-                                        }
-                                }
-                            }
+
                             profileBinding.txtEmail.setText(response.data?.email)
                             profileBinding.txtUsername.setText(response.data?.firstName + " " + response.data?.lastName)
 */
@@ -190,16 +174,11 @@ class ProfileFragment : BaseFragment(),
                     "toolbar" -> {
                         showToastError("clicked")
                     }
-                    "iv_edit" -> {
-                        // editImage = 0
-                        //  showPictureDialog()
+                    "upload_profile_layer" -> {
+                        val intent = Intent(context, ViewProfileActivity::class.java)
+                        startActivity(intent)
                     }
                     "img_right" -> {
-                        // isEditable = true
-                        //  profileBinding.commonToolBar.imgToolbarText.text = resources.getString(R.string.edit_profile)
-                        makeEnableDisableViews(true)
-                    }
-                    "upload_profile_layer" -> {
                         if (baseActivity.checkAndRequestPermissions()) {
                             confirmationDialog =
                                 mDialogClass.setUploadConfirmationDialog(
@@ -216,112 +195,9 @@ class ProfileFragment : BaseFragment(),
 
     }
 
-    private fun makeEnableDisableViews(isEnable : Boolean) {
-        profileBinding.etFirstname.isEnabled = isEnable
-        profileBinding.etLastname.isEnabled = isEnable
-        profileBinding.etEmail.isEnabled = false
-        profileBinding.etPhone.isEnabled = false
-        profileBinding.spinner.isEnabled = isEnable
-        // profileBinding.etAddress.isEnabled = isEnable
-        if (!isEnable) {
-            profileBinding.ivEdit.visibility = View.GONE
-            profileBinding.btnSubmit.visibility = View.GONE
-            profileBinding.commonToolBar.imgRight.visibility = View.VISIBLE
-        } else {
-            profileBinding.ivEdit.visibility = View.VISIBLE
-            profileBinding.commonToolBar.imgRight.visibility = View.GONE
-            profileBinding.btnSubmit.visibility = View.VISIBLE
-        }
-
-    }
-
     private fun showError(textView : TextView, error : String) {
         textView.requestFocus()
         textView.error = error
-    }
-
-    override fun photoFromCamera(mKey : String) {
-        Intent(MediaStore.ACTION_IMAGE_CAPTURE).also { takePictureIntent->
-            // Ensure that there's a camera activity to handle the intent
-            takePictureIntent.resolveActivity(activity!!.packageManager)?.also {
-                // Create the File where the photo should go
-                val photoFile : File? = try {
-                    createImageFile()
-                } catch (ex : IOException) {
-                    // Error occurred while creating the File
-                    null
-                }
-                // Continue only if the File was successfully created
-                photoFile?.also {
-                    val photoURI : Uri =
-                        FileProvider.getUriForFile(
-                            activity!!,
-                            activity!!.packageName + ".fileprovider",
-                            it
-                        )
-                    takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI)
-                    startActivityForResult(takePictureIntent, CAMERA_REQUEST)
-                }
-            }
-        }
-    }
-
-    private fun createImageFile() : File {
-        // Create an image file name
-        val timeStamp : String = SimpleDateFormat("yyyyMMdd_HHmmss").format(Date())
-        val storageDir : File = activity!!.getExternalFilesDir(Environment.DIRECTORY_PICTURES)
-        //currentPhotoPath = File(baseActivity?.cacheDir, fileName)
-        return File.createTempFile(
-            "JPEG_${timeStamp}_", /* prefix */
-            ".jpg", /* suffix */
-            storageDir /* directory */
-        ).apply {
-            // Save a file: path for use with ACTION_VIEW intents
-            profileImage = absolutePath
-        }
-    }
-
-    override fun photoFromGallery(mKey : String) {
-        val i = Intent(
-            Intent.ACTION_PICK,
-            android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI
-        )
-        startActivityForResult(i, RESULT_LOAD_IMAGE)
-    }
-
-    override fun videoFromCamera(mKey : String) {
-        //("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
-
-    override fun videoFromGallery(mKey : String) {
-        //("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
-
-    override fun onActivityResult(requestCode : Int, resultCode : Int, data : Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        if (requestCode == RESULT_LOAD_IMAGE && resultCode == RESULT_OK && null != data) {
-            val selectedImage = data.data
-            val filePathColumn = arrayOf(MediaStore.Images.Media.DATA)
-            val cursor =
-                activity!!.contentResolver.query(
-                    selectedImage!!,
-                    filePathColumn,
-                    null,
-                    null,
-                    null
-                )
-            cursor?.moveToFirst()
-            val columnIndex = cursor.getColumnIndex(filePathColumn[0])
-            val picturePath = cursor.getString(columnIndex)
-            profileImage = picturePath
-            setImage(picturePath)
-            cursor.close()
-        } else if (requestCode == CAMERA_REQUEST && resultCode == Activity.RESULT_OK /*&& null != categoryList*/) {
-            setImage(profileImage)            // val extras = categoryList!!.extras
-            // val imageBitmap = extras!!.get("categoryList") as Bitmap
-            //getImageUri(imageBitmap)
-        }
-
     }
 
     private fun setImage(path : String) {

@@ -44,6 +44,10 @@
                 android:screenOrientation="portrait"
                 android:windowSoftInputMode="stateHidden"></activity>
         <activity
+                android:name=".views.profile.ViewProfileActivity"
+                android:screenOrientation="portrait"
+                android:windowSoftInputMode="stateHidden"></activity>
+        <activity
                 android:name=".views.trucks.TruckDetailActivity"
                 android:screenOrientation="portrait"
                 android:windowSoftInputMode="stateHidden"></activity>

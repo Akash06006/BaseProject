@@ -12,6 +12,9 @@
     <string name="sorry_text">Sorry we couldn\'t find any matches</string>
     <string name="please_wait">Please wait…</string>
     <string name="dummy">dummy</string>
+    <string name="privacy">Privacy Policy</string>
+    <string name="terms">Terms and Conditions</string>
+    <string name="contactus">Contact Us</string>
     <string name="title_notifications">Notifications</string>
     <string name="email_c">E-MAIL</string>
     <string name="already_exist">Phone number is already exist</string>
@@ -113,6 +116,8 @@
     <string name="profile">Profile</string>
     <string name="booking_history">Booking History</string>
     <string name="fname">First Name</string>
+    <string name="sidewalk_id">Sidewalk ID</string>
+    <string name="experiencce">Experience</string>
     <string name="lname">Last Name</string>
     <string name="phone_number">Phone Number</string>
     <string name="accept_terms">Accept Terms and Conditions</string>
@@ -256,6 +261,7 @@
     <string name="new_user">New User?</string>
     <string name="login_with">Or Login with</string>
     <string name="vendor_license">Vendor License (Optional)</string>
+    <string name="vendor_licens">Vendor License</string>
     <string name="front">Front</string>
     <string name="back">Back</string>
     <string name="agree_terms">By continuing you agree to our Terms and Conditions</string>
@@ -270,6 +276,7 @@
     <string name="upcoming_events">Upcoming Events</string>
 
     <string name="upload_img">Upload image</string>
+    <string name="mobile_no">Mobile No</string>
     <string name="mobile_cart_name">Mobile cart name</string>
     <string name="location">Location</string>
     <string name="reg_no">Registration No.</string>
