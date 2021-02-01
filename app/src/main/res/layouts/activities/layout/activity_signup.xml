@@ -105,7 +105,7 @@
                                 android:layout_alignEnd="@+id/img_profile"
                                 android:layout_alignRight="@+id/img_profile"
                                 android:layout_alignBottom="@+id/img_profile"
-                                android:background="@drawable/ic_edit_image"
+                                android:background="@drawable/ic_edit_profile"
                                 android:elevation="@dimen/dp_10"
                                 android:onClick="@{(v) -> loginViewModel.clickListener(v)}"
                                 android:padding="@dimen/dp_8"

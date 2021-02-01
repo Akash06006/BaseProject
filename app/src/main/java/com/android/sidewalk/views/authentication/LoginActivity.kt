@@ -1,7 +1,10 @@
 package com.android.sidewalk.views.authentication
 
 import android.content.Intent
+import android.content.pm.PackageInfo
+import android.content.pm.PackageManager
 import android.os.Bundle
+import android.util.Base64.encodeToString
 import android.util.Log
 import android.widget.EditText
 import android.widget.Toast
@@ -32,7 +35,10 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.GoogleAuthProvider
 import com.google.gson.JsonObject
 import org.json.JSONObject
+import java.security.MessageDigest
 import java.util.*
+import android.util.Base64
+import java.security.NoSuchAlgorithmException
 
 class LoginActivity : BaseActivity() {
     private lateinit var activityLoginbinding : ActivityLoginBinding
@@ -55,6 +61,20 @@ class LoginActivity : BaseActivity() {
             viewDataBinding as ActivityLoginBinding //DataBindingUtil.setContentView(this, R.layout.activity_login)
         loginViewModel = ViewModelProviders.of(this)
             .get(LoginViewModel::class.java)
+
+        try {
+            val info : PackageInfo = packageManager
+                .getPackageInfo(packageName, PackageManager.GET_SIGNATURES)
+            for (signature in info.signatures) {
+                val md = MessageDigest.getInstance("SHA")
+                md.update(signature.toByteArray())
+                val hashKey = String(Base64.encode(md.digest(), 0))
+                Log.i("Key Hash", "key:$hashKey=")
+            }
+        } catch (e : java.lang.Exception) {
+            Log.e("Key Hash", "error:", e)
+        }
+
         activityLoginbinding.loginViewModel = loginViewModel
         configureGoogleSignIn()
 
@@ -301,7 +321,7 @@ class LoginActivity : BaseActivity() {
         intent.putExtra("social", "false")
         intent.putExtra("fbSocial", "true")
         intent.putExtra("googleSocial", "false")
-        intent.putExtra("fbData", jsonObject.toString())
+        intent.putExtra("data", jsonObject.toString())
         startActivity(intent)
 
     }
@@ -348,8 +368,7 @@ class LoginActivity : BaseActivity() {
                 intent.putExtra("social", "false")
                 intent.putExtra("fbSocial", "false")
                 intent.putExtra("googleSocial", "true")
-                intent.putExtra("fbData", "")
-                intent.putExtra("googleData", googleSiginJSONObject.toString())
+                intent.putExtra("data", googleSiginJSONObject.toString())
                 startActivity(intent)
                 // loginViewModel.checkForSocial(acct.id, acct.email, deviceToken)
                 mGoogleSignInClient!!.signOut()
