@@ -43,6 +43,7 @@ import com.android.sidewalk.utils.Utils
 import com.android.sidewalk.viewmodels.home.HomeViewModel
 import com.android.sidewalk.views.home.LandingActivty
 import com.google.android.gms.location.*
+import com.uniongoods.adapters.HomeEventsListAdapter
 import com.uniongoods.adapters.HomeTrucksListAdapter
 import com.uniongoods.adapters.TruckListAdapter
 import okhttp3.MultipartBody
@@ -68,6 +69,8 @@ HomeFragment : BaseFragment(), ChoiceCallBack {
     private var mDialogClass = DialogClass()
     private var profileImage = ""
     private var truckList = ArrayList<HomeListResponse.PopularData>()
+    private var eventsList = ArrayList<HomeListResponse.Events>()
+
     //var categoriesList = null
     override fun getLayoutResId() : Int {
         return R.layout.fragment_home
@@ -133,6 +136,14 @@ HomeFragment : BaseFragment(), ChoiceCallBack {
                         } else {
                             fragmentHomeBinding.rvTrucks.visibility = View.GONE
                         }
+
+                        if (loginResponse.data!!.vendorData!!.events != null) {
+                            fragmentHomeBinding.rvEvents.visibility = View.VISIBLE
+                            eventsList = loginResponse.data!!.vendorData!!.events!!
+                            initEventsRecyclerView()
+                        } else {
+                            fragmentHomeBinding.rvEvents.visibility = View.GONE
+                        }
                     } else {
                         showToastError(message!!)
                     }
@@ -189,6 +200,21 @@ HomeFragment : BaseFragment(), ChoiceCallBack {
         fragmentHomeBinding.rvTrucks.layoutManager = linearLayoutManager1
         fragmentHomeBinding.rvTrucks.adapter = truckListAdapter
         fragmentHomeBinding.rvTrucks.addOnScrollListener(object :
+            RecyclerView.OnScrollListener() {
+            override fun onScrolled(recyclerView : RecyclerView, dx : Int, dy : Int) {
+
+            }
+        })
+    }
+
+    private fun initEventsRecyclerView() {
+        val linearLayoutManager1 = LinearLayoutManager(activity)
+        val truckListAdapter = HomeEventsListAdapter(this, eventsList, activity!!)
+        fragmentHomeBinding.rvEvents.setHasFixedSize(true)
+        linearLayoutManager1.orientation = RecyclerView.HORIZONTAL
+        fragmentHomeBinding.rvEvents.layoutManager = linearLayoutManager1
+        fragmentHomeBinding.rvEvents.adapter = truckListAdapter
+        fragmentHomeBinding.rvEvents.addOnScrollListener(object :
             RecyclerView.OnScrollListener() {
             override fun onScrolled(recyclerView : RecyclerView, dx : Int, dy : Int) {
 
