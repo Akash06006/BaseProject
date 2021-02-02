@@ -5,7 +5,7 @@ import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import retrofit2.Call
 import retrofit2.http.*
-import java.util.HashMap
+import java.util.*
 
 interface ApiInterface {
     @get:GET("user-profile-detail/")
@@ -174,4 +174,7 @@ interface ApiInterface {
     @POST("outlet-group-services-by-date/")
     fun getClassesListByDate(@Body mJsonObject : JsonObject) : Call<JsonObject>
 
+    @Multipart
+    @POST("vendor/auth/checkSocial")
+    fun checkSocial(@PartMap mHashMap : HashMap<String, RequestBody>) : Call<JsonObject>
 }
