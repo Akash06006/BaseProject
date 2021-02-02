@@ -158,7 +158,7 @@ class ProfileFragment : BaseFragment() {
                                 response.categoryList!!.firstName + " " + response.categoryList!!.lastName
                             )
 */
-                          //  makeEnableDisableViews(false)
+                      //      makeEnableDisableViews(false)
                         }
                         else -> message?.let { showToastError(it) }
                     }
@@ -178,17 +178,17 @@ class ProfileFragment : BaseFragment() {
                         val intent = Intent(context, ViewProfileActivity::class.java)
                         startActivity(intent)
                     }
-                   /* "img_right" -> {
-                        if (baseActivity.checkAndRequestPermissions()) {
+                    "img_right" -> {
+                       /* if (baseActivity.checkAndRequestPermissions()) {
                             confirmationDialog =
                                 mDialogClass.setUploadConfirmationDialog(
                                     activity!!,
                                     this,
                                     "gallery"
                                 )
-                        }
+                        }*/
 
-                    }*/
+                    }
                 }
             })
         )

@@ -36,6 +36,7 @@ import com.android.sidewalk.utils.Utils
 import com.android.sidewalk.utils.ValidationsClass
 import com.android.sidewalk.viewmodels.profile.ProfileViewModel
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.google.gson.JsonObject
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
@@ -72,8 +73,23 @@ class ViewProfileActivity : BaseActivity() {
             .get(ProfileViewModel::class.java)
         activityEditProfileBinding.loginViewModel = loginViewModel
 
-        activityEditProfileBinding.toolbarCommon.imgToolbarText.visibility = View.INVISIBLE
-      //  activityEditProfileBinding.toolbarCommon.imgRight.setImageResource(resources.)
+        activityEditProfileBinding.toolbarCommon.imgRight.visibility = View.VISIBLE
+
+        Glide.with(this)
+            .load(resources.getDrawable(
+                R.drawable.user
+            ))
+            .diskCacheStrategy(DiskCacheStrategy.ALL)
+            .placeholder(resources.getDrawable(
+                R.drawable.user
+            ))
+            .into(activityEditProfileBinding.toolbarCommon.imgRight)
+
+        activityEditProfileBinding.toolbarCommon.imgRight.setOnClickListener{
+            val intent = Intent(this, EditProfileActivity::class.java)
+            startActivity(intent)
+
+        }
 
         loginViewModel.getDetail().observe(this,
             Observer<ProfileResponse> { profileResponse->
@@ -115,11 +131,12 @@ class ViewProfileActivity : BaseActivity() {
         })
 
         loginViewModel.isClick().observe(
-            this, Observer<String>(function =
+            this, Observer<String>(
             fun(it : String?) {
                 when (it) {
-                    "iv_edit" -> {
-
+                    "img_right" -> {
+                        val intent = Intent(this, EditProfileActivity::class.java)
+                        startActivity(intent)
                     }
 
 
