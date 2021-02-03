@@ -14,7 +14,7 @@ import com.google.gson.JsonObject
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import retrofit2.Response
-import java.util.HashMap
+import java.util.*
 
 class LoginRepository {
     private var data : MutableLiveData<LoginResponse>? =
@@ -170,4 +170,73 @@ class LoginRepository {
 
     }
 
+    fun getLogoutResonse(jsonObject : JsonObject?) : MutableLiveData<CommonModel> {
+        if (jsonObject != null) {
+            val mApiService = ApiService<JsonObject>()
+            mApiService.get(
+                object : ApiResponse<JsonObject> {
+                    override fun onResponse(mResponse : Response<JsonObject>) {
+                        val logoutResponse = if (mResponse.body() != null)
+                            gson.fromJson<CommonModel>(
+                                "" + mResponse.body(),
+                                CommonModel::class.java
+                            )
+                        else {
+                            gson.fromJson<CommonModel>(
+                                mResponse.errorBody()!!.charStream(),
+                                CommonModel::class.java
+                            )
+                        }
+
+                        data1!!.postValue(logoutResponse)
+
+                    }
+
+                    override fun onError(mKey : String) {
+                        UtilsFunctions.showToastError(
+                            MyApplication.instance.getString(
+                                R.string.internal_server_error
+                            )
+                        )
+                        data1!!.postValue(null)
+
+                    }
+
+                },
+                ApiClient.getApiInterface().callLogout(
+                    jsonObject
+                )
+            )
+
+        }
+        return data1!!
+
+    }
+
+    fun checkSocial(
+        mJsonObject : HashMap<String, RequestBody>?,
+        profileDetails : MutableLiveData<LoginResponse>?
+    ) : MutableLiveData<LoginResponse>? {
+        if (UtilsFunctions.isNetworkConnected() && mJsonObject != null) {
+            val mApiService = ApiService<JsonObject>()
+            mApiService.get(
+                object : ApiResponse<JsonObject> {
+                    override fun onResponse(mResponse : Response<JsonObject>) {
+                        val data = gson.fromJson<LoginResponse>(
+                            "" + mResponse.body()!!,
+                            LoginResponse::class.java
+                        )
+                        profileDetails!!.postValue(data)
+                    }
+
+                    override fun onError(mKey : String) {
+                        profileDetails!!.value = null
+                        UtilsFunctions.showToastError(MyApplication.instance.getString(R.string.internal_server_error))
+                    }
+                }, ApiClient.getApiInterface().checkSocial(mJsonObject)
+            )
+        }
+
+        return profileDetails
+    }
 }
