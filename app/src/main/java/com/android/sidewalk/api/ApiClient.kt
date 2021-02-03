@@ -1,5 +1,4 @@
 package com.android.sidewalk.api
-
 /*
  Created by Saira on 03/07/2019.
 */
@@ -25,6 +24,7 @@ object ApiClient {
     private val BASE_URL = GlobalConstants.BASE_URL
     private val sharedPrefClass =
         SharedPrefClass()
+
     @JvmStatic
     private var mApiInterface : ApiInterface? = null
 
@@ -75,6 +75,11 @@ object ApiClient {
                     val request = builder.build()
                     val response = chain.proceed(request)
                     return if (response.code() == 401) {
+                        SharedPrefClass().putObject(
+                            MyApplication.instance.applicationContext,
+                            "isLogin",
+                            false
+                        )
                         val i = Intent(
                             MyApplication.instance.applicationContext,
                             LoginActivity::class.java

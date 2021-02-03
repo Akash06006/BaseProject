@@ -85,8 +85,8 @@ interface ApiInterface {
     @PUT("change-password/")
     fun changePassword(@Body mJsonObject : JsonObject) : Call<JsonObject>
 
-    @POST("auth/logout/")
-    fun callLogout(@Body mJsonObject : JsonObject) : Call<JsonObject>
+    @GET("vendor/auth/logout")
+    fun callLogout() : Call<JsonObject>
 
     @GET("vendor/others/home")
     fun getHomeList() : Call<JsonObject>

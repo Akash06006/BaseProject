@@ -11,65 +11,76 @@ import com.android.sidewalk.views.trucks.TruckListFragment
 import com.google.android.material.tabs.TabLayout
 
 class LandingActivty : BaseActivity() {
-    private lateinit var activityOtpVerificationBinding : ActivityLandingActivtyBinding
-
+    private lateinit var activityLandingActivtyBinding : ActivityLandingActivtyBinding
+    var pos = 0
     override fun getLayoutId() : Int {
         return R.layout.activity_landing_activty
     }
 
+    override fun onBackPressed() {
+        // super.onBackPressed()
+        if (pos == 0) {
+            finish()
+        } else {
+            val fragment = HomeFragment()
+            this.callFragments(
+                fragment,
+                supportFragmentManager,
+                false,
+                "send_data",
+                ""
+            )
+            activityLandingActivtyBinding!!.tablayout.getTabAt(0)?.select()
+
+        }
+    }
+
     override fun initViews() {
-        activityOtpVerificationBinding = viewDataBinding as ActivityLandingActivtyBinding
+        activityLandingActivtyBinding = viewDataBinding as ActivityLandingActivtyBinding
         val fragment = HomeFragment()
         callFragments(fragment, supportFragmentManager, false, "send_data", "")
-        activityOtpVerificationBinding!!.tablayout.addOnTabSelectedListener(object :
+        activityLandingActivtyBinding!!.tablayout.addOnTabSelectedListener(object :
             TabLayout.OnTabSelectedListener {
             override fun onTabSelected(tab : TabLayout.Tab?) {
-                activityOtpVerificationBinding!!.tablayout!!.getTabAt(0)!!
+                activityLandingActivtyBinding!!.tablayout!!.getTabAt(0)!!
                     .setIcon(resources.getDrawable(R.drawable.ic_home_tab))
-                activityOtpVerificationBinding!!.tablayout!!.getTabAt(1)!!
+                activityLandingActivtyBinding!!.tablayout!!.getTabAt(1)!!
                     .setIcon(resources.getDrawable(R.drawable.ic_truck_tab))
-                activityOtpVerificationBinding!!.tablayout!!.getTabAt(2)!!
+                activityLandingActivtyBinding!!.tablayout!!.getTabAt(2)!!
                     .setIcon(resources.getDrawable(R.drawable.ic_event_tab))
-                activityOtpVerificationBinding!!.tablayout!!.getTabAt(3)!!
+                activityLandingActivtyBinding!!.tablayout!!.getTabAt(3)!!
                     .setIcon(resources.getDrawable(R.drawable.ic_setting_tab))
-
                 var fragment : Fragment? = null
                 fragment =
                     HomeFragment()
                 //   activityDashboardBinding!!.toolbarCommon.imgRight.visibility = View.GONE
                 when (tab!!.position) {
                     0 -> {
-                        /* activityOtpVerificationBinding!!.toolbarCommon.imgToolbarText.setText(
-                             resources.getString(
-                                 R.string.home
-                             )
-                         )*/
-                        activityOtpVerificationBinding!!.tablayout!!.getTabAt(0)!!
+                        pos = 0
+                        activityLandingActivtyBinding!!.tablayout!!.getTabAt(0)!!
                             .setIcon(resources.getDrawable(R.drawable.ic_home_tab_selected))
                         fragment =
                             HomeFragment()
                     }
                     1 -> {
+                        pos = 1
                         fragment =
                             TruckListFragment()
-                        activityOtpVerificationBinding!!.tablayout!!.getTabAt(1)!!
+                        activityLandingActivtyBinding!!.tablayout!!.getTabAt(1)!!
                             .setIcon(resources.getDrawable(R.drawable.ic_truck_tab_selected))
                     }
                     2 -> {
+                        pos = 2
                         fragment =
                             EventsListFragment()
-                        activityOtpVerificationBinding!!.tablayout!!.getTabAt(2)!!
+                        activityLandingActivtyBinding!!.tablayout!!.getTabAt(2)!!
                             .setIcon(resources.getDrawable(R.drawable.ic_event_tab_selected))
                     }
                     3 -> {
-                        /*  activityOtpVerificationBinding!!.toolbarCommon.imgToolbarText.setText(
-                              resources.getString(
-                                  R.string.profile
-                              )
-                          )*/
+                        pos = 3
                         fragment =
                             ProfileFragment()
-                        activityOtpVerificationBinding!!.tablayout!!.getTabAt(3)!!
+                        activityLandingActivtyBinding!!.tablayout!!.getTabAt(3)!!
                             .setIcon(resources.getDrawable(R.drawable.ic_setting_tab_selected))
                     }
                 }
@@ -93,10 +104,19 @@ class LandingActivty : BaseActivity() {
     }
 
     fun callTruckFragment() {
+        pos = 1
         val fragment =
             TruckListFragment()
         callFragments(fragment, supportFragmentManager, false, "send_data", "")
-        activityOtpVerificationBinding!!.tablayout.getTabAt(1)!!.select()
+        activityLandingActivtyBinding!!.tablayout.getTabAt(1)!!.select()
+    }
+
+    fun callEventsFragment() {
+        pos = 2
+        val fragment =
+            EventsListFragment()
+        callFragments(fragment, supportFragmentManager, false, "send_data", "")
+        activityLandingActivtyBinding!!.tablayout.getTabAt(2)!!.select()
     }
 
 }

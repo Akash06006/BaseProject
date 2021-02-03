@@ -22,6 +22,7 @@ class ProfileRepository {
     private var data : MutableLiveData<LoginResponse>? = null
     private var data1 : MutableLiveData<ProfileResponse>? = null
     private var data2 : MutableLiveData<CommonModel>? = null
+    private var logoutResponse : MutableLiveData<CommonModel>? = null
     private var profileUpdate : MutableLiveData<CommonModel>? = null
     private val gson = GsonBuilder().serializeNulls().create()
     private var data3 : MutableLiveData<RegionResponse>? = null
@@ -31,6 +32,7 @@ class ProfileRepository {
         data1 = MutableLiveData()
         data2 = MutableLiveData()
         profileUpdate = MutableLiveData()
+        logoutResponse = MutableLiveData()
         data3 = MutableLiveData()
 
     }
@@ -111,13 +113,13 @@ class ProfileRepository {
 
     }
 
-    fun getLogoutResonse(jsonObject : JsonObject?) : MutableLiveData<CommonModel> {
+    fun getLogoutResonse(jsonObject : String?) : MutableLiveData<CommonModel> {
         if (jsonObject != null) {
             val mApiService = ApiService<JsonObject>()
             mApiService.get(
                 object : ApiResponse<JsonObject> {
                     override fun onResponse(mResponse : Response<JsonObject>) {
-                        val logoutResponse = if (mResponse.body() != null)
+                        val logoutResponse11 = if (mResponse.body() != null)
                             gson.fromJson<CommonModel>(
                                 "" + mResponse.body(),
                                 CommonModel::class.java
@@ -129,7 +131,7 @@ class ProfileRepository {
                             )
                         }
 
-                        data2!!.postValue(logoutResponse)
+                        logoutResponse!!.postValue(logoutResponse11)
 
                     }
 
@@ -137,15 +139,15 @@ class ProfileRepository {
                         UtilsFunctions.showToastError(
                             MyApplication.instance.getString(R.string.internal_server_error)
                         )
-                        data1!!.postValue(null)
+                        logoutResponse!!.postValue(null)
 
                     }
 
-                }, ApiClient.getApiInterface().callLogout(jsonObject)
+                }, ApiClient.getApiInterface().callLogout()
             )
 
         }
-        return data2!!
+        return logoutResponse!!
 
     }
 

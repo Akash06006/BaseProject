@@ -44,7 +44,8 @@
                             android:id="@+id/toolbarCommon"
                             layout="@layout/common_toolbar_back"
                             android:layout_width="match_parent"
-                            android:layout_height="@dimen/dp_55" />
+                            android:layout_height="@dimen/dp_55"
+                            android:onClick="@{(v) -> loginViewModel.clickListener(v)}" />
 
                     <de.hdodenhof.circleimageview.CircleImageView
                             android:id="@+id/img_profile"
@@ -71,7 +72,7 @@
                                 android:layout_height="wrap_content"
                                 android:layout_gravity="center"
                                 android:layout_marginTop="@dimen/dp_10"
-                                android:text="@{profileResponse.firstName+profileResponse.lastName}"
+                                android:text="@{profileResponse.firstName+ profileResponse.lastName}"
                                 android:textAllCaps="false"
                                 android:textColor="@color/colorWhite"
                                 android:textSize="@dimen/sp_18"
@@ -293,9 +294,9 @@
                         android:layout_height="@dimen/dp_150"
                         android:layout_marginLeft="@dimen/dp_20"
                         android:layout_marginTop="@dimen/dp_10"
+                        android:layout_marginRight="@dimen/dp_20"
                         android:layout_marginBottom="@dimen/dp_30"
                         android:background="@drawable/shape_round_corner_white"
-                        android:layout_marginRight="@dimen/dp_20"
                         android:gravity="center"
                         android:orientation="horizontal"
                         android:weightSum="2">
@@ -317,8 +318,6 @@
                                 app:riv_corner_radius="12dp"
                                 app:riv_mutate_background="true" />
 
-
-
                     </RelativeLayout>
                     <!--</androidx.cardview.widget.CardView>-->
 
@@ -339,7 +338,6 @@
                                 android:scaleType="centerCrop"
                                 app:riv_corner_radius="12dp"
                                 app:riv_mutate_background="true" />
-
 
                     </RelativeLayout>
 

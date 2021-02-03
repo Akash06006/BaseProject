@@ -332,6 +332,12 @@
     <string name="my_profile">My Profile</string>
     <string name="experience">Experience eg: 2 Years.</string>
     <string name="country_code">Country-Code</string>
+    <string name="no_result_found">Results not found</string>
+    <string name="search_hint">Search...</string>
+    <string name="you_don_not_have_mobile_cart">You do not have mobile cart</string>
+    <string name="select_country">Select a county</string>
+    <string name="logout_msg">Logout Successfully</string>
+
     <string-array name="Languages">
         <item>Java</item>
         <item>Kotlin</item>

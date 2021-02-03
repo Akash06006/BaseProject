@@ -28,7 +28,6 @@ import com.bumptech.glide.Glide
 import com.android.sidewalk.common.UtilsFunctions.showToastError
 import com.android.sidewalk.common.UtilsFunctions.showToastSuccess
 import com.android.sidewalk.constants.GlobalConstants
-import com.android.sidewalk.utils.Utils
 import com.google.gson.JsonObject
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
@@ -37,18 +36,18 @@ import java.io.IOException
 import java.text.SimpleDateFormat
 import java.util.*
 import com.android.sidewalk.databinding.ActivityProfileBinding
+import com.android.sidewalk.model.CommonModel
 import com.android.sidewalk.model.LoginResponse
 import com.android.sidewalk.model.profile.ProfileResponse
 import com.android.sidewalk.model.profile.RegionResponse
 import com.android.sidewalk.sharedpreference.SharedPrefClass
-import com.android.sidewalk.utils.BaseFragment
-import com.android.sidewalk.utils.DialogClass
-import com.android.sidewalk.utils.ValidationsClass
+import com.android.sidewalk.utils.*
 import com.android.sidewalk.viewmodels.profile.ProfileViewModel
+import com.android.sidewalk.views.authentication.LoginActivity
 import com.android.sidewalk.views.trucks.AddTruckActivity
 import kotlin.collections.HashMap
 
-class ProfileFragment : BaseFragment() {
+class ProfileFragment : BaseFragment(), DialogssInterface {
     private var reginRes =
         ArrayList<RegionResponse.Data>()
     private lateinit var profileBinding : ActivityProfileBinding
@@ -65,6 +64,23 @@ class ProfileFragment : BaseFragment() {
     var region = ArrayList<String>()
     override fun getLayoutResId() : Int {
         return R.layout.activity_profile
+    }
+
+    override fun onResume() {
+        super.onResume()
+        val name =
+            SharedPrefClass().getPrefValue(
+                activity!!,
+                GlobalConstants.USERNAME
+            )
+        val image =
+            SharedPrefClass().getPrefValue(
+                activity!!,
+                GlobalConstants.USER_IMAGE
+            )
+        profileBinding.txtUsername.text = name.toString()
+        Glide.with(activity!!).load(image).into(profileBinding.imgProfile)
+
     }
 
     override fun initView() {
@@ -101,6 +117,35 @@ class ProfileFragment : BaseFragment() {
         setImage(image.toString())
 
 
+        profieViewModel.getLogoutResponse().observe(this,
+            Observer<CommonModel> { response->
+                baseActivity.stopProgressDialog()
+                if (response != null) {
+                    val message = response.message
+                    when {
+                        response.code == 200 -> {
+                            SharedPrefClass().putObject(
+                                activity!!,
+                                "isLogin",
+                                false
+                            )
+
+                            SharedPrefClass().putObject(
+                                activity!!,
+                                GlobalConstants.USER_IMAGE,
+                                "null"
+                            )
+                            showToastSuccess(getString(R.string.logout_msg))
+                            val intent1 = Intent(activity!!, LoginActivity::class.java)
+                            startActivity(intent1)
+
+                            activity!!.finish()
+                        }
+                        else -> message?.let { showToastError(it) }
+                    }
+                }
+            })
+
         profieViewModel.getDetail().observe(this,
             Observer<ProfileResponse> { response->
                 baseActivity.stopProgressDialog()
@@ -108,24 +153,7 @@ class ProfileFragment : BaseFragment() {
                     val message = response.message
                     when {
                         response.code == 200 -> {
-                            /*profileBinding.model = response
-
-                            SharedPrefClass()
-                                .putObject(
-                                    activity!!,
-                                    GlobalConstants.USER_IMAGE,
-                                    response.data!!.image
-                                )
-                            SharedPrefClass()
-                                .putObject(
-                                    activity!!,
-                                    getString(R.string.fname),
-                                    response.data!!.firstName + " " + response.data!!.lastName
-                                )
-
-                            profileBinding.txtEmail.setText(response.data?.email)
-                            profileBinding.txtUsername.setText(response.data?.firstName + " " + response.data?.lastName)
-*/
+                            profileBinding.profileResponse = response.data
                         }
                         else -> message?.let { showToastError(it) }
                     }
@@ -147,18 +175,7 @@ class ProfileFragment : BaseFragment() {
                                 baseActivity.startProgressDialog()
                                 profieViewModel.getProfileDetail(mJsonObject)
                             }
-                            /*SharedPrefClass().putObject(
-                                activity!!,
-                                GlobalConstants.USER_IMAGE,
-                                response.categoryList!!.image
-                            )
-                            SharedPrefClass().putObject(
-                                activity!!,
-                                getString(R.string.fname),
-                                response.categoryList!!.firstName + " " + response.categoryList!!.lastName
-                            )
-*/
-                      //      makeEnableDisableViews(false)
+
                         }
                         else -> message?.let { showToastError(it) }
                     }
@@ -178,16 +195,14 @@ class ProfileFragment : BaseFragment() {
                         val intent = Intent(context, ViewProfileActivity::class.java)
                         startActivity(intent)
                     }
-                    "img_right" -> {
-                       /* if (baseActivity.checkAndRequestPermissions()) {
-                            confirmationDialog =
-                                mDialogClass.setUploadConfirmationDialog(
-                                    activity!!,
-                                    this,
-                                    "gallery"
-                                )
-                        }*/
-
+                    "txt_log_out" -> {
+                        confirmationDialog = mDialogClass.setDefaultDialog(
+                            activity!!,
+                            this,
+                            "logout",
+                            "Do you really want to logout?", "", ""
+                        )
+                        confirmationDialog?.show()
                     }
                 }
             })
@@ -205,6 +220,23 @@ class ProfileFragment : BaseFragment() {
             .load(path)
             .placeholder(R.drawable.ic_user_profile)
             .into(profileBinding.imgProfile)
+    }
+
+    override fun onDialogConfirmAction(mView : View?, mKey : String?) {
+        when (mKey) {
+            "logout" -> {
+                confirmationDialog?.dismiss()
+                profieViewModel!!.callLogoutApi()
+                // dashboardViewModel!!.callLogoutApi()
+
+            }
+        }
+    }
+
+    override fun onDialogCancelAction(mView : View?, mKey : String?) {
+        when (mKey) {
+            "logout" -> confirmationDialog?.dismiss()
+        }
     }
 
 }

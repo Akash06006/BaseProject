@@ -170,47 +170,4 @@ class LoginRepository {
 
     }
 
-    fun getLogoutResonse(jsonObject : JsonObject?) : MutableLiveData<CommonModel> {
-        if (jsonObject != null) {
-            val mApiService = ApiService<JsonObject>()
-            mApiService.get(
-                object : ApiResponse<JsonObject> {
-                    override fun onResponse(mResponse : Response<JsonObject>) {
-                        val logoutResponse = if (mResponse.body() != null)
-                            gson.fromJson<CommonModel>(
-                                "" + mResponse.body(),
-                                CommonModel::class.java
-                            )
-                        else {
-                            gson.fromJson<CommonModel>(
-                                mResponse.errorBody()!!.charStream(),
-                                CommonModel::class.java
-                            )
-                        }
-
-                        data1!!.postValue(logoutResponse)
-
-                    }
-
-                    override fun onError(mKey : String) {
-                        UtilsFunctions.showToastError(
-                            MyApplication.instance.getString(
-                                R.string.internal_server_error
-                            )
-                        )
-                        data1!!.postValue(null)
-
-                    }
-
-                },
-                ApiClient.getApiInterface().callLogout(
-                    jsonObject
-                )
-            )
-
-        }
-        return data1!!
-
-    }
-
 }

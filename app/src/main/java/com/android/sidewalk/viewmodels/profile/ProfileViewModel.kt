@@ -23,6 +23,8 @@ class ProfileViewModel : BaseViewModel() {
         MutableLiveData<ProfileResponse>()
     private var updateProfile =
         MutableLiveData<CommonModel>()
+    private var logoutResponse =
+        MutableLiveData<CommonModel>()
     private var profileRepository =
         ProfileRepository()
     private val mIsUpdating = MutableLiveData<Boolean>()
@@ -33,12 +35,17 @@ class ProfileViewModel : BaseViewModel() {
             profileDetail = profileRepository.getUserProfile()
             updateProfile = profileRepository.callUpdateProfile(null, null, null, null)
             regionResponse = profileRepository.getRegoins()
+            logoutResponse = profileRepository.getLogoutResonse(null)
         }
 
     }
 
     fun getDetail() : LiveData<ProfileResponse> {
         return profileDetail
+    }
+
+    fun getLogoutResponse() : LiveData<CommonModel> {
+        return logoutResponse
     }
 
     fun getUpdateDetail() : LiveData<LoginResponse> {
@@ -87,6 +94,22 @@ class ProfileViewModel : BaseViewModel() {
             mIsUpdating.postValue(true)
         }
 
+    }
+
+    fun callLogoutApi() {
+        if (UtilsFunctions.isNetworkConnected()) {
+            //emialExistenceResponse = loginRepository.checkPhoneExistence(mJsonObject)
+            updateProfile =
+                profileRepository.getLogoutResonse("aaa")
+            mIsUpdating.postValue(true)
+        }
+    }
+
+    fun callProfielApi() {
+        if (UtilsFunctions.isNetworkConnected()) {
+            profileDetail = profileRepository.getUserProfile()
+            mIsUpdating.postValue(true)
+        }
     }
 
 }

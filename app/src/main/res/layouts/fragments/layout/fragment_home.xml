@@ -92,7 +92,7 @@
                                     android:id="@+id/imgEdit"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:layout_marginLeft="5dp"
+                                    android:padding="5dp"
                                     android:onClick="@{(v) -> homeViewModel.clickListener(v)}"
                                     android:src="@drawable/ic_edit_image" />
                         </LinearLayout>
@@ -116,6 +116,19 @@
                 </RelativeLayout>
             </RelativeLayout>
 
+            <TextView
+                    android:id="@+id/txtNoRecord"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginTop="20dp"
+                    android:gravity="center"
+                    android:text="@string/you_don_not_have_mobile_cart"
+                    android:textColor="@color/colorBlack"
+                    android:textStyle="bold"
+                    android:visibility="gone"
+                    app:font="@{`bold`}" />
+
             <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -124,6 +137,7 @@
                     android:orientation="vertical">
 
                 <TextView
+                        android:id="@+id/txtPopularTrucks"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_vertical"
@@ -131,6 +145,7 @@
                         android:text="@string/your_popular_mobile_cart"
                         android:textColor="@color/colorBlack"
                         android:textStyle="bold"
+                        android:visibility="gone"
                         app:font="@{`bold`}" />
 
                 <TextView
@@ -144,6 +159,7 @@
                         android:text="@string/see_all"
                         android:textColor="@color/view_see"
                         android:textSize="12sp"
+                        android:visibility="gone"
                         app:font="@{`regular`}" />
             </RelativeLayout>
 
@@ -171,6 +187,7 @@
                         android:text="@string/upcoming_events"
                         android:textColor="@color/colorBlack"
                         android:textStyle="bold"
+                        android:visibility="gone"
                         app:font="@{`bold`}" />
 
                 <TextView
@@ -184,6 +201,7 @@
                         android:text="@string/see_all"
                         android:textColor="@color/view_see"
                         android:textSize="12sp"
+                        android:visibility="gone"
                         app:font="@{`regular`}" />
             </RelativeLayout>
 

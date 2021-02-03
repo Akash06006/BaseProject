@@ -19,11 +19,14 @@ import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
 import com.android.sidewalk.utils.BaseActivity
 import com.android.sidewalk.R
+import com.android.sidewalk.application.MyApplication
 import com.android.sidewalk.callbacks.ChoiceCallBack
 import com.android.sidewalk.common.UtilsFunctions
+import com.android.sidewalk.constants.GlobalConstants
 import com.android.sidewalk.databinding.ActivityEditProfileBinding
 import com.android.sidewalk.model.CommonModel
 import com.android.sidewalk.model.profile.ProfileResponse
+import com.android.sidewalk.sharedpreference.SharedPrefClass
 import com.android.sidewalk.utils.DialogClass
 import com.android.sidewalk.utils.Utils
 import com.android.sidewalk.utils.ValidationsClass
@@ -75,6 +78,7 @@ class EditProfileActivity : BaseActivity(), ChoiceCallBack {
                     val message = profileResponse.message
 
                     if (profileResponse.code == 200) {
+                        profileViewModel.callProfielApi()
                         showToastSuccess(message)
                     } else if (profileResponse.code == 408) {
                         showToastError(message)
@@ -100,6 +104,26 @@ class EditProfileActivity : BaseActivity(), ChoiceCallBack {
                          )*/
                         activityEditProfileBinding.profileResponse = profileResponse.data
 
+                        SharedPrefClass()
+                            .putObject(
+                                MyApplication.instance,
+                                GlobalConstants.USER_IMAGE,
+                                profileResponse.data!!.image
+                            )
+
+                        SharedPrefClass()
+                            .putObject(
+                                MyApplication.instance,
+                                GlobalConstants.USERNAME,
+                                profileResponse.data!!.firstName + " " + profileResponse.data!!.lastName
+                            )
+                        SharedPrefClass()
+                            .putObject(
+                                MyApplication.instance,
+                                GlobalConstants.CUSTOMER_IAMGE,
+                                profileResponse.data!!.image
+                            )
+
                         if (!TextUtils.isEmpty(profileResponse.data!!.licenseFront)) {
                             lincesFront = profileResponse.data!!.licenseFront!!
                             activityEditProfileBinding.imgFrontPlus.visibility = View.GONE
@@ -124,7 +148,6 @@ class EditProfileActivity : BaseActivity(), ChoiceCallBack {
 
                 }
             })
-
 
         profileViewModel.isLoading().observe(this, Observer<Boolean> { aBoolean->
             if (aBoolean!!) {

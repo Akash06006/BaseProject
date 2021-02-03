@@ -59,14 +59,14 @@ class HomeEventsListAdapter(
                 R.drawable.ic_add_img
             )
             .into(holder.binding!!.imgReview)
-
         holder.binding.txtName.setText(addressList[position].eventName)
         holder.binding.rlTop.setOnClickListener {
             val intent = Intent(
                 activity,
                 EventDetailActivity::class.java
             )
-            intent.putExtra("id", addressList[position].id/*categoriesList[position].id*/)
+            intent.putExtra("eventType", "accept")
+            intent.putExtra("id", addressList[position].id)
 
             activity.startActivity(intent)
         }

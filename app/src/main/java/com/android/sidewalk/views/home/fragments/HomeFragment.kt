@@ -110,8 +110,6 @@ HomeFragment : BaseFragment(), ChoiceCallBack {
         Glide.with(activity!!).load(userImage).placeholder(R.drawable.ic_user)
             .into(fragmentHomeBinding.toolbarCommon.imgRight)
 
-
-
         homeViewModel.getHomeListRes().observe(this,
             Observer<HomeListResponse> { loginResponse->
                 //stopProgressDialog()
@@ -122,26 +120,46 @@ HomeFragment : BaseFragment(), ChoiceCallBack {
                         if (!TextUtils.isEmpty(loginResponse.data!!.vendorData!!.image)) {
                             Glide.with(activity!!).load(loginResponse.data!!.vendorData!!.image)
                                 .into(fragmentHomeBinding.imgRight)
+                            SharedPrefClass()
+                                .putObject(
+                                    MyApplication.instance,
+                                    GlobalConstants.USER_IMAGE,
+                                    loginResponse.data!!.vendorData!!.image
+                                )
                         }
 
+                        if (loginResponse.data!!.popularData == null && loginResponse.data!!.vendorData!!.events == null) {
+                            fragmentHomeBinding.txtNoRecord.visibility = View.VISIBLE
+                        } else {
+                            fragmentHomeBinding.txtNoRecord.visibility = View.GONE
+                        }
                         if (!TextUtils.isEmpty(loginResponse.data!!.vendorData!!.cover)) {
                             Glide.with(activity!!).load(loginResponse.data!!.vendorData!!.cover)
                                 .placeholder(R.drawable.ic_home_banner)
                                 .into(fragmentHomeBinding.imgBanner)
                         }
                         if (loginResponse.data!!.popularData != null) {
+                            fragmentHomeBinding.txtPopularTrucks.visibility = View.VISIBLE
+                            fragmentHomeBinding.txtTruckAll.visibility = View.VISIBLE
                             fragmentHomeBinding.rvTrucks.visibility = View.VISIBLE
                             truckList = loginResponse.data!!.popularData!!
                             initRecyclerView()
                         } else {
+                            fragmentHomeBinding.txtPopularTrucks.visibility = View.GONE
+                            fragmentHomeBinding.txtTruckAll.visibility = View.GONE
                             fragmentHomeBinding.rvTrucks.visibility = View.GONE
                         }
 
                         if (loginResponse.data!!.vendorData!!.events != null) {
+                            fragmentHomeBinding.txtEventsTitle.visibility = View.VISIBLE
+                            fragmentHomeBinding.txtEventsAll.visibility = View.VISIBLE
+
                             fragmentHomeBinding.rvEvents.visibility = View.VISIBLE
                             eventsList = loginResponse.data!!.vendorData!!.events!!
                             initEventsRecyclerView()
                         } else {
+                            fragmentHomeBinding.txtEventsTitle.visibility = View.GONE
+                            fragmentHomeBinding.txtEventsAll.visibility = View.GONE
                             fragmentHomeBinding.rvEvents.visibility = View.GONE
                         }
                     } else {
@@ -185,6 +203,9 @@ HomeFragment : BaseFragment(), ChoiceCallBack {
                     }
                     "txtTruckAll" -> {
                         (activity as LandingActivty?)!!.callTruckFragment()
+                    }
+                    "txtEventsAll" -> {
+                        (activity as LandingActivty?)!!.callEventsFragment()
                     }
                 }
             })
