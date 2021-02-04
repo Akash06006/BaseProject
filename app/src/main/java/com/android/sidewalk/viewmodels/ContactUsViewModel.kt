@@ -5,23 +5,38 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import android.view.View
 import com.android.sidewalk.R
+import com.android.sidewalk.common.UtilsFunctions
+import com.android.sidewalk.model.CommonModel
+import com.android.sidewalk.repositories.ContactUsRepository
+import com.google.gson.JsonObject
 
 class ContactUsViewModel : BaseViewModel() {
-    private val postNameError = MutableLiveData<String>()
-    private val postEmailError = MutableLiveData<String>()
-    private val postPhoneNumberError = MutableLiveData<String>()
-    private val postMessageError = MutableLiveData<String>()
+    private var addConcern = MutableLiveData<CommonModel>()
+    private val mIsUpdating = MutableLiveData<Boolean>()
+    private val btnClick = MutableLiveData<String>()
+    private var contactUsRepository = ContactUsRepository()
+
+    init {
+        if (UtilsFunctions.isNetworkConnected()) {
+            addConcern = contactUsRepository.addConcern(null)
+            //clearAllNotifications = notificationRepository.clearAllNotifications("")
+        }
+    }
 
     override fun isLoading() : LiveData<Boolean> {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        return mIsUpdating
     }
 
     override fun isClick() : LiveData<String> {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        return btnClick
     }
 
     override fun clickListener(v : View) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        btnClick.value = v.resources.getResourceName(v.id).split("/")[1]
+    }
+
+    fun addConcernRes() : LiveData<CommonModel> {
+        return addConcern
     }
 
     @SuppressLint("HardwareIds")
@@ -36,6 +51,13 @@ class ContactUsViewModel : BaseViewModel() {
         when (v.id) {
             R.id.btn_send -> {
             }
+        }
+    }
+
+    fun addConcern(obj : JsonObject) {
+        if (UtilsFunctions.isNetworkConnected()) {
+            addConcern = contactUsRepository.addConcern(obj)
+            mIsUpdating.postValue(true)
         }
     }
 

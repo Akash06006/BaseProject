@@ -54,7 +54,8 @@ class HomeTrucksListAdapter(
             .load(addressList[position].truckImages)
             //.apply(RequestOptions.bitmapTransform(RoundedCorners(20)))
             .placeholder(
-                R.drawable.ic_add_img
+                R.drawable.ic_dummy
+
             )
             .into(holder.binding!!.imgReview)
 

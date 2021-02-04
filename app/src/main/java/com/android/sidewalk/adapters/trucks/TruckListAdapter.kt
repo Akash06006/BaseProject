@@ -63,6 +63,24 @@ class TruckListAdapter(
         holder.binding.txtAddress.setText(addressList[position].location)
         holder.binding.txtTime.setText(addImageContext.resources.getString(R.string.time) + " " + addressList[position].startTime + " - " + addressList[position].endTime)
 
+        if (addressList[position].status.equals("1")) {
+            holder.binding.chkTruckOn.isChecked = true
+            // holder.binding.view.visibility = View.GONE
+            holder.binding!!.topLay.alpha = 1f
+        } else {
+            holder.binding.chkTruckOn.isChecked = false
+            //holder.binding.view.visibility = View.VISIBLE
+            holder.binding!!.topLay.alpha = 0.5f
+        }
+        holder.binding.chkTruckOn.setOnCheckedChangeListener({ buttonView, isChecked->
+            /*if (isChecked) {
+                // show toast , check box is checked
+            } else {
+                // show toast , check box is not checked
+            }*/
+            addReviewContext?.changeTruckStatus(position, isChecked)
+        })
+
         holder.binding!!.topLay.setOnClickListener {
             val intent = Intent(
                 activity,

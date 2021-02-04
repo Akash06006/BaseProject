@@ -11,6 +11,7 @@ import com.android.sidewalk.model.truck.TruckListResponse
 import com.android.sidewalk.repositories.truck.AddGalleryModel
 import com.android.sidewalk.viewmodels.BaseViewModel
 import com.example.services.repositories.home.TruckRepository
+import com.google.gson.JsonObject
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import java.util.HashMap
@@ -28,6 +29,7 @@ class TrucksViewModel : BaseViewModel() {
     private var viewGallery =
         MutableLiveData<GalleryListResponse>()
     private var addUpdateTruck = MutableLiveData<CommonModel>()
+    private var updateTruckStatus = MutableLiveData<CommonModel>()
 
     init {
         if (UtilsFunctions.isNetworkConnectedReturn()) {
@@ -36,6 +38,7 @@ class TrucksViewModel : BaseViewModel() {
             truckList = truckRepository.truckList(null)
             truckDetail = truckRepository.truckDetail(null)
             viewGallery = truckRepository.viewGallery(null)
+            updateTruckStatus = truckRepository.changeTruckStatus(null)
         }
 
     }
@@ -47,6 +50,10 @@ class TrucksViewModel : BaseViewModel() {
    }*/
     fun getAddGalleryRes() : LiveData<AddGalleryModel> {
         return addGallery
+    }
+
+    fun updateTruckStatusRes() : LiveData<CommonModel> {
+        return updateTruckStatus
     }
 
     fun getAddTruckRes() : LiveData<CommonModel> {
@@ -107,6 +114,14 @@ class TrucksViewModel : BaseViewModel() {
     fun truckDetail(id : String) {
         if (UtilsFunctions.isNetworkConnected()) {
             truckDetail = truckRepository.truckDetail(id)
+            mIsUpdating.postValue(true)
+        }
+
+    }
+
+    fun changeTruckStatus(id : JsonObject?) {
+        if (UtilsFunctions.isNetworkConnected()) {
+            updateTruckStatus = truckRepository.changeTruckStatus(id)
             mIsUpdating.postValue(true)
         }
 

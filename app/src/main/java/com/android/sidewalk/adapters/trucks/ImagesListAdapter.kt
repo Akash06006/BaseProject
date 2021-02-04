@@ -68,18 +68,24 @@ class ImagesListAdapter(
                 .load(addressList[position].image)
                 //.apply(RequestOptions.bitmapTransform(RoundedCorners(20)))
                 .placeholder(
-                    R.drawable.ic_add_img
+                    R.drawable.ic_dummy
                 )
-                .into(holder.binding!!.imgReview)
-            if (position == 3 || (position + 1) == addressList.count()) {
-                holder.binding!!.txtViewAll.visibility = View.VISIBLE
-                holder.binding!!.txtViewAll.bringToFront()
+                .into(holder.binding.imgReview)
+            if (position == 3 /*|| (position + 1) == addressList.count()*/) {
+                holder.binding.cardAll.visibility = View.VISIBLE
+                holder.binding.cardView.visibility = View.GONE
+                holder.binding.txtViewAll.bringToFront()
             } else {
-                holder.binding!!.txtViewAll.visibility = View.GONE
+                holder.binding.cardAll.visibility = View.GONE
             }
-
-            holder.binding!!.imgReview.setOnClickListener {
+            holder.binding.cardAll.setOnClickListener {
                 truckDetailActivity.callGalleryActivity()
+            }
+            holder.binding.imgReview.setOnClickListener {
+                truckDetailActivity.showImageAlert(
+                    truckDetailActivity,
+                    addressList[position].image!!
+                )
             }
         }
 

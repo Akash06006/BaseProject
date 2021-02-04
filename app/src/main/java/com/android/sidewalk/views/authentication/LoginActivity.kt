@@ -12,6 +12,7 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.android.sidewalk.R
 import com.android.sidewalk.application.MyApplication
+import com.android.sidewalk.common.FirebaseFunctions
 import com.android.sidewalk.common.UtilsFunctions
 import com.android.sidewalk.constants.GlobalConstants
 import com.android.sidewalk.databinding.ActivityLoginBinding
@@ -96,18 +97,25 @@ class LoginActivity : BaseActivity() {
 
                     if (loginResponse.code == 200) {
                         //TODO comment the below is login
-                        SharedPrefClass()
-                            .putObject(
-                                MyApplication.instance,
-                                "isLogin",
-                                true
-                            )
+                        /* SharedPrefClass()
+                             .putObject(
+                                 MyApplication.instance,
+                                 "isLogin",
+                                 true
+                             )*/
                         SharedPrefClass()
                             .putObject(
                                 MyApplication.instance,
                                 GlobalConstants.ACCESS_TOKEN,
                                 loginResponse.data!!.token
                             )
+                        SharedPrefClass()
+                            .putObject(
+                                MyApplication.instance,
+                                GlobalConstants.USEREMAIL,
+                                loginResponse.data!!.email
+                            )
+
                         SharedPrefClass()
                             .putObject(
                                 MyApplication.instance,
@@ -139,16 +147,16 @@ class LoginActivity : BaseActivity() {
                                 loginResponse.data!!.image
                             )
                         GlobalConstants.VERIFICATION_TYPE = "login"
-                        //TODO uncomment
-                        // FirebaseFunctions.sendOTP("login", mOtpJsonObject, this)
-                        showToastSuccess(message)
-                        val intent = Intent(
-                            this,
-                            LandingActivty::class.java
-                        )
-                        //intent.putExtra("itemId", ""/*categoriesList[position].id*/)
-                        startActivity(intent)
-                        finish()
+
+                        FirebaseFunctions.sendOTP("login", mOtpJsonObject, this)
+                        //showToastSuccess(message)
+//                        val intent = Intent(
+//                            this,
+//                            LandingActivty::class.java
+//                        )
+//                        //intent.putExtra("itemId", ""/*categoriesList[position].id*/)
+//                        startActivity(intent)
+//                        finish()
 
                     } else {
                         showToastError(message)
@@ -156,18 +164,6 @@ class LoginActivity : BaseActivity() {
 
                 }
             })
-        /*loginViewModel.getEmailError().observe(this, Observer<String> { emailError->
-            activityLoginbinding.etEmail.error = emailError
-            activityLoginbinding.etEmail.requestFocus()
-        })
-
-
-        loginViewModel.getPasswordError().observe(this, Observer<String> { passError->
-            activityLoginbinding.etPassword.requestFocus()
-            activityLoginbinding.etPassword.error = passError
-        })*/
-
-
 
         loginViewModel.isLoading().observe(this, Observer<Boolean> { aBoolean->
             if (aBoolean!!) {
@@ -341,12 +337,6 @@ class LoginActivity : BaseActivity() {
         textView.error = error
     }
 
-    /*override fun onActivityResult(requestCode : Int, resultCode : Int, data : Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-
-        callbackManager?.onActivityResult(requestCode, resultCode, data)
-    }
-*/
     override fun onActivityResult(requestCode : Int, resultCode : Int, data : Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == RC_SIGN_IN) {
@@ -364,11 +354,6 @@ class LoginActivity : BaseActivity() {
     }
 
     private fun firebaseAuthWithGoogle(acct : GoogleSignInAccount) {
-        /* val credential = GoogleAuthProvider.getCredential(acct.idToken, null)
-
-        firebaseAuth.signInWithCredential(credential).addOnCompleteListener {
-            if (it.isSuccessful) {*/
-        // startActivity(HomeActivity.getLaunchIntent(this))
         try {
             loginWith = "google"
             val jsonObject = JsonObject()
@@ -426,6 +411,12 @@ class LoginActivity : BaseActivity() {
                                     MyApplication.instance,
                                     GlobalConstants.USER_IMAGE,
                                     loginResponse.data!!.image
+                                )
+                            SharedPrefClass()
+                                .putObject(
+                                    MyApplication.instance,
+                                    GlobalConstants.USEREMAIL,
+                                    loginResponse.data!!.email
                                 )
                             SharedPrefClass()
                                 .putObject(

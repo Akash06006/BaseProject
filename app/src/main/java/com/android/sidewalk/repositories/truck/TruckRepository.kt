@@ -21,6 +21,7 @@ import java.util.HashMap
 
 class TruckRepository {
     private var data1 : MutableLiveData<CommonModel>? = null
+    private var updateTruckStatus : MutableLiveData<CommonModel>? = null
     private var addGallery : MutableLiveData<AddGalleryModel>? = null
     private var truckDetail : MutableLiveData<TruckDetailResponse>? = null
     private var truckList : MutableLiveData<TruckListResponse>? = null
@@ -28,6 +29,7 @@ class TruckRepository {
     private val gson = GsonBuilder().serializeNulls().create()
 
     init {
+        updateTruckStatus = MutableLiveData()
         data1 = MutableLiveData()
         addGallery = MutableLiveData()
         truckList = MutableLiveData()
@@ -207,6 +209,47 @@ class TruckRepository {
             )
         }
         return truckDetail!!
+
+    }
+
+    fun changeTruckStatus(jsonObject : JsonObject?) : MutableLiveData<CommonModel> {
+        if (jsonObject != null) {
+            val mApiService = ApiService<JsonObject>()
+            mApiService.get(
+                object : ApiResponse<JsonObject> {
+                    override fun onResponse(mResponse : Response<JsonObject>) {
+                        val loginResponse = if (mResponse.body() != null)
+                            gson.fromJson<CommonModel>(
+                                "" + mResponse.body(),
+                                CommonModel::class.java
+                            )
+                        else {
+                            gson.fromJson<CommonModel>(
+                                mResponse.errorBody()!!.charStream(),
+                                CommonModel::class.java
+                            )
+                        }
+
+
+                        updateTruckStatus!!.postValue(loginResponse)
+
+                    }
+
+                    override fun onError(mKey : String) {
+                        UtilsFunctions.showToastError(
+                            MyApplication.instance.getString(
+                                R.string.internal_server_error
+                            )
+                        )
+                        updateTruckStatus!!.postValue(null)
+
+                    }
+
+                },
+                ApiClient.getApiInterface().changeTruckStatus(jsonObject)
+            )
+        }
+        return updateTruckStatus!!
 
     }
 

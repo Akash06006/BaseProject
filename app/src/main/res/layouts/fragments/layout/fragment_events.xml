@@ -18,6 +18,20 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
+        <TextView
+                android:id="@+id/txtNoRecord"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:layout_gravity="center"
+                android:text="@string/no_record_found"
+                android:textAllCaps="false"
+                android:textColor="@color/colorBlack"
+                android:textStyle="bold"
+                android:visibility="gone"
+                app:font="@{`semibold`}"
+                tools:ignore="AllCaps" />
+
         <ScrollView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
@@ -45,6 +59,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="@dimen/dp_2"
+                            android:layout_marginBottom="@dimen/dp_2"
                             android:layout_toLeftOf="@+id/chkTruckOn"
                             android:background="@drawable/ic_event_selected"
                             android:gravity="center"
@@ -62,6 +77,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginLeft="10dp"
                             android:layout_marginTop="@dimen/dp_2"
+                            android:layout_marginBottom="@dimen/dp_2"
                             android:layout_toLeftOf="@+id/chkTruckOn"
                             android:background="@drawable/ic_event_unselected"
                             android:gravity="center"

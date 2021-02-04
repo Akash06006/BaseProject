@@ -153,11 +153,11 @@ abstract class BaseActivity : AppCompatActivity() {
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
         dialog.setContentView(binding.root)
         dialog.setTitle(getString(R.string.app_name))
-       // val window = dialog.getWindow();
+        // val window = dialog.getWindow();
         //window.setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
         // set the custom dialog components - text, image and button
         val imageView = dialog.findViewById(R.id.imgView) as ImageView
-        Glide.with(activity).load(url).into(imageView)
+        Glide.with(activity).load(url).placeholder(R.drawable.ic_dummy).into(imageView)
         val dialogButton = dialog.findViewById(R.id.dialogButtonOK) as ImageView
         // if button is clicked, close the custom dialog
         dialogButton.setOnClickListener {

@@ -263,7 +263,7 @@
                                     android:layout_marginTop="5dp"
                                     android:layout_toRightOf="@+id/imgPayment"
 
-                                    android:text="@{detailResponse.payment}"
+                                    android:text="@{'$'+detailResponse.payment}"
                                     android:textColor="@color/colorBlack"
                                     app:font="@{`semibold`}" />
 

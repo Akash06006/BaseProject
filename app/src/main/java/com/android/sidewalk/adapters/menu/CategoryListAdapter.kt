@@ -51,15 +51,12 @@ class CategoryListAdapter(
             .load(addressList!![position].image)
             //.apply(RequestOptions.bitmapTransform(RoundedCorners(20)))
             .placeholder(
-                R.drawable.ic_add_img
+                R.drawable.ic_dummy
             )
             .into(holder.binding!!.imgCategory)
         holder.binding.txtCatName.setText(addressList!![position].name)
-        holder.binding!!.imgCategory.setOnClickListener {
-            categoryListActivity.callGalleryActivity()
-        }
 
-        holder.binding!!.imgCategory.setOnClickListener {
+        holder.binding!!.rlTop.setOnClickListener {
             val intent = Intent(
                 categoryListActivity,
                 ProductListActivity::class.java

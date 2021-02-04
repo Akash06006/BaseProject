@@ -44,6 +44,7 @@ import com.android.sidewalk.sharedpreference.SharedPrefClass
 import com.android.sidewalk.utils.*
 import com.android.sidewalk.viewmodels.profile.ProfileViewModel
 import com.android.sidewalk.views.authentication.LoginActivity
+import com.android.sidewalk.views.contactus.ContactUsActivity
 import com.android.sidewalk.views.trucks.AddTruckActivity
 import kotlin.collections.HashMap
 
@@ -195,14 +196,30 @@ class ProfileFragment : BaseFragment(), DialogssInterface {
                         val intent = Intent(context, ViewProfileActivity::class.java)
                         startActivity(intent)
                     }
+                    "txt_contact_us" -> {
+                        val intent = Intent(context, ContactUsActivity::class.java)
+                        startActivity(intent)
+                    }
                     "txt_log_out" -> {
                         confirmationDialog = mDialogClass.setDefaultDialog(
                             activity!!,
                             this,
-                            "logout",
-                            "Do you really want to logout?", "", ""
+                            "logout", "", "",
+                            activity!!.resources.getString(R.string.logout_warning)
                         )
                         confirmationDialog?.show()
+                    }
+                    "txtAboutUs" -> {
+                        showToastSuccess("Coming Soon")
+                    }
+                    "txt_notifications" -> {
+                        showToastSuccess("Coming Soon")
+                    }
+                    "txt_privacy" -> {
+                        showToastSuccess("Coming Soon")
+                    }
+                    "txt_terms" -> {
+                        showToastSuccess("Coming Soon")
                     }
                 }
             })

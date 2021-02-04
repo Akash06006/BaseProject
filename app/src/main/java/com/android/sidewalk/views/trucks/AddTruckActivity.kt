@@ -160,6 +160,7 @@ class AddTruckActivity : BaseActivity(), ChoiceCallBack {
                                 if (!TextUtils.isEmpty(item1.image)) {
                                     val imagesModel = ImagesModel()
                                     imagesModel.image = item1.image!!
+                                    imagesModel.id = item1.id!!
                                     imagesModel.name = item1.image!!
                                     galleryImagesList.add(imagesModel)
                                 }
@@ -654,7 +655,7 @@ class AddTruckActivity : BaseActivity(), ChoiceCallBack {
             if (item.image!!.contains("http")) {
                 if (!TextUtils.isEmpty(path)) {
                     if (item.image.equals(path)) {
-                        galleryImagesDeletedIds.add(galleryImagesList[pos].image!!)
+                        galleryImagesDeletedIds.add(galleryImagesList[pos].id!!)
                         galleryImagesList.remove(item)
                         break
                     }
@@ -662,6 +663,7 @@ class AddTruckActivity : BaseActivity(), ChoiceCallBack {
             } else {
                 if (item.image.equals(path)) {
                     galleryImagesList.remove(item)
+                    break
                 }
             }
         }

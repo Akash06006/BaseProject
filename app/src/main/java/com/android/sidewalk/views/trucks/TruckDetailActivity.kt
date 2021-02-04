@@ -30,6 +30,14 @@ class TruckDetailActivity : BaseActivity() {
         return R.layout.activity_truck_detail
     }
 
+    override fun onResume() {
+        super.onResume()
+        if (UtilsFunctions.isNetworkConnected()) {
+            startProgressDialog()
+            trucksViewModel.truckDetail(truckId)
+        }
+    }
+
     @SuppressLint("SetTextI18n")
     override fun initViews() {
         addTruckBinding = viewDataBinding as ActivityTruckDetailBinding
@@ -44,7 +52,10 @@ class TruckDetailActivity : BaseActivity() {
 
         truckId = intent.extras?.get("id") as String
 
-        trucksViewModel.truckDetail(truckId)
+        if (UtilsFunctions.isNetworkConnected()) {
+            startProgressDialog()
+
+        }
         // viewPager = findViewById<ViewPager>(R.id.viewPager)
         trucksViewModel.getTruckDetail().observe(this,
             Observer<TruckDetailResponse> { addGalleryRes->
@@ -59,10 +70,11 @@ class TruckDetailActivity : BaseActivity() {
                         //showToastSuccess(message)
                         truckImages = addGalleryRes.data!!.truckImages
                         setBannerAdapter()
-                        if (addGalleryRes.data!!.galleries == null) {
+                        if (addGalleryRes.data!!.galleries == null || addGalleryRes.data!!.galleries!!.size == 0) {
                             addTruckBinding.txtGallery.visibility = View.GONE
                             addTruckBinding.rvGallery.visibility = View.GONE
                         } else {
+                            imagesList.clear()
                             addTruckBinding.txtGallery.visibility = View.VISIBLE
                             addTruckBinding.rvGallery.visibility = View.VISIBLE
                             for (item in addGalleryRes.data!!.galleries!!) {

@@ -48,7 +48,7 @@ class ItemsListAdapter(
         Glide.with(categoryListActivity!!)
             .load(itemsList!![position].image)
             .placeholder(
-                R.drawable.ic_add_img
+                R.drawable.ic_dummy
             )
             .into(holder.binding!!.imgCategory)
         holder.binding.txtCatName.setText(itemsList!![position].name)

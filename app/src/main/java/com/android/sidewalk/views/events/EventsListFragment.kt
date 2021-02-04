@@ -11,6 +11,7 @@ import android.location.LocationManager
 import android.os.Looper
 import android.widget.Toast
 import android.provider.Settings
+import android.view.View
 import androidx.core.app.ActivityCompat
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
@@ -40,6 +41,7 @@ EventsListFragment : BaseFragment() {
     var currentLong = ""
     var eventType = "pending"
     private lateinit var fragmentTruckBinding : FragmentEventsBinding
+
     //var categoriesList = null
     override fun getLayoutResId() : Int {
         return R.layout.fragment_events
@@ -60,6 +62,7 @@ EventsListFragment : BaseFragment() {
             baseActivity.startProgressDialog()
             eventsViewModel.eventList("0")
         }
+        fragmentTruckBinding.toolbarCommon.toolbar.visibility = View.INVISIBLE
         fragmentTruckBinding.toolbarCommon.imgToolbarText.text =
             getString(R.string.events)
         mFusedLocationClass =
@@ -75,6 +78,15 @@ EventsListFragment : BaseFragment() {
                     if (loginResponse.code == 200) {
                         eventList.clear()
                         eventList = loginResponse.data!!
+                        if (eventList.size > 0) {
+                            fragmentTruckBinding.txtNoRecord.visibility = View.GONE
+                            //fragmentTruckBinding.txtPending.visibility = View.VISIBE
+                            // fragmentTruckBinding.txtAccepted.visibility = View.GONE
+                        } else {
+                            fragmentTruckBinding.txtNoRecord.visibility = View.VISIBLE
+                            // fragmentTruckBinding.txtPending.visibility = View.GONE
+                            //fragmentTruckBinding.txtAccepted.visibility = View.GONE
+                        }
                         initRecyclerView()
                         /*if (!TextUtils.isEmpty(loginResponse.categoryList!!.vendorData!!.image)) {
                             Glide.with(activity!!).load(loginResponse.categoryList!!.vendorData!!.image)
@@ -87,6 +99,7 @@ EventsListFragment : BaseFragment() {
                                 .into(fragmentTruckBinding.imgBanner)
                         }*/
                     } else {
+                        fragmentTruckBinding.txtNoRecord.visibility = View.VISIBLE
                         showToastError(message!!)
                     }
 

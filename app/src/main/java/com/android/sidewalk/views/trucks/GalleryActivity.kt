@@ -65,7 +65,12 @@ class GalleryActivity : BaseActivity() {
             getString(R.string.view_gallery)
         val id = intent.extras?.get("id") as String
 
-        trucksViewModel.viewGallery(id)
+        if (UtilsFunctions.isNetworkConnected()) {
+            startProgressDialog()
+            trucksViewModel.viewGallery(id)
+        }
+
+
 
         trucksViewModel.getViewGallery().observe(this,
             Observer<GalleryListResponse> { viewGalleryResponse->

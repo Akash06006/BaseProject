@@ -82,7 +82,7 @@ class EventsRepository {
         return data1!!
 
     }
-
+/*startDate -> {JsonPrimitive@12356} ""2021-03-18T00:00:00.000Z""*/
     fun eventsList(isCalled : String?) : MutableLiveData<EventListResponse> {
         if (isCalled != null) {
             val mApiService = ApiService<JsonObject>()

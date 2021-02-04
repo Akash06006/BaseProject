@@ -135,6 +135,14 @@ class SignupActivity : BaseActivity(), ChoiceCallBack {
                                 GlobalConstants.USERID,
                                 loginResponse.data!!.id
                             )
+
+                        SharedPrefClass()
+                            .putObject(
+                                MyApplication.instance,
+                                GlobalConstants.USEREMAIL,
+                                loginResponse.data!!.email
+                            )
+
                         SharedPrefClass()
                             .putObject(
                                 MyApplication.instance,
@@ -255,38 +263,38 @@ class SignupActivity : BaseActivity(), ChoiceCallBack {
                                     R.string.profile_img_error
                                 )
                             )
-                            fName.isEmpty() -> showError(
+                            fName.trim().isEmpty() -> showError(
                                 activitySignupbinding.edtFirstName,
                                 getString(R.string.empty) + " " + getString(
                                     R.string.fname
                                 )
                             )
-                            lName.isEmpty() -> showError(
+                            lName.trim().isEmpty() -> showError(
                                 activitySignupbinding.edtLastName,
                                 getString(R.string.empty) + " " + getString(
                                     R.string.lname
                                 )
                             )
-                            email.isEmpty() -> showError(
+                            email.trim().isEmpty() -> showError(
                                 activitySignupbinding.edtEmail,
                                 getString(R.string.empty) + " " + getString(
                                     R.string.email
                                 )
                             )
-                            !email.matches((ValidationsClass.EMAIL_PATTERN).toRegex()) ->
+                            !email.trim().matches((ValidationsClass.EMAIL_PATTERN).toRegex()) ->
                                 showError(
                                     activitySignupbinding.edtEmail,
                                     getString(R.string.invalid) + " " + getString(
                                         R.string.email
                                     )
                                 )
-                            phone.isEmpty() -> showError(
+                            phone.trim().isEmpty() -> showError(
                                 activitySignupbinding.edtPhone,
                                 getString(R.string.empty) + " " + getString(
                                     R.string.phone_number
                                 )
                             )
-                            phone.length < 10 -> showError(
+                            phone.length < 7 -> showError(
                                 activitySignupbinding.edtPhone,
                                 getString(R.string.phone_number) + " " + getString(
                                     R.string.phone_min

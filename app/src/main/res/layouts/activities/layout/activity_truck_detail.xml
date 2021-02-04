@@ -213,7 +213,7 @@
                                 android:layout_marginLeft="@dimen/dp_5"
                                 android:layout_weight="2"
                                 android:singleLine="true"
-                                android:text="202 Food Street nexus"
+                                android:text=""
                                 android:textColor="@color/colorBlack"
                                 android:textSize="16sp"
                                 app:font="@{`regular`}" />

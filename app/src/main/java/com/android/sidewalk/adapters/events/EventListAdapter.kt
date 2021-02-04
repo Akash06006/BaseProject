@@ -17,6 +17,7 @@ import com.android.sidewalk.databinding.TruckItemBinding
 import com.android.sidewalk.model.events.EventDetailResponse
 import com.android.sidewalk.model.events.EventListResponse
 import com.android.sidewalk.model.truck.TruckListResponse
+import com.android.sidewalk.utils.Utils
 import com.android.sidewalk.views.events.EventDetailActivity
 import com.android.sidewalk.views.events.EventsListFragment
 import com.android.sidewalk.views.trucks.TruckDetailActivity
@@ -59,7 +60,20 @@ class EventListAdapter(
         holder.binding!!.txtName.setText(addressList[position].eventName)
         holder.binding.txtAddress.setText(addressList[position].location)
         holder.binding.txtTime.setText(activity.resources.getString(R.string.time) + " " + addressList[position].time)
+        val date = Utils(activity).getDate(
+            "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'",
+            addressList[position].startDate,
+            "dd MMM yy"
+        )
+        val newDate = date.split(" ")
+        holder.binding.txtDay.setText(newDate[0])
+        holder.binding.txtMonthYear.setText(newDate[1] + " " + newDate[2])
 
+        if (position % 2 == 0) {
+            holder.binding.llDate.setBackgroundColor(activity.resources.getColor(R.color.colorPrice))
+        } else {
+            holder.binding.llDate.setBackgroundColor(activity.resources.getColor(R.color.colorPrimary))
+        }
         holder.binding!!.topLay.setOnClickListener {
             val intent = Intent(
                 activity,
@@ -71,7 +85,6 @@ class EventListAdapter(
             activity.startActivity(intent)
         }
         //}
-
 
     }
 

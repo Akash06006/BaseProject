@@ -56,7 +56,7 @@ class HomeEventsListAdapter(
             .load(addressList[position].image)
             //.apply(RequestOptions.bitmapTransform(RoundedCorners(20)))
             .placeholder(
-                R.drawable.ic_add_img
+                R.drawable.ic_dummy
             )
             .into(holder.binding!!.imgReview)
         holder.binding.txtName.setText(addressList[position].eventName)

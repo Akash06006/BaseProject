@@ -25,6 +25,9 @@ class HomeListResponse {
         @Expose
         var popularData : ArrayList<PopularData>? = null
 
+        @SerializedName("events")
+        @Expose
+        var events : ArrayList<Events>? = null
     }
 
     class VendorData {
@@ -36,9 +39,6 @@ class HomeListResponse {
         @Expose
         var cover : String? = null
 
-        @SerializedName("events")
-        @Expose
-        var events : ArrayList<Events>? = null
     }
 
     class Events {

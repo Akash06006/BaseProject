@@ -54,6 +54,9 @@ interface ApiInterface {
     @POST("vendor/auth/login")
     fun callLogin(@Body jsonObject : JsonObject) : Call<JsonObject>
 
+    @POST("vendor/others/changeAvailablity")
+    fun changeTruckStatus(@Body jsonObject : JsonObject) : Call<JsonObject>
+
     @Multipart
     @POST("vendor/auth/signup")
     fun callSignup(
@@ -84,6 +87,9 @@ interface ApiInterface {
 
     @PUT("change-password/")
     fun changePassword(@Body mJsonObject : JsonObject) : Call<JsonObject>
+
+    @POST("vendor/others/contactus")
+    fun contactUs(@Body mJsonObject : JsonObject) : Call<JsonObject>
 
     @GET("vendor/auth/logout")
     fun callLogout() : Call<JsonObject>

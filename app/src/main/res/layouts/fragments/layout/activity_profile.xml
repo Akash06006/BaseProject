@@ -135,13 +135,13 @@
                         android:background="@drawable/shape_round_corner_white"
                         android:drawableEnd="@drawable/side_arrow"
                         android:gravity="center_vertical"
+                        android:onClick="@{(v) -> profileViewModel.clickListener(v)}"
                         android:padding="@dimen/dp_10"
                         android:paddingEnd="@dimen/dp_30"
                         android:text="@string/title_notifications"
                         android:textAllCaps="false"
                         android:textColor="@color/colorGrey"
-                        android:textSize="@dimen/sp_18"
-                        android:textStyle="bold"
+                        android:textSize="@dimen/sp_16"
                         android:visibility="visible"
                         app:font="@{`bold`}" />
 
@@ -155,13 +155,13 @@
                         android:background="@drawable/shape_round_corner_white"
                         android:drawableEnd="@drawable/side_arrow"
                         android:gravity="center_vertical"
+                        android:onClick="@{(v) -> profileViewModel.clickListener(v)}"
                         android:padding="@dimen/dp_10"
                         android:paddingEnd="@dimen/dp_30"
                         android:text="@string/privacy_policy"
                         android:textAllCaps="false"
                         android:textColor="@color/colorGrey"
-                        android:textSize="@dimen/sp_18"
-                        android:textStyle="bold"
+                        android:textSize="@dimen/sp_16"
                         android:visibility="visible"
                         app:font="@{`bold`}" />
 
@@ -175,13 +175,13 @@
                         android:background="@drawable/shape_round_corner_white"
                         android:drawableEnd="@drawable/side_arrow"
                         android:gravity="center_vertical"
+                        android:onClick="@{(v) -> profileViewModel.clickListener(v)}"
                         android:padding="@dimen/dp_10"
                         android:paddingEnd="@dimen/dp_30"
                         android:text="@string/terms"
                         android:textAllCaps="false"
                         android:textColor="@color/colorGrey"
-                        android:textSize="@dimen/sp_18"
-                        android:textStyle="bold"
+                        android:textSize="@dimen/sp_16"
                         android:visibility="visible"
                         app:font="@{`bold`}" />
 
@@ -195,13 +195,33 @@
                         android:background="@drawable/shape_round_corner_white"
                         android:drawableEnd="@drawable/side_arrow"
                         android:gravity="center_vertical"
+                        android:onClick="@{(v) -> profileViewModel.clickListener(v)}"
                         android:padding="@dimen/dp_10"
                         android:paddingEnd="@dimen/dp_30"
                         android:text="@string/contact_us"
                         android:textAllCaps="false"
                         android:textColor="@color/colorGrey"
-                        android:textSize="@dimen/sp_18"
-                        android:textStyle="bold"
+                        android:textSize="@dimen/sp_16"
+                        android:visibility="visible"
+                        app:font="@{`bold`}" />
+
+                <TextView
+                        android:id="@+id/txtAboutUs"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/dp_60"
+                        android:layout_marginStart="@dimen/dp_10"
+                        android:layout_marginTop="@dimen/dp_10"
+                        android:layout_marginEnd="@dimen/dp_10"
+                        android:background="@drawable/shape_round_corner_white"
+                        android:drawableEnd="@drawable/side_arrow"
+                        android:gravity="center_vertical"
+                        android:onClick="@{(v) -> profileViewModel.clickListener(v)}"
+                        android:padding="@dimen/dp_10"
+                        android:paddingEnd="@dimen/dp_30"
+                        android:text="@string/about_us"
+                        android:textAllCaps="false"
+                        android:textColor="@color/colorGrey"
+                        android:textSize="@dimen/sp_16"
                         android:visibility="visible"
                         app:font="@{`bold`}" />
 
@@ -221,8 +241,7 @@
                         android:text="@string/logout"
                         android:textAllCaps="false"
                         android:textColor="@color/colorGrey"
-                        android:textSize="@dimen/sp_18"
-                        android:textStyle="bold"
+                        android:textSize="@dimen/sp_16"
                         android:visibility="visible"
                         app:font="@{`bold`}" />
 

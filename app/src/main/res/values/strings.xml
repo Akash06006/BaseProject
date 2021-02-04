@@ -96,7 +96,7 @@
     <string name="comment_title">In Case you have any thoughts /comment do let us Know.</string>
     <string name="add_comment_here">Add comment here (optional)</string>
     <string name="trip_add_title">Would you like to add trip for service ?</string>
-    <string name="submit">Submit</string>
+
     <string name="rate1">$5</string>
     <string name="add_custom">Add Custom Amount</string>
     <string name="enter_price">Enter Price</string>
@@ -177,7 +177,7 @@
     <string name="booking_for">Booking For : &#160; </string>
     <string name="booked_for" tools:keep="@string/booked_for">Booked For : &#160; </string>
     <string name="accept_digits">abcdefghijklmnopqrstuvwxyz</string>
-    <string name="phone_min">should be minimum of 10 characters</string>
+    <string name="phone_min">should be minimum of 7 characters</string>
     <string name="name_min">should be minimum of 3 characters</string>
     <string name="key_type">key_type</string>
     <string name="calendar">Calendar</string>
@@ -337,6 +337,10 @@
     <string name="you_don_not_have_mobile_cart">You do not have mobile cart</string>
     <string name="select_country">Select a county</string>
     <string name="logout_msg">Logout Successfully</string>
+    <string name="write_about_your_queries">Write about your queries</string>
+    <string name="please_write_here">Please write here</string>
+    <string name="submit">Submit</string>
+    <string name="logout_warning">Do you really want to logout?</string>
 
     <string-array name="Languages">
         <item>Java</item>

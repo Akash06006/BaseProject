@@ -9,8 +9,8 @@
     <com.makeramen.roundedimageview.RoundedImageView
             android:id="@+id/imgGallery"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="@drawable/ic_img_back"
+            android:layout_height="100dp"
+            android:background="@drawable/ic_dummy"
             android:scaleType="centerCrop"
             app:riv_corner_radius="12dp"
             app:riv_mutate_background="true" />

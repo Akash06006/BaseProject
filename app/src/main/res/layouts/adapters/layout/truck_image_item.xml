@@ -21,12 +21,22 @@
 
         <!--
             android:background="@drawable/ic_secondary_round_back"-->
-        <ImageView
+
+        <com.makeramen.roundedimageview.RoundedImageView
                 android:id="@+id/imgTruck"
                 android:layout_width="match_parent"
                 android:layout_height="170dp"
-                android:background="@drawable/ic_img_back"
-                android:scaleType="centerCrop" />
+                android:layout_margin="5dp"
+                android:background="@drawable/ic_dummy"
+                android:scaleType="centerCrop"
+                app:riv_corner_radius="20dp"
+                app:riv_mutate_background="true" />
+
+        <!-- <ImageView
+                 android:layout_width="match_parent"
+                 android:layout_height="170dp"
+                 android:background="@drawable/ic_img_back"
+                 android:scaleType="centerCrop" />-->
         <!--
                         app:riv_corner_radius="12dp"
                         app:riv_mutate_background="true" -->

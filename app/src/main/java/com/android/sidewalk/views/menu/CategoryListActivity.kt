@@ -50,6 +50,7 @@ class CategoryListActivity : BaseActivity(), ChoiceCallBack {
     var viewPager : ViewPager? = null
     var imagesList = ArrayList<String>()
     var truckId = ""
+
     //    var categoryList = ArrayList<CategoryListsResponse.Data>()
     private var categoryList : ArrayList<CategoryListsResponse.Data>? = null
     private val RESULT_LOAD_IMAGE = 100
@@ -211,7 +212,7 @@ class CategoryListActivity : BaseActivity(), ChoiceCallBack {
                         R.string.upload_img_error
                     )
                 )
-                catname.isEmpty() -> showError(
+                catname.trim().isEmpty() -> showError(
                     edtCatname,
                     getString(R.string.empty) + " " + getString(
                         R.string.category_name

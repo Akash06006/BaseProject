@@ -127,18 +127,23 @@ HomeFragment : BaseFragment(), ChoiceCallBack {
                                     loginResponse.data!!.vendorData!!.image
                                 )
                         }
-
-                        if (loginResponse.data!!.popularData == null && loginResponse.data!!.vendorData!!.events == null) {
+                        if (loginResponse.data!!.popularData!!.size == 0) {
                             fragmentHomeBinding.txtNoRecord.visibility = View.VISIBLE
+                            fragmentHomeBinding.txtPopularTrucks.visibility = View.GONE
+                            fragmentHomeBinding.txtTruckAll.visibility = View.GONE
+
                         } else {
                             fragmentHomeBinding.txtNoRecord.visibility = View.GONE
+                            fragmentHomeBinding.txtPopularTrucks.visibility = View.VISIBLE
+                            fragmentHomeBinding.txtTruckAll.visibility = View.VISIBLE
                         }
+
                         if (!TextUtils.isEmpty(loginResponse.data!!.vendorData!!.cover)) {
                             Glide.with(activity!!).load(loginResponse.data!!.vendorData!!.cover)
-                                .placeholder(R.drawable.ic_home_banner)
+                                .placeholder(R.drawable.ic_dummy)
                                 .into(fragmentHomeBinding.imgBanner)
                         }
-                        if (loginResponse.data!!.popularData != null) {
+                        if (loginResponse.data!!.popularData!!.size != 0) {
                             fragmentHomeBinding.txtPopularTrucks.visibility = View.VISIBLE
                             fragmentHomeBinding.txtTruckAll.visibility = View.VISIBLE
                             fragmentHomeBinding.rvTrucks.visibility = View.VISIBLE
@@ -150,18 +155,18 @@ HomeFragment : BaseFragment(), ChoiceCallBack {
                             fragmentHomeBinding.rvTrucks.visibility = View.GONE
                         }
 
-                        if (loginResponse.data!!.vendorData!!.events != null) {
+                        if (loginResponse.data!!.events!!.size != 0) {
                             fragmentHomeBinding.txtEventsTitle.visibility = View.VISIBLE
                             fragmentHomeBinding.txtEventsAll.visibility = View.VISIBLE
-
                             fragmentHomeBinding.rvEvents.visibility = View.VISIBLE
-                            eventsList = loginResponse.data!!.vendorData!!.events!!
+                            eventsList = loginResponse.data!!.events!!
                             initEventsRecyclerView()
                         } else {
                             fragmentHomeBinding.txtEventsTitle.visibility = View.GONE
                             fragmentHomeBinding.txtEventsAll.visibility = View.GONE
                             fragmentHomeBinding.rvEvents.visibility = View.GONE
                         }
+
                     } else {
                         showToastError(message!!)
                     }
@@ -176,6 +181,7 @@ HomeFragment : BaseFragment(), ChoiceCallBack {
                     val message = loginResponse.message
 
                     if (loginResponse.code == 200) {
+                        homeViewModel.homeList()
                     } else {
                         showToastError(message!!)
                     }

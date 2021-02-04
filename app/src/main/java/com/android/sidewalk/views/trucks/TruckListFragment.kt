@@ -18,9 +18,11 @@ import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.android.sidewalk.R
+import com.android.sidewalk.common.UtilsFunctions
 import com.android.sidewalk.common.UtilsFunctions.showToastError
 import com.android.sidewalk.databinding.FragmentTruckBinding
 import com.android.sidewalk.maps.FusedLocationClass
+import com.android.sidewalk.model.CommonModel
 import com.android.sidewalk.model.truck.TruckListResponse
 import com.android.sidewalk.utils.BaseFragment
 import com.android.sidewalk.utils.DialogClass
@@ -28,6 +30,7 @@ import com.android.sidewalk.viewmodels.trucks.TrucksViewModel
 import com.android.sidewalk.views.home.LandingActivty
 import com.android.sidewalk.views.menu.CategoryListActivity
 import com.google.android.gms.location.*
+import com.google.gson.JsonObject
 import com.uniongoods.adapters.TruckListAdapter
 
 class
@@ -40,11 +43,15 @@ TruckListFragment : BaseFragment() {
     lateinit var mFusedLocationClient : FusedLocationProviderClient
     var currentLat = ""
     var currentLong = ""
+    var truckListAdapter : TruckListAdapter? = null
     var isFABOpen : Boolean? = false
     private lateinit var fragmentTruckBinding : FragmentTruckBinding
     private val PERMISSION_REQUEST_CODE : Int = 101
     private var confirmationDialog : Dialog? = null
     private var mDialogClass = DialogClass()
+    var pos = 0
+    var status = ""
+
     //var categoriesList = null
     override fun getLayoutResId() : Int {
         return R.layout.fragment_truck
@@ -52,6 +59,10 @@ TruckListFragment : BaseFragment() {
 
     override fun onResume() {
         super.onResume()
+        if (UtilsFunctions.isNetworkConnected()) {
+            baseActivity.startProgressDialog()
+            truckViewModel.truckList()
+        }
     }
 
     //api/mobile/services/getSubcat/b21a7c8f-078f-4323-b914-8f59054c4467
@@ -61,21 +72,44 @@ TruckListFragment : BaseFragment() {
             .get(TrucksViewModel::class.java)
         fragmentTruckBinding.truckViewModel = truckViewModel
         // categoriesList=List<Service>()
-        truckViewModel.truckList()
+        fragmentTruckBinding.toolbarCommon.toolbar.visibility = View.INVISIBLE
         fragmentTruckBinding.toolbarCommon.imgToolbarText.text =
             getString(R.string.my_mobile_carts)
         mFusedLocationClass =
             FusedLocationClass(activity)
         mFusedLocationClient = LocationServices.getFusedLocationProviderClient(activity!!)
         // initRecyclerView()
+        truckViewModel.updateTruckStatusRes().observe(this,
+            Observer<CommonModel> { loginResponse->
+                //stopProgressDialog()
+                if (loginResponse != null) {
+                    val message = loginResponse.message
+
+                    if (loginResponse.code == 200) {
+                        truckList[pos].status = status
+                        truckListAdapter?.notifyDataSetChanged()
+
+                    } else {
+                        truckListAdapter?.notifyDataSetChanged()
+                        showToastError(message!!)
+                    }
+
+                }
+            })
+
         truckViewModel.getTruckListRes().observe(this,
             Observer<TruckListResponse> { loginResponse->
-            //stopProgressDialog()
+                baseActivity.stopProgressDialog()
                 if (loginResponse != null) {
                     val message = loginResponse.message
 
                     if (loginResponse.code == 200) {
                         truckList = loginResponse.data!!
+                        if (truckList.size > 0) {
+                            fragmentTruckBinding.txtNoRecord.visibility = View.GONE
+                        } else {
+                            fragmentTruckBinding.txtNoRecord.visibility = View.VISIBLE
+                        }
                         initRecyclerView()
                         /*if (!TextUtils.isEmpty(loginResponse.categoryList!!.vendorData!!.image)) {
                             Glide.with(activity!!).load(loginResponse.categoryList!!.vendorData!!.image)
@@ -88,6 +122,7 @@ TruckListFragment : BaseFragment() {
                                 .into(fragmentTruckBinding.imgBanner)
                         }*/
                     } else {
+                        fragmentTruckBinding.txtNoRecord.visibility = View.VISIBLE
                         showToastError(message!!)
                     }
 
@@ -112,20 +147,22 @@ TruckListFragment : BaseFragment() {
             }
         })
 
-        fragmentTruckBinding.fab2.setOnClickListener{
-           val intent= Intent(
+        fragmentTruckBinding.fab2.setOnClickListener {
+            val intent = Intent(
                 context,
                 AddTruckActivity::class.java
             )
-            intent.putExtra("id","")
+            intent.putExtra("id", "")
             startActivity(intent)
+            closeFABMenu()
         }
-        fragmentTruckBinding.fab1.setOnClickListener{
-            val intent= Intent(
+        fragmentTruckBinding.fab1.setOnClickListener {
+            val intent = Intent(
                 context,
                 CategoryListActivity::class.java
             )
             startActivity(intent)
+            closeFABMenu()
         }
 
     }
@@ -144,7 +181,7 @@ TruckListFragment : BaseFragment() {
 
     private fun initRecyclerView() {
         val linearLayoutManager1 = LinearLayoutManager(activity)
-        val truckListAdapter = TruckListAdapter(this, this, truckList, activity!!)
+        truckListAdapter = TruckListAdapter(this, this, truckList, activity!!)
         fragmentTruckBinding.rvTrucks.setHasFixedSize(true)
         linearLayoutManager1.orientation = RecyclerView.VERTICAL
         fragmentTruckBinding.rvTrucks.layoutManager = linearLayoutManager1
@@ -231,6 +268,23 @@ TruckListFragment : BaseFragment() {
             mLocationRequest, mLocationCallback,
             Looper.myLooper()
         )
+
+    }
+
+    fun changeTruckStatus(position : Int, checked : Boolean) {
+        if (UtilsFunctions.isNetworkConnected()) {
+            pos = position
+            if (checked) {
+                status = "1"
+            } else {
+                status = "0"
+            }
+            val jsonObject = JsonObject()
+            jsonObject.addProperty("status", status)
+            jsonObject.addProperty("truckId", truckList[pos].id)
+            // baseActivity.startProgressDialog()
+            truckViewModel.changeTruckStatus(jsonObject)
+        }
 
     }
 

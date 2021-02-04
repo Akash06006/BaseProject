@@ -24,9 +24,10 @@
                 android:layout_marginLeft="3dp"
                 android:layout_marginTop="5dp"
                 android:layout_marginBottom="5dp"
+                android:visibility="visible"
                 app:cardCornerRadius="@dimen/dp_10">
 
-            <ImageView
+            <com.makeramen.roundedimageview.RoundedImageView
                     android:id="@+id/imgReview"
                     android:layout_width="80dp"
                     android:layout_height="80dp"
@@ -35,7 +36,9 @@
                     android:elevation="@dimen/dp_5"
                     android:scaleType="centerCrop"
                     android:src="@drawable/ic_add_img"
-                    android:visibility="visible" />
+                    android:visibility="visible"
+                    app:riv_corner_radius="15dp"
+                    app:riv_mutate_background="true" />
 
         </androidx.cardview.widget.CardView>
 
@@ -43,26 +46,32 @@
                 android:id="@+id/imgCross"
                 android:layout_width="20dp"
                 android:layout_height="20dp"
+                android:layout_marginLeft="2dp"
                 android:layout_toRightOf="@+id/card_view"
                 android:scaleType="centerCrop"
                 android:src="@drawable/ic_cross_grey" />
 
-        <RelativeLayout
-                android:layout_width="@dimen/dp_80"
+        <androidx.cardview.widget.CardView
+                android:id="@+id/cardAll"
+                android:layout_width="80dp"
                 android:layout_height="80dp"
                 android:layout_marginLeft="3dp"
-                android:layout_marginTop="5dp">
+                android:layout_marginTop="5dp"
+                android:layout_marginBottom="5dp"
+                android:background="#80000000"
+                android:visibility="gone"
+                app:cardCornerRadius="@dimen/dp_15">
 
             <TextView
                     android:id="@+id/txtViewAll"
-                    android:layout_width="80dp"
-                    android:layout_height="80dp"
-                    android:background="#80000000"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/ic_add_img"
+                    android:backgroundTint="@color/colorblack"
                     android:gravity="center"
                     android:text="@string/view_all"
-                    android:textColor="@color/colorWhite"
-                    android:visibility="visible" />
-        </RelativeLayout>
+                    android:textColor="@color/colorWhite" />
+        </androidx.cardview.widget.CardView>
     </RelativeLayout>
     <!-- </androidx.cardview.widget.CardView>-->
 </layout>
