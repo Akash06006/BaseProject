@@ -14,6 +14,7 @@ import com.android.sidewalk.R
 import com.android.sidewalk.databinding.TruckItemBinding
 import com.android.sidewalk.model.truck.TruckListResponse
 import com.android.sidewalk.views.authentication.SignupActivity
+import com.android.sidewalk.views.trucks.AddTruckActivity
 import com.android.sidewalk.views.trucks.TruckDetailActivity
 import com.android.sidewalk.views.trucks.TruckListFragment
 import com.bumptech.glide.Glide
@@ -87,6 +88,16 @@ class TruckListAdapter(
                 TruckDetailActivity::class.java
             )
             intent.putExtra("id", addressList[position].id/*categoriesList[position].id*/)
+
+            activity.startActivity(intent)
+        }
+
+        holder.binding!!.imgEdit.setOnClickListener {
+            val intent = Intent(
+                activity,
+                AddTruckActivity::class.java
+            )
+            intent.putExtra("id", addressList[position].id)
 
             activity.startActivity(intent)
         }

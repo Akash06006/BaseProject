@@ -54,6 +54,8 @@ class OTPVerificationActivity : BaseActivity() {
         activityOtpVerificationBinding.toolbarCommon.imgToolbarText.text =
             resources.getString(R.string.otp_verify)
 
+        resendOTPtimer()
+
         userId = SharedPrefClass()
             .getPrefValue(
                 this,
@@ -101,8 +103,7 @@ class OTPVerificationActivity : BaseActivity() {
                                 "isLogin",
                                 true
                             )
-
-                        showToastSuccess(message)
+                        // showToastSuccess(message)
                         val intent = Intent(
                             this,
                             LandingActivty::class.java
@@ -113,7 +114,7 @@ class OTPVerificationActivity : BaseActivity() {
                         finish()
 
                     } else {
-                        //showToastError(message)
+                        showToastError(message)
                     }
 
                 }
@@ -178,7 +179,8 @@ class OTPVerificationActivity : BaseActivity() {
                             this
                         )
                         // startProgressDialog()
-                        object : CountDownTimer(30000, 1000) {
+                        resendOTPtimer()
+                        /*object : CountDownTimer(30000, 1000) {
                             override fun onTick(millisUntilFinished : Long) {
                                 // activityOtpVerificationBinding.resendOTP = 1
                                 activityOtpVerificationBinding.tvResend.isEnabled = false
@@ -195,7 +197,7 @@ class OTPVerificationActivity : BaseActivity() {
                                 // mTextField.setText("done!")
                             }
 
-                        }.start()
+                        }.start()*/
 
                     }
                 }
@@ -203,6 +205,27 @@ class OTPVerificationActivity : BaseActivity() {
             })
         )
 
+    }
+
+    private fun resendOTPtimer() {
+        object : CountDownTimer(30000, 1000) {
+            override fun onTick(millisUntilFinished : Long) {
+                // activityOtpVerificationBinding.resendOTP = 1
+                activityOtpVerificationBinding.tvResend.isEnabled = false
+                activityOtpVerificationBinding.tvResend.text =
+                    "Resend in " + millisUntilFinished / 1000 + " sec"
+                //here you can have your logic to set text to edittext
+            }
+
+            override fun onFinish() {
+                activityOtpVerificationBinding.tvResend.isEnabled = true
+                activityOtpVerificationBinding.tvResend.text =
+                    getString(R.string.resend_otp)
+                //  activityOtpVerificationBinding.resendOTP = 0
+                // mTextField.setText("done!")
+            }
+
+        }.start()
     }
 
     private val mCallbacks = object : PhoneAuthProvider.OnVerificationStateChangedCallbacks() {
@@ -222,7 +245,10 @@ class OTPVerificationActivity : BaseActivity() {
         @TargetApi(Build.VERSION_CODES.M)
         override fun onVerificationFailed(e : FirebaseException) {
             if ((e as FirebaseAuthException).errorCode == "ERROR_INVALID_PHONE_NUMBER")
-                showToastError(e.message.toString().split("\\.".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()[0])
+                showToastError(
+                    e.message.toString().split("\\.".toRegex()).dropLastWhile { it.isEmpty() }
+                        .toTypedArray()[0]
+                )
             else
                 showToastError(getString(R.string.server_not_reached))
         }
@@ -241,20 +267,21 @@ class OTPVerificationActivity : BaseActivity() {
             .addOnCompleteListener(this,
                 { task->
                     stopProgressDialog()
-                    SharedPrefClass()
-                        .putObject(
-                            MyApplication.instance,
-                            "isLogin",
-                            true
-                        )
+
                     if (task.isSuccessful) {
-                        showToastSuccess("OTP Verified")
+                        //showToastSuccess("OTP Verified")
                         if (GlobalConstants.VERIFICATION_TYPE.equals("signup")) {
                             callVerifyUserApi()
                         } else {
                             /* val intent = Intent(this, ResetPasswrodActivity::class.java)
                              startActivity(intent)
                              finish()*/
+                            SharedPrefClass()
+                                .putObject(
+                                    MyApplication.instance,
+                                    "isLogin",
+                                    true
+                                )
                             val intent = Intent(this, LandingActivty::class.java)
                             intent.flags =
                                 Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK

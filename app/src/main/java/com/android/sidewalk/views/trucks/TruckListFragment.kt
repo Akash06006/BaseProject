@@ -141,6 +141,7 @@ TruckListFragment : BaseFragment() {
             override fun onClick(view : View?) {
                 if (!isFABOpen!!) {
                     showFABMenu()
+                    //   fragmentTruckBinding.fab.setImageResource(R.drawable.ic_corss_fab)
                 } else {
                     closeFABMenu()
                 }
@@ -169,12 +170,14 @@ TruckListFragment : BaseFragment() {
 
     private fun showFABMenu() {
         isFABOpen = true
+     //  fragmentTruckBinding.fab.setIm(R.drawable.ic_corss_fab)
         fragmentTruckBinding.fab1.animate().translationY(-resources.getDimension(R.dimen.dp_70))
         fragmentTruckBinding.fab2.animate().translationY(-resources.getDimension(R.dimen.dp_140))
     }
 
     private fun closeFABMenu() {
         isFABOpen = false
+       // fragmentTruckBinding.fab.setImageResource(R.drawable.ic_plus)
         fragmentTruckBinding.fab1.animate().translationY(0F)
         fragmentTruckBinding.fab2.animate().translationY(0F)
     }

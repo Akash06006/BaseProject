@@ -5,13 +5,16 @@ import android.annotation.SuppressLint
 import android.app.Activity
 import android.app.Dialog
 import android.app.TimePickerDialog
+import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Environment
 import android.provider.MediaStore
 import android.text.TextUtils
+import android.util.Log
 import android.view.View
+import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 import android.widget.TimePicker
 import android.widget.Toast
@@ -32,6 +35,7 @@ import com.android.sidewalk.model.truck.TruckDetailResponse
 import com.android.sidewalk.repositories.truck.AddGalleryModel
 import com.android.sidewalk.utils.BaseActivity
 import com.android.sidewalk.utils.DialogClass
+import com.android.sidewalk.utils.ResizeImage
 import com.android.sidewalk.utils.Utils
 import com.android.sidewalk.viewmodels.trucks.TrucksViewModel
 import com.uniongoods.adapters.GalleryImagesListAdapter
@@ -121,6 +125,8 @@ class AddTruckActivity : BaseActivity(), ChoiceCallBack {
 
                     } else {
                         UtilsFunctions.showToastError(message!!)
+                        val last = galleryImagesList.get(galleryImagesList.size - 1)
+                        galleryImagesList.remove(last)
                     }
                 }
             })
@@ -134,6 +140,7 @@ class AddTruckActivity : BaseActivity(), ChoiceCallBack {
                     if (addGalleryRes.code == 200) {
                         // galleryImagesIds.add(addGalleryRes.categoryList!!.image!!)
                         showToastSuccess(message)
+                        finish()
                     } else {
                         UtilsFunctions.showToastError(message!!)
                     }
@@ -188,43 +195,83 @@ class AddTruckActivity : BaseActivity(), ChoiceCallBack {
                 function =
                 fun(it : String?) {
                     when (it) {
+                        "edtLocation" -> {
+                            if (ContextCompat.checkSelfPermission(
+                                    this,
+                                    Manifest.permission.ACCESS_FINE_LOCATION
+                                ) !==
+                                PackageManager.PERMISSION_GRANTED
+                            ) {
+                                if (ActivityCompat.shouldShowRequestPermissionRationale(
+                                        this!!,
+                                        Manifest.permission.ACCESS_FINE_LOCATION
+                                    )
+                                ) {
+                                    ActivityCompat.requestPermissions(
+                                        this!!,
+                                        arrayOf(Manifest.permission.ACCESS_FINE_LOCATION), 1
+                                    )
+                                } else {
+                                    ActivityCompat.requestPermissions(
+                                        this!!,
+                                        arrayOf(Manifest.permission.ACCESS_FINE_LOCATION), 1
+                                    )
+                                }
+                            } else {
+                                //if (!TextUtils.isEmpty(addTruckBinding.edtLocation.text.toString())) {
+                                if (UtilsFunctions.isNetworkConnected()) {
+                                    val intent =
+                                        Intent(this, AddAddressActivity::class.java)
+                                    startActivityForResult(intent, 200)
+                                    /*     }
+                                     } else {
+                                         showToastError("Please select pickup address")
+                                     }*/
+                                }
+                            }
+                        }
                         "edtStartTime" -> {
                             val mcurrentTime = Calendar.getInstance()
                             val hour = mcurrentTime.get(Calendar.HOUR_OF_DAY)
                             val minute = mcurrentTime.get(Calendar.MINUTE)
 
                             mTimePicker =
-                                TimePickerDialog(this, object : TimePickerDialog.OnTimeSetListener {
-                                    @SuppressLint("SetTextI18n")
-                                    override fun onTimeSet(
-                                        view : TimePicker?,
-                                        hourOfDay : Int,
-                                        minute : Int
-                                    ) {
-                                        var hours = hourOfDay
-                                        var amPmformat = ""
+                                TimePickerDialog(
+                                    this,
+                                    object : TimePickerDialog.OnTimeSetListener {
+                                        @SuppressLint("SetTextI18n")
+                                        override fun onTimeSet(
+                                            view : TimePicker?,
+                                            hourOfDay : Int,
+                                            minute : Int
+                                        ) {
+                                            var hours = hourOfDay
+                                            var amPmformat = ""
 
-                                        if (hours == 0) {
-                                            hours += 12
+                                            if (hours == 0) {
+                                                hours += 12
 
-                                            amPmformat = "AM"
-                                        } else if (hours == 12) {
-                                            amPmformat = "PM"
+                                                amPmformat = "AM"
+                                            } else if (hours == 12) {
+                                                amPmformat = "PM"
 
-                                        } else if (hours > 12) {
-                                            hours -= 12
+                                            } else if (hours > 12) {
+                                                hours -= 12
 
-                                            amPmformat = "PM"
+                                                amPmformat = "PM"
 
-                                        } else {
-                                            amPmformat = "AM"
+                                            } else {
+                                                amPmformat = "AM"
+                                            }
+
+                                            addTruckBinding.edtStartTime.setText("$hours : $minute $amPmformat")
                                         }
 
-                                        addTruckBinding.edtStartTime.setText("$hours : $minute $amPmformat")
                                     }
-
-                                }
-                                    , hour, minute, false)
+                                    ,
+                                    hour,
+                                    minute,
+                                    false)
                             mTimePicker!!.show()
                         }
                         "edtEndTime" -> {
@@ -233,36 +280,42 @@ class AddTruckActivity : BaseActivity(), ChoiceCallBack {
                             val minute = mcurrentTime.get(Calendar.MINUTE)
 
                             mTimePicker =
-                                TimePickerDialog(this, object : TimePickerDialog.OnTimeSetListener {
-                                    @SuppressLint("SetTextI18n")
-                                    override fun onTimeSet(
-                                        view : TimePicker?,
-                                        hourOfDay : Int,
-                                        minute : Int
-                                    ) {
-                                        var hours = hourOfDay
-                                        var format = ""
+                                TimePickerDialog(
+                                    this,
+                                    object : TimePickerDialog.OnTimeSetListener {
+                                        @SuppressLint("SetTextI18n")
+                                        override fun onTimeSet(
+                                            view : TimePicker?,
+                                            hourOfDay : Int,
+                                            minute : Int
+                                        ) {
+                                            var hours = hourOfDay
+                                            var format = ""
 
-                                        if (hours == 0) {
-                                            hours += 12
+                                            if (hours == 0) {
+                                                hours += 12
 
-                                            format = "AM"
-                                        } else if (hours == 12) {
-                                            format = "PM"
+                                                format = "AM"
+                                            } else if (hours == 12) {
+                                                format = "PM"
 
-                                        } else if (hours > 12) {
-                                            hours -= 12
+                                            } else if (hours > 12) {
+                                                hours -= 12
 
-                                            format = "PM"
+                                                format = "PM"
 
-                                        } else {
-                                            format = "AM"
+                                            } else {
+                                                format = "AM"
+                                            }
+
+                                            addTruckBinding.edtEndTime.setText("$hours : $minute $format")
+
                                         }
-
-                                        addTruckBinding.edtEndTime.setText("$hours : $minute $format")
-
-                                    }
-                                }, hour, minute, false)
+                                    },
+                                    hour,
+                                    minute,
+                                    false
+                                )
                             mTimePicker!!.show()
                         }
                         "txtUploadImage" -> {
@@ -313,44 +366,50 @@ class AddTruckActivity : BaseActivity(), ChoiceCallBack {
                                         R.string.upload_img_error
                                     )
                                 )
-                                truckName.isEmpty() -> showError(
+                                truckName.trim().isEmpty() -> showError(
                                     addTruckBinding.edtTruckName,
                                     getString(R.string.empty) + " " + getString(
                                         R.string.mobile_cart_name
                                     )
                                 )
-                                location.isEmpty() -> showError(
+                                location.trim().isEmpty() -> showError(
                                     addTruckBinding.edtLocation,
                                     getString(R.string.empty) + " " + getString(
                                         R.string.lname
                                     )
                                 )
-                                regName.isEmpty() -> showError(
+                                regName.trim().isEmpty() -> showError(
                                     addTruckBinding.edtRegNo,
                                     getString(R.string.empty) + " " + getString(
                                         R.string.reg_no
                                     )
                                 )
-                                startTime.isEmpty() -> showToastError(
+                                startTime.trim().isEmpty() -> showToastError(
                                     getString(
                                         R.string.select_start_time
                                     )
                                 )
-                                endTime.isEmpty() -> showToastError(
+                                endTime.trim().isEmpty() -> showToastError(
                                     getString(
                                         R.string.select_end_time
                                     )
                                 )
-                                partnerName.isEmpty() -> showError(
+                                partnerName.trim().isEmpty() -> showError(
                                     addTruckBinding.edtName,
                                     getString(R.string.empty) + " " + getString(
                                         R.string.name
                                     )
                                 )
-                                partnerPhone.isEmpty() -> showError(
+                                partnerPhone.trim().isEmpty() -> showError(
                                     addTruckBinding.edtPhone,
                                     getString(R.string.empty) + " " + getString(
                                         R.string.phone_number
+                                    )
+                                )
+                                partnerPhone.trim().length < 7 -> showError(
+                                    addTruckBinding.edtPhone,
+                                    getString(R.string.phone_number) + " " + getString(
+                                        R.string.phone_min
                                     )
                                 )
                                 else -> {
@@ -374,11 +433,14 @@ class AddTruckActivity : BaseActivity(), ChoiceCallBack {
                                     var ids = ""
                                     for (item in galleryImagesList) {
                                         if (!item.image!!.contains("http")) {
-                                            if (TextUtils.isEmpty(ids)) {
-                                                ids = item.id!!
-                                            } else {
-                                                ids = ids + "," + item.id
+                                            if (!TextUtils.isEmpty(item.id)) {
+                                                if (TextUtils.isEmpty(ids)) {
+                                                    ids = item.id!!
+                                                } else {
+                                                    ids = ids + "," + item.id
+                                                }
                                             }
+
                                         }
                                     }
 
@@ -416,7 +478,13 @@ class AddTruckActivity : BaseActivity(), ChoiceCallBack {
                                         imagesParts =
                                             arrayOfNulls<MultipartBody.Part>(finalUploadedImages.count())
                                         for (i in 0 until finalUploadedImages.count()) {
-                                            val f1 = File(finalUploadedImages[i])
+                                            val f1 =
+                                                File(
+                                                    ResizeImage.compressImage(
+                                                        finalUploadedImages[i]
+                                                    )
+                                                )
+                                            //val f1 = File(finalUploadedImages[i])
                                             imagesParts!![i] =
                                                 Utils(this).prepareFilePart("image", f1)
 
@@ -522,6 +590,17 @@ class AddTruckActivity : BaseActivity(), ChoiceCallBack {
             setImage(profileImage)            // val extras = categoryList!!.extras
             // val imageBitmap = extras!!.get("categoryList") as Bitmap
             //getImageUri(imageBitmap)
+        } else if (requestCode == 200) {
+            val lat = data?.getStringExtra("lat")
+            val long = data?.getStringExtra("long")
+            val address = data?.getStringExtra("address")
+            if (!TextUtils.isEmpty(lat)) {
+                addTruckBinding.edtLocation.setText(address)
+                val latitude = lat as String
+                val longitude = long.toString()
+                //delAddress = address.toString()
+            }
+
         }
 
     }
@@ -593,7 +672,9 @@ class AddTruckActivity : BaseActivity(), ChoiceCallBack {
             galleryImagesListAdapter?.notifyDataSetChanged()
             var bannerImage : MultipartBody.Part? = null
             if (!profileImage.isEmpty()) {
-                val f1 = File(profileImage)
+                //val f1 = File(profileImage)
+                val f1 =
+                    File(ResizeImage.compressImage(profileImage))
                 bannerImage =
                     Utils(this)
                         .prepareFilePart(
@@ -670,5 +751,28 @@ class AddTruckActivity : BaseActivity(), ChoiceCallBack {
         galleryImagesListAdapter?.notifyDataSetChanged()
 
     }
+    /*override fun onActivityResult(requestCode : Int, resultCode : Int, data : Intent?) {
+        // activityCreateOrderBinding.autocompleteFragment.visibility = View.GONE
+        val inputManager : InputMethodManager =
+            getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        *//* inputManager.hideSoftInputFromWindow(
+             activity!!.currentFocus.windowToken,
+             InputMethodManager.SHOW_FORCED
+         )*//*
 
+        if (requestCode == 200) {
+            val lat = data?.getStringExtra("lat")
+            val long = data?.getStringExtra("long")
+            val address = data?.getStringExtra("address")
+            if (!TextUtils.isEmpty(lat)) {
+                addTruckBinding.edtLocation.setText(address)
+                val latitude = lat as String
+                val longitude = long.toString()
+                //delAddress = address.toString()
+            }
+
+        }
+        super.onActivityResult(requestCode, resultCode, data)
+    }
+*/
 }

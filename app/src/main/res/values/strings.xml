@@ -6,7 +6,7 @@
     <string name="facebook_app_id">1098465737337881</string>
     <string name="fb_login_protocol_scheme">fb630169387861716</string>
     <string name="web_client_id">27036329346-e80av2pekjeojtrepubv08m734pjtl4u.apps.googleusercontent.com</string>
-
+    <string name="maps_api_key">AIzaSyDBBLtvW2kqoNiPXOuDBzlk5V_QmRXJLKg</string>
     <string name="internal_server_error">Internal server error, so please try after some time!</string>
     <string name="internet_connection">Please check your internet connection and try after some time!</string>
     <string name="sorry_text">Sorry we couldn\'t find any matches</string>
@@ -40,7 +40,7 @@
     <string name="OTP">OTP</string>
 
     <string name="server_not_reached">We can\'t connect to the server right now,please try again after some time.</string>
-    <string name="resend_otp_message">We sent OTP to verify,Please check associated phone</string>
+    <string name="resend_otp_message">We resent OTP on given mobile number, Please check your device.</string>
     <string name="invalid_otp">Invalid OTP</string>
     <string name="something_error">Somthing is wrong, we will fix it soon...</string>
     <string name="verify">Verify</string>
@@ -270,6 +270,7 @@
     <string name="license_front_img_error">Please select license front image</string>
     <string name="license_back_img_error">Please select license back image</string>
     <string name="truck">Truck</string>
+    <string name="mobile_carts">Mobile Carts</string>
     <string name="settings">Settings</string>
     <string name="your_popular_mobile_cart">Your Popular Mobile Carts</string>
     <string name="see_all">See All</string>
@@ -299,6 +300,7 @@
 
     <string name="view_gallery">View Gallery</string>
     <string name="truck_partner">Truck Partner</string>
+    <string name="mobile_cart_partner_info">Mobile cart partner information</string>
     <string name="phone_no">Phone No</string>
     <string name="details">Details</string>
     <string name="view_all">View All</string>
@@ -341,7 +343,13 @@
     <string name="please_write_here">Please write here</string>
     <string name="submit">Submit</string>
     <string name="logout_warning">Do you really want to logout?</string>
-
+    <string name="category_added_success">Category Added Successfully</string>
+    <string name="category_updated_success">Category Updated Successfully</string>
+    <string name="item_updated_successfully">Item Updated Successfully</string>
+    <string name="item_added_successfully">Item Added Successfully</string>
+    <string name="select_address">Select Address</string>
+    <string name="selected_address">Selected Address</string>
+    <string name="confirm_location_and_proceed">Confirm Address and Proceed</string>
     <string-array name="Languages">
         <item>Java</item>
         <item>Kotlin</item>

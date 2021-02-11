@@ -120,7 +120,7 @@ class SignupActivity : BaseActivity(), ChoiceCallBack {
                          )*/
                         GlobalConstants.VERIFICATION_TYPE =
                             "signup"
-                        FirebaseFunctions.sendOTP("login", mOtpJsonObject, this)
+                        //TODO FirebaseFunctions.sendOTP("login", mOtpJsonObject, this)
                         // mOtpJsonObject.addProperty("phoneNumber", response.categoryList?.phoneNumber)
                         //mOtpJsonObject.addProperty("countryCode", response.categoryList?.countryCode)
                         SharedPrefClass()
@@ -159,7 +159,7 @@ class SignupActivity : BaseActivity(), ChoiceCallBack {
                         val mJsonObject = JsonObject()
                         mJsonObject.addProperty("userId", loginResponse.data!!.id)
                         mJsonObject.addProperty("sessionToken", loginResponse.data!!.token)
-                        //loginViewModel.callVerifyUserApi(mJsonObject)
+                        loginViewModel.callVerifyUserApi(mJsonObject)
                         /*showToastSuccess(message)
                         val intent = Intent(this, OTPVerificationActivity::class.java)
                         startActivity(intent)
@@ -198,7 +198,7 @@ class SignupActivity : BaseActivity(), ChoiceCallBack {
                         finish()
 
                     } else {
-                        //showToastError(message)
+                        showToastError(message)
                     }
 
                 }
@@ -251,12 +251,15 @@ class SignupActivity : BaseActivity(), ChoiceCallBack {
                         } else requestPermission()
                     }
                     "btnSignup" -> {
-                        val fName = activitySignupbinding.edtFirstName.text.toString()
-                        val lName = activitySignupbinding.edtLastName.text.toString()
-                        val email = activitySignupbinding.edtEmail.text.toString()
-                        val phone = activitySignupbinding.edtPhone.text.toString()
-                        val experience = activitySignupbinding.edtExperience.text.toString()
-
+                        var fName = activitySignupbinding.edtFirstName.text.toString().trim()
+                        var lName = activitySignupbinding.edtLastName.text.toString().trim()
+                        val email = activitySignupbinding.edtEmail.text.toString().trim()
+                        val phone = activitySignupbinding.edtPhone.text.toString().trim()
+                        val experience = activitySignupbinding.edtExperience.text.toString().trim()
+                        fName = fName.trim()
+                        lName = lName.trim()
+                        //fName = fName.trim()
+                        //fName = fName.trim()
                         when {
                             profileImage.isEmpty() -> showToastError(
                                 getString(
@@ -269,10 +272,22 @@ class SignupActivity : BaseActivity(), ChoiceCallBack {
                                     R.string.fname
                                 )
                             )
+                            fName.length < 3 -> showError(
+                                activitySignupbinding.edtFirstName,
+                                getString(R.string.fname) + " " + getString(
+                                    R.string.name_min
+                                )
+                            )
                             lName.trim().isEmpty() -> showError(
                                 activitySignupbinding.edtLastName,
                                 getString(R.string.empty) + " " + getString(
                                     R.string.lname
+                                )
+                            )
+                            lName.length < 3 -> showError(
+                                activitySignupbinding.edtLastName,
+                                getString(R.string.lname) + " " + getString(
+                                    R.string.name_min
                                 )
                             )
                             email.trim().isEmpty() -> showError(

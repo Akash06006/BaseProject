@@ -80,6 +80,7 @@ class EditProfileActivity : BaseActivity(), ChoiceCallBack {
                     if (profileResponse.code == 200) {
                         profileViewModel.callProfielApi()
                         showToastSuccess(message)
+                        // finish()
                     } else if (profileResponse.code == 408) {
                         showToastError(message)
                     } else {
@@ -195,25 +196,39 @@ class EditProfileActivity : BaseActivity(), ChoiceCallBack {
                         } else requestPermission()
                     }
                     "btnSignup" -> {
-                        val fName = activityEditProfileBinding.edtFirstName.text.toString()
-                        val lName = activityEditProfileBinding.edtLastName.text.toString()
+                        var fName = activityEditProfileBinding.edtFirstName.text.toString()
+                        var lName = activityEditProfileBinding.edtLastName.text.toString()
                         val email = activityEditProfileBinding.edtEmail.text.toString()
                         val phone = activityEditProfileBinding.edtPhone.text.toString()
                         val experience = activityEditProfileBinding.edtExperience.text.toString()
+                        fName = fName.trim()
+                        lName = lName.trim()
                         when {
-                            fName.isEmpty() -> showError(
+                            fName.trim().isEmpty() -> showError(
                                 activityEditProfileBinding.edtFirstName,
                                 getString(R.string.empty) + " " + getString(
                                     R.string.fname
                                 )
                             )
-                            lName.isEmpty() -> showError(
+                            fName.length < 3 -> showError(
+                                activityEditProfileBinding.edtFirstName,
+                                getString(R.string.fname) + " " + getString(
+                                    R.string.name_min
+                                )
+                            )
+                            lName.trim().isEmpty() -> showError(
                                 activityEditProfileBinding.edtLastName,
                                 getString(R.string.empty) + " " + getString(
                                     R.string.lname
                                 )
                             )
-                            email.isEmpty() -> showError(
+                            lName.length < 3 -> showError(
+                                activityEditProfileBinding.edtLastName,
+                                getString(R.string.lname) + " " + getString(
+                                    R.string.name_min
+                                )
+                            )
+                            email.trim().isEmpty() -> showError(
                                 activityEditProfileBinding.edtEmail,
                                 getString(R.string.empty) + " " + getString(
                                     R.string.email
@@ -226,7 +241,7 @@ class EditProfileActivity : BaseActivity(), ChoiceCallBack {
                                         R.string.email
                                     )
                                 )
-                            phone.isEmpty() -> showError(
+                            phone.trim().isEmpty() -> showError(
                                 activityEditProfileBinding.edtPhone,
                                 getString(R.string.empty) + " " + getString(
                                     R.string.phone_number

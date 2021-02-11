@@ -170,7 +170,7 @@
                             android:layout_marginRight="10dp"
                             android:background="@drawable/shape_button_back"
                             android:onClick="@{(v) -> loginViewModel.clickListener(v)}"
-                            android:text="@string/send_otp"
+                            android:text="@string/login"
                             android:textAllCaps="false"
                             android:textColor="@color/colorWhite"
                             android:textSize="@dimen/button_text_size" />
@@ -196,41 +196,41 @@
 
                         <RelativeLayout
                                 android:id="@+id/googleLogin"
-                                android:layout_width="80dp"
-                                android:layout_height="80dp"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
                                 android:layout_marginLeft="5dp"
                                 android:layout_marginTop="5dp"
                                 android:layout_marginBottom="5dp"
-                                android:background="@drawable/shape_round_corner"
+                                android:background="@drawable/ic_google_login"
                                 android:elevation="2dp"
                                 android:onClick="@{(v) -> loginViewModel.clickListener(v)}">
                             <!-- -->
-                            <ImageView
+                            <!--<ImageView
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:layout_centerInParent="true"
-                                    android:background="@drawable/ic_google" />
+                                     />-->
 
                         </RelativeLayout>
 
                         <RelativeLayout
                                 android:id="@+id/fbLogin"
-                                android:layout_width="80dp"
-                                android:layout_height="80dp"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
                                 android:layout_marginLeft="10dp"
                                 android:layout_marginTop="5dp"
                                 android:layout_marginRight="5dp"
                                 android:layout_marginBottom="5dp"
-                                android:background="@drawable/shape_round_corner"
+                                android:background="@drawable/ic_fb_login"
                                 android:elevation="2dp"
                                 android:onClick="@{(v) -> loginViewModel.clickListener(v)}">
                             <!-- android:elevation="5dp"-->
-                            <ImageView
+                            <!--<ImageView
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:layout_centerInParent="true"
                                     android:background="@drawable/ic_facebook" />
-
+-->
                         </RelativeLayout>
 
                     </LinearLayout>

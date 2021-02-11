@@ -28,7 +28,6 @@ import com.android.sidewalk.common.UtilsFunctions
 import com.android.sidewalk.databinding.ActivityCategoryListBinding
 import com.android.sidewalk.model.CommonModel
 import com.android.sidewalk.model.menu.CategoryListsResponse
-import com.android.sidewalk.model.truck.TruckListResponse
 import com.android.sidewalk.utils.BaseActivity
 import com.android.sidewalk.utils.DialogClass
 import com.android.sidewalk.utils.Utils
@@ -50,6 +49,7 @@ class CategoryListActivity : BaseActivity(), ChoiceCallBack {
     var viewPager : ViewPager? = null
     var imagesList = ArrayList<String>()
     var truckId = ""
+    var isUpdated = true
 
     //    var categoryList = ArrayList<CategoryListsResponse.Data>()
     private var categoryList : ArrayList<CategoryListsResponse.Data>? = null
@@ -90,15 +90,13 @@ class CategoryListActivity : BaseActivity(), ChoiceCallBack {
                             categoryList!!.clear()
                         }
 
-
-
                         categoryList = addGalleryRes.data
                         if (categoryList!!.size > 0) {
                             initRecyclerView()
                         }
 
                     } else {
-                        UtilsFunctions.showToastError(message!!)
+                        // UtilsFunctions.showToastError(message!!)
                         addTruckBinding.txtNoRecord.visibility = View.VISIBLE
                         addTruckBinding.rvCategory.visibility = View.GONE
                     }
@@ -113,6 +111,11 @@ class CategoryListActivity : BaseActivity(), ChoiceCallBack {
                     val message = addGalleryRes.message
 
                     if (addGalleryRes.code == 200) {
+                        if (!isUpdated) {
+                            showToastSuccess(getString(R.string.category_added_success))
+                        } else {
+                            showToastSuccess(getString(R.string.category_updated_success))
+                        }
                         menuViewModel.categoryList()
                     } else {
                         UtilsFunctions.showToastError(message!!)
@@ -160,6 +163,11 @@ class CategoryListActivity : BaseActivity(), ChoiceCallBack {
 
     fun addCategoryDialog(isEdit : Boolean, position : Int) {
         var categoryId = ""
+        //  if (isEdit) {
+        isUpdated = isEdit
+        /*} else {
+            isUpdated = false
+        }*/
         val binding =
             DataBindingUtil.inflate<ViewDataBinding>(
                 LayoutInflater.from(this),

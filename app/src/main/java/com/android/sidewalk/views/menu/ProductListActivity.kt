@@ -94,7 +94,7 @@ class ProductListActivity : BaseActivity(), ChoiceCallBack {
                         initRecyclerView(addGalleryRes.data)
 
                     } else {
-                        UtilsFunctions.showToastError(message!!)
+                        //  UtilsFunctions.showToastError(message!!)
                         addTruckBinding.txtNoRecord.visibility = View.VISIBLE
                         addTruckBinding.rvItems.visibility = View.GONE
                     }

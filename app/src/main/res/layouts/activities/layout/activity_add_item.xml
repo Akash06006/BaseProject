@@ -119,10 +119,13 @@
                     android:gravity="top|left"
                     android:hint="@string/description"
                     android:inputType="textCapSentences|textMultiLine"
+                    android:maxLength="60"
                     android:maxLines="7"
                     android:minLines="5"
                     android:paddingLeft="20dp"
                     android:paddingTop="15dp"
+                    android:paddingRight="20dp"
+                    android:paddingBottom="15dp"
                     android:text="@{itemDetailResponse.description}"
                     android:textSize="14sp"
                     app:font="@{`regular`}" />

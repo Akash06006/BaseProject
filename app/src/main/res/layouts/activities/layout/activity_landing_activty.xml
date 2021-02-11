@@ -30,8 +30,8 @@
                 android:layout_alignParentBottom="true"
                 android:background="@color/colorSecondary"
                 android:visibility="visible"
-                app:tabIndicatorColor="@color/colorWhite"
                 app:tabIconTint="@color/colorWhite"
+                app:tabIndicatorColor="@color/colorWhite"
                 app:tabSelectedTextColor="@color/colorWhite"
                 app:tabTextAppearance="@style/customizeTabText"
                 app:tabTextColor="@color/tabColor">
@@ -49,7 +49,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:icon="@drawable/ic_truck_tab"
-                    android:text="@string/truck" />
+                    android:text="@string/mobile_carts" />
             <!-- android:icon="@drawable/ic_booking_tab"-->
             <com.google.android.material.tabs.TabItem
                     android:id="@+id/tab2"

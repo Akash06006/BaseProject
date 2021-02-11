@@ -47,6 +47,7 @@ class AddItemActivity : BaseActivity(), ChoiceCallBack {
     private var confirmationDialog : Dialog? = null
     private var mDialogClass = DialogClass()
     private var itemImage = ""
+    var isUpdate = false
     override fun getLayoutId() : Int {
         return R.layout.activity_add_item
     }
@@ -62,16 +63,23 @@ class AddItemActivity : BaseActivity(), ChoiceCallBack {
         catId = intent.extras?.get("id") as String
         itemId = intent.extras?.get("itemId") as String
         if (!TextUtils.isEmpty(itemId)) {
+            isUpdate = true
             menuViewModel.itemsDetail(itemId)
             addItemBinding.toolbarCommon.imgToolbarText.text =
                 getString(R.string.update_item)
+        } else {
+            isUpdate = false
         }
 
         menuViewModel.getAddCategoryRes().observe(this,
             Observer<CommonModel> { addGalleryRes->
                 stopProgressDialog()
                 if (addGalleryRes != null) {
-                    showToastSuccess(addGalleryRes.message)
+                    if (isUpdate) {
+                        showToastSuccess(getString(R.string.item_updated_successfully))
+                    } else {
+                        showToastSuccess(getString(R.string.item_added_successfully))
+                    }
                     finish()
                 }
             })
@@ -80,7 +88,7 @@ class AddItemActivity : BaseActivity(), ChoiceCallBack {
             Observer<ItemDetailResponse> { addGalleryRes->
                 stopProgressDialog()
                 if (addGalleryRes != null) {
-                    if(addGalleryRes.data!= null) {
+                    if (addGalleryRes.data != null) {
                         addItemBinding.itemDetailResponse = addGalleryRes.data
                         //val message = addGalleryRes.message
                         Glide.with(this).load(addGalleryRes.data!!.image)
@@ -118,26 +126,33 @@ class AddItemActivity : BaseActivity(), ChoiceCallBack {
                                         R.string.upload_img_error
                                     )
                                 )
-                                name.isEmpty() -> showError(
+                                name.trim().isEmpty() -> showError(
                                     addItemBinding.edtItemName,
                                     getString(R.string.empty) + " " + getString(
                                         R.string.item_name
                                     )
                                 )
-                                price.isEmpty() -> showError(
+                                price.trim().isEmpty() -> showError(
                                     addItemBinding.edtPrice,
                                     getString(R.string.empty) + " " + getString(
                                         R.string.price
                                     )
                                 )
-                                description.isEmpty() -> showError(
+                                price.equals("0") -> {
+                                    showError(
+                                        addItemBinding.edtPrice,
+                                        getString(R.string.invalid) + " " + getString(
+                                            R.string.price
+                                        )
+                                    )
+                                }
+                                description.trim().isEmpty() -> showError(
                                     addItemBinding.edtDescription,
                                     getString(R.string.empty) + " " + getString(
                                         R.string.description
                                     )
                                 )
                                 else -> {
-
                                     val mHashMap = HashMap<String, RequestBody>()
                                     mHashMap["name"] =
                                         Utils(this).createPartFromString(name)

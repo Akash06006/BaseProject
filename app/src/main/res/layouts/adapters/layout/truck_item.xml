@@ -48,7 +48,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/dp_2"
-                        android:layout_toLeftOf="@+id/chkTruckOn"
+                        android:layout_toLeftOf="@+id/imgEdit"
                         android:singleLine="true"
                         android:text="Nepal Vally"
                         android:textColor="@color/colorBlack"
@@ -56,14 +56,15 @@
                         android:textStyle="bold"
                         app:font="@{`bold`}" />
 
-                <CheckBox
-                        android:id="@+id/chkTruckOn"
+                <ImageView
+                        android:id="@+id/imgEdit"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_alignParentRight="true"
-                        android:layout_margin="@dimen/dp_5"
-                        android:button="@drawable/checkbox_selector" />
-
+                        android:layout_marginEnd="5dp"
+                        android:paddingLeft="5dp"
+                        android:paddingTop="5dp"
+                        android:src="@drawable/ic_edit_icon" />
             </RelativeLayout>
 
             <LinearLayout
@@ -79,7 +80,7 @@
                         android:numStars="5"
                         android:rating="4"
                         android:stepSize="0.5"
-                        android:theme="@style/RatingBar" />
+                        android:theme="@style/RatingBarYellow" />
 
                 <TextView
                         android:id="@+id/txtCount"
@@ -102,24 +103,32 @@
                     android:textSize="@dimen/sp_12"
                     app:font="@{`regular`}" />
 
-            <TextView
-                    android:id="@+id/txtTime"
+            <RelativeLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:singleLine="true"
-                    android:text="Time: 10:00 AM - 9:00 PM"
-                    android:textColor="@color/colorGrey"
-                    android:textSize="@dimen/sp_12"
-                    app:font="@{`regular`}" />
+                    android:layout_height="wrap_content">
+
+                <TextView
+                        android:id="@+id/txtTime"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_toLeftOf="@+id/chkTruckOn"
+                        android:singleLine="true"
+                        android:text="Time: 10:00 AM - 9:00 PM"
+                        android:textColor="@color/colorGrey"
+                        android:textSize="@dimen/sp_12"
+                        app:font="@{`regular`}" />
+
+                <CheckBox
+                        android:id="@+id/chkTruckOn"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
+                        android:layout_marginRight="@dimen/dp_5"
+                        android:button="@drawable/checkbox_selector" />
+            </RelativeLayout>
+
         </LinearLayout>
 
-        <View
-                android:id="@+id/view"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:alpha="0.5"
-                android:background="@color/colorWhite"
-                />
     </RelativeLayout>
     <!-- </androidx.cardview.widget.CardView>-->
 </layout>

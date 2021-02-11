@@ -4,6 +4,7 @@ import android.content.Intent
 import android.content.pm.PackageInfo
 import android.content.pm.PackageManager
 import android.os.Bundle
+import android.text.TextUtils
 import android.util.Base64
 import android.util.Log
 import android.widget.EditText
@@ -59,10 +60,19 @@ class LoginActivity : BaseActivity() {
     }
 
     override fun initViews() {
+
+
+
+     
+
+
+
         activityLoginbinding =
             viewDataBinding as ActivityLoginBinding //DataBindingUtil.setContentView(this, R.layout.activity_login)
         loginViewModel = ViewModelProviders.of(this)
             .get(LoginViewModel::class.java)
+
+        LoginManager.getInstance().logOut()
 
         try {
             val info : PackageInfo = packageManager
@@ -147,16 +157,16 @@ class LoginActivity : BaseActivity() {
                                 loginResponse.data!!.image
                             )
                         GlobalConstants.VERIFICATION_TYPE = "login"
-
-                        FirebaseFunctions.sendOTP("login", mOtpJsonObject, this)
+                        //TODO FirebaseFunctions.sendOTP("login", mOtpJsonObject, this)
                         //showToastSuccess(message)
-//                        val intent = Intent(
-//                            this,
-//                            LandingActivty::class.java
-//                        )
-//                        //intent.putExtra("itemId", ""/*categoriesList[position].id*/)
-//                        startActivity(intent)
-//                        finish()
+                        val intent = Intent(
+                            this,
+                            LandingActivty::class.java
+                        )
+                        intent.flags =
+                            Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                        startActivity(intent)
+                        finish()
 
                     } else {
                         showToastError(message)
@@ -247,14 +257,13 @@ class LoginActivity : BaseActivity() {
                         }
                     }
                     "fbLogin" -> {
+                        loginWith = "facebook"
                         callbackManager = CallbackManager.Factory.create()
                         LoginManager.getInstance().logInWithReadPermissions(
                             this,
                             Arrays.asList(
                                 "public_profile",
-                                "email",
-                                "user_birthday",
-                                "user_friends"
+                                "email"
                             )
                         )
                         LoginManager.getInstance().registerCallback(callbackManager,
@@ -329,7 +338,12 @@ class LoginActivity : BaseActivity() {
         if (jsonObject.has("email")) {
             email = jsonObject.getString("email")
         }
-        loginViewModel.checkForSocial(socialId, email, deviceToken)
+        if (!TextUtils.isEmpty(email)) {
+            loginViewModel.checkForSocial(socialId, email, deviceToken)
+        } else {
+            showToastError("Email is not associated with this Facebook account, Please try with other account")
+        }
+
     }
 
     private fun showError(textView : EditText, error : String) {
